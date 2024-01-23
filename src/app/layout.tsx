@@ -4,6 +4,7 @@ import type { Children } from "@/typings";
 import { ThemeProvider } from "@/components/themeProvider";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/components";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: Children) {
                 >
                     <Navigation />
                     <main>{children}</main>
+                    <Toaster position="top-center" />
                 </ThemeProvider>
             </body>
         </html>
