@@ -21,7 +21,7 @@ export default function Login() {
 
         if (data.status === "success") {
             toast("Login success !");
-            localStorage.setItem("access_token", data.access_token)
+            localStorage.setItem("access_token", data.access_token);
         } else {
             toast("Failed to log you in !");
         }
@@ -31,7 +31,7 @@ export default function Login() {
         <form
             method="POST"
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-6 mt-16 w-11/12 sm:w-96 py-6 px-8 rounded-xl mx-auto shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted"
+            className="flex flex-col gap-6 mt-32 sm:mt-24 w-11/12 sm:w-96 py-6 px-8 rounded-xl mx-auto shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted"
         >
             <h1 className="font-extrabold text-4xl text-secondary-foreground">
                 Log in

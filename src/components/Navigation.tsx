@@ -2,9 +2,10 @@
 
 import { LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "./ui/button";
-import Link from "next/link";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,8 +16,8 @@ import {
 export default function Navigation() {
     return (
         <nav className="bg-background h-14 container flex justify-between items-center border-b border-muted">
-            <h1 className="text-secondary-foreground text-lg font-bold uppercase">
-                Library System
+            <h1 className="text-secondary-foreground text-3xl font-extrabold uppercase">
+                Libsys
             </h1>
 
             <div className="flex gap-3 items-center text-secondary-foreground">
