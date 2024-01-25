@@ -26,13 +26,16 @@ export async function middleware(request: NextRequest) {
 }
 
 async function validateToken(access_token: string | undefined) {
-    const res = await fetch("https://library-system-backend-gray.vercel.app/api/check-token", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/check-token`, {
         headers: {
             Authorization: "Bearer " + access_token,
             "Content-Type": "application/json",
         },
     });
+
     const data = await res.json();
+    console.log(data);
+
     return data;
 }
 

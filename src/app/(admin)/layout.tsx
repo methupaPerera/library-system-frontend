@@ -1,5 +1,5 @@
 import Sidebar from "@/components/Sidebar";
-import { Children } from "@/typings";
+import type { Children } from "@/typings";
 
 export default function AdminLayout({ children }: Children) {
     return (
