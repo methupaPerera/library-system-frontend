@@ -26,16 +26,23 @@ export async function middleware(request: NextRequest) {
 }
 
 async function validateToken(access_token: string | undefined) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/check-token`, {
-        headers: {
-            Authorization: "Bearer " + access_token,
-            "Content-Type": "application/json",
-        },
-    });
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/check-token`,
+            {
+                headers: {
+                    Authorization: "Bearer " + access_token,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
 
-    const data = await res.json();
+        const data = await res.json();
 
-    return data;
+        return data;
+    } catch (e) {
+        return null;
+    }
 }
 
 export const config = {
