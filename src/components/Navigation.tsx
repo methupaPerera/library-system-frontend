@@ -3,9 +3,7 @@
 import { LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { buttonVariants } from "./ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,21 +11,20 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { handleLogout } from "@/services";
+
 export default function Navigation() {
     return (
-        <nav className="bg-background h-14 container flex justify-between items-center border-b border-muted">
-            <h1 className="text-secondary-foreground text-3xl font-extrabold uppercase">
+        <nav className="h-14 container flex justify-between items-center bg-background border-b border-muted">
+            <h1 className="text-3xl text-secondary-foreground font-extrabold uppercase">
                 Libsys
             </h1>
 
-            <div className="flex gap-3 items-center text-secondary-foreground">
+            <div className="flex items-center gap-3 text-secondary-foreground">
                 <ModeToggle />
-                <Link
-                    href="/logout"
-                    className={buttonVariants({ variant: "default" })}
-                >
+                <Button variant="default" onClick={() => handleLogout()}>
                     Log out <LogOut className="pl-2 text-[0.5rem]" />
-                </Link>
+                </Button>
             </div>
         </nav>
     );

@@ -1,39 +1,22 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import type { LoginInputs } from "@/typings";
 
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-import { LoginInputs, LoginReturns } from "@/typings";
+import { submitLogin } from "@/services";
 
 export default function Login() {
-    const { register, handleSubmit, formState } = useForm<LoginInputs>();
-
-    async function onSubmit(formData: LoginInputs) {
-        const res = await fetch("http://localhost:5000/api/login", {
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-            body: JSON.stringify(formData),
-        });
-
-        const data: LoginReturns = await res.json();
-
-        if (data.status === "success") {
-            toast("Login success !");
-            localStorage.setItem("access_token", data.access_token);
-        } else {
-            toast("Failed to log you in !");
-        }
-    }
+    const { register, handleSubmit } = useForm<LoginInputs>();
 
     return (
         <form
             method="POST"
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-6 mt-32 sm:mt-24 w-11/12 sm:w-96 py-6 px-8 rounded-xl mx-auto shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted"
+            onSubmit={handleSubmit((data) => submitLogin(data))}
+            className="mx-auto mt-32 sm:mt-24 w-11/12 sm:w-96 px-8 py-6 flex flex-col gap-6 shadow-[5px_0_1rem] shadow-gray-300 dark:shadow-none dark:border dark:border-muted rounded-xl"
         >
-            <h1 className="font-extrabold text-4xl text-secondary-foreground">
+            <h1 className="text-4xl text-secondary-foreground font-extrabold">
                 Log in
             </h1>
 
