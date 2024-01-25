@@ -34,7 +34,6 @@ async function validateToken(access_token: string | undefined) {
     });
 
     const data = await res.json();
-    console.log(data);
 
     return data;
 }
