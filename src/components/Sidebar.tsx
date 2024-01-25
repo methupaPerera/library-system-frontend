@@ -1,22 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
-import {
-    LayoutDashboard,
-    LucideProps,
-    Users,
-    BookOpenText,
-} from "lucide-react";
 import { usePathname } from "next/navigation";
-import { ForwardRefExoticComponent } from "react";
+import { buttonVariants } from "./ui/button";
+
+import { BiSolidDashboard } from "react-icons/bi";
+import { ImBooks } from "react-icons/im";
+import { BsFillPeopleFill } from "react-icons/bs";
 
 export default function Sidebar() {
     return (
-        <div className="h-[100vh] pt-12 px-2 w-48 flex flex-col gap-1 bg-background border-r border-muted fixed">
-            <SidebarLink route="dashboard" Icon={LayoutDashboard} />
-            <SidebarLink route="members" Icon={Users} />
-            <SidebarLink route="books" Icon={BookOpenText} />
+        <div className="w-16 h-[calc(100vh-3.5rem)] pt-14 px-1.5 flex flex-col gap-1 bg-background border-r border-muted">
+            <SidebarLink route="dashboard" Icon={<BiSolidDashboard />} />
+            <SidebarLink route="members" Icon={<BsFillPeopleFill />} />
+            <SidebarLink route="books" Icon={<ImBooks />} />
         </div>
     );
 }
@@ -26,21 +23,19 @@ function SidebarLink({
     Icon,
 }: {
     route: string;
-    Icon: ForwardRefExoticComponent<LucideProps>;
+    Icon: React.ReactElement;
 }) {
     const path = usePathname();
 
     return (
         <Link
             href={route}
-            className={
-                buttonVariants({
-                    size: "lg",
-                    variant: !(path === "/" + route) ? "outline" : "default",
-                }) + " !w-[100%] !text-base !justify-start capitalize"
-            }
+            className={buttonVariants({
+                size: "lg",
+                variant: !(path === "/" + route) ? "outline" : "default",
+            }) + " !text-2xl !px-1"}
         >
-            <Icon className="pr-2" /> {route}
+            {Icon}
         </Link>
     );
 }
