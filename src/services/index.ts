@@ -3,7 +3,7 @@ import type { LoginInputs, LoginReturns } from "@/typings";
 import { toast } from "sonner";
 
 export async function submitLogin(formData: LoginInputs) {
-    toast("Please wait...");
+    toast.loading("Please wait...");
     
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         headers: { "Content-Type": "application/json" },
