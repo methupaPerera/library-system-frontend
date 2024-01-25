@@ -13,11 +13,11 @@ import { ForwardRefExoticComponent } from "react";
 
 export default function Sidebar() {
     return (
-        <aside className="pt-12 px-2 w-48 flex flex-col gap-1 bg-background h-[calc(100vh-3.5rem)] border-r border-muted fixed bottom-0 left-0 z-50">
+        <div className="pt-12 px-2 w-48 flex flex-col gap-1 bg-background h-[calc(100vh-3.5rem)] border-r border-muted fixed bottom-0 left-0 z-50">
             <SidebarLink route="dashboard" Icon={LayoutDashboard} />
             <SidebarLink route="members" Icon={Users} />
             <SidebarLink route="books" Icon={BookOpenText} />
-        </aside>
+        </div>
     );
 }
 
