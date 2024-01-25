@@ -3,6 +3,7 @@ import type { LoginInputs, LoginReturns } from "@/typings";
 import { toast } from "sonner";
 
 export async function submitLogin(formData: LoginInputs) {
+    toast("Please wait !");
     const res = await fetch("https://library-system-backend-gray.vercel.app/api/login", {
         headers: { "Content-Type": "application/json" },
         method: "POST",
