@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
 }
 
 async function validateToken(access_token: string | undefined) {
-    const res = await fetch("http://localhost:5000/api/check-token", {
+    const res = await fetch("https://library-system-backend-gray.vercel.app/api/check-token", {
         headers: {
             Authorization: "Bearer " + access_token,
             "Content-Type": "application/json",

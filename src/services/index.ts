@@ -2,13 +2,8 @@ import type { LoginInputs, LoginReturns } from "@/typings";
 
 import { toast } from "sonner";
 
-export const api_string =
-    process.env.NODE_ENV === "production"
-        ? "https://library-system-backend-gray.vercel.app"
-        : "http://localhost:5000";
-
 export async function submitLogin(formData: LoginInputs) {
-    const res = await fetch(`${api_string}/login`, {
+    const res = await fetch("https://library-system-backend-gray.vercel.app/api/login", {
         headers: { "Content-Type": "application/json" },
         method: "POST",
         body: JSON.stringify(formData),
