@@ -41,7 +41,7 @@ async function validateToken(access_token: string | undefined) {
 
         return data;
     } catch (e) {
-        return null;
+        return { status: "failed" };
     }
 }
 
