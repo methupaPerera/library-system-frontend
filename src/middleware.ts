@@ -52,5 +52,5 @@ async function validateToken(access_token: string | undefined) {
 }
 
 export const config = {
-    matcher: ["/", "/my-profile", "/login", "/dashboard"],
+    matcher: ["/", "/my-profile", "/login", "/dashboard", "/members", "/books"],
 };

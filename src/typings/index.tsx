@@ -22,6 +22,7 @@ export type SidebarLinkProps = {
 export type StaticsCardProps = {
     caption: string;
     value: string | number;
+    Icon: any
 };
 
 export type BookDataProps = {
