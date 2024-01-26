@@ -23,3 +23,9 @@ export type StaticsCardProps = {
     caption: string;
     value: string | number;
 };
+
+export type BookDataProps = {
+    name: string;
+    author: string;
+    availability: boolean;
+}

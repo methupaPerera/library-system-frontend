@@ -20,7 +20,7 @@ import { BsFillPeopleFill } from "react-icons/bs";
 
 export default function Sidebar() {
     return (
-        <div className="w-16 h-[calc(100vh-3.5rem)] pt-14 px-1.5 flex flex-col gap-1 bg-background border-r border-muted">
+        <div className="w-16 h-[calc(100vh-3.5rem)] pt-14 px-1.5 flex flex-col gap-1 bg-background border-r border-muted fixed">
             <SidebarLink route="dashboard" Icon={<BiSolidDashboard />} />
             <SidebarLink route="members" Icon={<BsFillPeopleFill />} />
             <SidebarLink route="books" Icon={<ImBooks />} />

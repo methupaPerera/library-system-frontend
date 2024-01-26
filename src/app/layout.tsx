@@ -24,7 +24,7 @@ export default function RootLayout({ children }: Children) {
                     disableTransitionOnChange
                 >
                     <Navigation />
-                    <main>{children}</main>
+                    <main className="pt-14">{children}</main>
                     <Toaster position="top-right" />
                 </ThemeProvider>
             </body>
