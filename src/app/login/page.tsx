@@ -2,6 +2,7 @@
 
 import type { LoginInputs } from "@/typings";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { submitLogin } from "@/services";
 
@@ -10,6 +11,17 @@ import { Input } from "@/components/ui/input";
 
 export default function Login() {
     const { register, handleSubmit } = useForm<LoginInputs>();
+
+    useEffect(() => {
+        function handleKeyPress(event: KeyboardEvent) {
+            if (event.key !== "Enter") return;
+
+            handleSubmit((data) => submitLogin(data));
+        }
+
+        window.addEventListener("keydown", handleKeyPress);
+        return () => window.removeEventListener("keydown", handleKeyPress);
+    }, []);
 
     return (
         <form
