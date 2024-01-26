@@ -16,3 +16,10 @@ export type SidebarLinkProps = {
     route: string;
     Icon: React.ReactElement;
 };
+
+// --------------------- DASHBOARD ITEMS ----------------------------------------
+
+export type StaticsCardProps = {
+    caption: string;
+    value: string | number;
+};

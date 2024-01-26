@@ -1,3 +1,14 @@
+import { StaticsCard } from "@/components";
+
 export default function Dashboard() {
-    return <div className="p-1 font-semibold text-xl text-muted-foreground">Dashboard</div>;
+    return (
+        <div className="pt-3 px-4">
+            <h3 className="font-semibold text-2xl text-muted-foreground">
+                Dashboard
+            </h3>
+            <div className="pt-4">
+                <StaticsCard caption="Books" value={226} />
+            </div>
+        </div>
+    );
 }
