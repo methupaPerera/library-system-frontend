@@ -1,5 +1,7 @@
 "use client";
 
+import type { SidebarLinkProps } from "@/typings";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { buttonVariants } from "./ui/button";
@@ -7,6 +9,8 @@ import { buttonVariants } from "./ui/button";
 import { BiSolidDashboard } from "react-icons/bi";
 import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
+
+// --------------------- SIDEBAR ------------------------------------------------
 
 export default function Sidebar() {
     return (
@@ -18,22 +22,20 @@ export default function Sidebar() {
     );
 }
 
-function SidebarLink({
-    route,
-    Icon,
-}: {
-    route: string;
-    Icon: React.ReactElement;
-}) {
+// --------------------- LINK STYLER FOR SIDEBAR --------------------------------
+
+function SidebarLink({ route, Icon }: SidebarLinkProps) {
     const path = usePathname();
 
     return (
         <Link
             href={route}
-            className={buttonVariants({
-                size: "lg",
-                variant: !(path === "/" + route) ? "outline" : "default",
-            }) + " !text-2xl !px-1"}
+            className={
+                buttonVariants({
+                    size: "lg",
+                    variant: !(path === "/" + route) ? "outline" : "default",
+                }) + " !text-2xl !px-1"
+            }
         >
             {Icon}
         </Link>

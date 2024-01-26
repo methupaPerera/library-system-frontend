@@ -2,27 +2,43 @@ import type { LoginInputs, LoginReturns } from "@/typings";
 
 import { toast } from "sonner";
 
+// --------------------- USER LOGIN ---------------------------------------------
+
 export async function submitLogin(formData: LoginInputs) {
-    toast.loading("Please wait...");
-    
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
-        body: JSON.stringify(formData),
-    });
+    const tId = toast.loading("Please wait...");
 
-    const data: LoginReturns = await res.json();
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify(formData),
+        });
 
-    if (data.status === "success") {
-        toast("Login success !");
-        document.cookie = `access_token=${data.access_token}`;
-        location.reload();
-    } else {
-        toast("Failed to log you in !");
+        const data: LoginReturns = await res.json();
+
+        toast.dismiss(tId);
+
+        if (data.status === "success") {
+            toast(data.message);
+            document.cookie = `access_token=${data.access_token}`;
+            location.reload();
+        } else {
+            toast(data.message);
+        }
+    } catch (e) {
+        toast.dismiss(tId);
+        toast("Failed to submit login");
     }
 }
 
+// --------------------- USER LOGOUT --------------------------------------------
+
 export function handleLogout() {
-    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    location.reload();
+    toast("Successfully logged out");
+
+    setTimeout(() => {
+        document.cookie =
+            "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        location.reload();
+    }, 500);
 }

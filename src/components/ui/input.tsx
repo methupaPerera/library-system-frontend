@@ -25,6 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     />
                     
                     {/* Added the visibility button for the password fields. */}
+                    
                     <div className="text-muted-foreground absolute right-3 top-3 cursor-pointer">
                         {type === "password" ? (
                             inputType === "password" ? (

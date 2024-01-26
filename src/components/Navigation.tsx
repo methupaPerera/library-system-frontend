@@ -1,7 +1,7 @@
 "use client";
 
-import { LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { handleLogout } from "@/services";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,11 +11,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { handleLogout } from "@/services";
+import { LogOut, Moon, Sun } from "lucide-react";
+
+// --------------------- NAVIGATION BAR -----------------------------------------
 
 export default function Navigation() {
     return (
-        <nav className="h-14 container flex justify-between items-center bg-background border-b border-muted">
+        <nav className="h-14 px-3 sm:px-4 md:px-6 lg:px-10 flex justify-between items-center bg-background border-b border-muted">
             <h1 className="text-3xl text-secondary-foreground font-extrabold uppercase">
                 Libsys
             </h1>
@@ -30,6 +32,8 @@ export default function Navigation() {
     );
 }
 
+// --------------------- THEME SWITCHING BUTTON ---------------------------------
+
 function ModeToggle() {
     const { setTheme } = useTheme();
 
@@ -42,6 +46,7 @@ function ModeToggle() {
                     <span className="sr-only">Toggle theme</span>
                 </Button>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
                     Light
