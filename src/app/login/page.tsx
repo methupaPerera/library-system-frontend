@@ -13,6 +13,9 @@ export default function Login() {
     const { register, handleSubmit } = useForm<LoginInputs>();
 
     useEffect(() => {
+        document.cookie =
+            "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
 
