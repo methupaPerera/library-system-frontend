@@ -9,6 +9,14 @@ export type UpdatePasswordInputs = {
     new_password: string;
 };
 
+export type CreateMemberInputs = {
+    full_name: string;
+    address: string;
+    phone_number: string;
+    email: string;
+    membership_type: string;
+};
+
 interface APIResponse {
     status: "success" | "failed";
     message: string;
@@ -22,6 +30,13 @@ export interface LoginReturns extends APIResponse {
 
 export interface UpdatePasswordReturns extends APIResponse {
     data: {};
+}
+
+export interface CreateMemberReturns extends APIResponse {
+    data: {
+        member_id: string;
+        password: string;
+    };
 }
 
 // --------------------- SIDEBAR ------------------------------------------------

@@ -1,4 +1,6 @@
 import type {
+    CreateMemberInputs,
+    CreateMemberReturns,
     LoginInputs,
     LoginReturns,
     UpdatePasswordInputs,
@@ -6,12 +8,11 @@ import type {
 } from "@/typings";
 
 import { toast } from "sonner";
-import axios from "axios";
 import { getAccessTokenCookie } from "@/lib/utils";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-// --------------------- AUTH ---------------------------------------------------
+// --------------------- LOG IN -------------------------------------------------
 
 export async function submitLogin(formData: LoginInputs) {
     const tId = toast.loading("Please wait...");
@@ -42,32 +43,39 @@ export async function submitLogin(formData: LoginInputs) {
     }
 }
 
+// --------------------- UPDATE PASSWORDS ---------------------------------------
+
 export async function submitUpdatePassword(formData: UpdatePasswordInputs) {
     const tId = toast.loading("Please wait...");
 
-    const res = await fetch(`${apiURL}/password`, {
-        method: "PATCH",
-        body: JSON.stringify(formData),
-        headers: {
-            Authorization: `Bearer ${getAccessTokenCookie()}`,
-            "Content-Type": "application/json",
-        },
-    });
+    try {
+        const res = await fetch(`${apiURL}/password`, {
+            method: "PATCH",
+            body: JSON.stringify(formData),
+            headers: {
+                Authorization: `Bearer ${getAccessTokenCookie()}`,
+                "Content-Type": "application/json",
+            },
+        });
 
-    const { status, message }: UpdatePasswordReturns = await res.json();
+        const { status, message }: UpdatePasswordReturns = await res.json();
 
-    toast.dismiss(tId);
+        toast.dismiss(tId);
 
-    if (status === "success") {
-        toast(message + " Please log in again.");
-        document.cookie =
-            "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        if (status === "success") {
+            toast(message + " Please log in again.");
+            document.cookie =
+                "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
-        setTimeout(() => {
-            location.reload();
-        }, 1000);
-    } else {
-        toast(message);
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        } else {
+            toast(message);
+        }
+    } catch (e) {
+        toast.dismiss(tId);
+        toast("Failed to update the password.");
     }
 }
 
@@ -82,4 +90,36 @@ export function handleLogout() {
 
         location.reload();
     }, 500);
+}
+
+// --------------------- CREATE MEMBER ------------------------------------------
+
+export async function submitCreateMember(formData: CreateMemberInputs) {
+    const tId = toast.loading("Please wait...");
+
+    try {
+        const res = await fetch(`${apiURL}/member`, {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+                Authorization: `Bearer ${getAccessTokenCookie()}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        const { status, message, data }: CreateMemberReturns = await res.json();
+
+        toast.dismiss(tId);
+
+        if (status === "success") {
+            toast(message);
+
+            return { status, data };
+        } else {
+            toast(message);
+        }
+    } catch (e) {
+        toast.dismiss(tId);
+        toast("Failed to submit new member data.");
+    }
 }

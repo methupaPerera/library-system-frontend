@@ -63,7 +63,7 @@ export default function UpdatePasswordForm() {
                         {...register("new_password", { required: true })}
                     />
 
-                    <Button type="submit" className="mt-4">
+                    <Button type="submit" className="mt-6">
                         Submit
                     </Button>
                 </form>
