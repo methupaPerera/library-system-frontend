@@ -166,7 +166,7 @@ export default function CreateMemberForm() {
                 <AlertDialogContent className="w-96">
                     <AlertDialogHeader>
                         <AlertDialogTitle>
-                            Here's the new member's member id and the password!
+                            Here&apos;s the new member&apos;s member id and the password!
                         </AlertDialogTitle>
                         <AlertDialogDescription className="pt-3 pb-1 flex flex-col justify-center mx-auto text-2xl">
                             <span>
