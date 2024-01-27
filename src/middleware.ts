@@ -1,31 +1,28 @@
 import type { NextRequest } from "next/server";
-
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const access_token = request.cookies.get("access_token")?.value;
 
-    // Users can't continue without logging in.
-    if (path !== "/login" && !access_token) {
-        return NextResponse.redirect(new URL("/login", request.url));
-    }
-
     // Validating the access token.
-    const data = await validateToken(access_token);
+    const { status, data } = await validateToken(access_token);
 
     // Users can't continue with a mutated access token.
-    if (path !== "/login" && data.status === "failed") {
+    if (path !== "/login" && status === "failed") {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
     // Users can't relogin without logging out.
-    if ((path === "/login" || path === "/") && data.type === "admin") {
+    if (
+        (path === "/login" || path === "/") &&
+        data.membership_type === "admin"
+    ) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     // Members can't access the pages other than "my-profile".
-    if (path !== "/my-profile" && data.type === "member") {
+    if (path !== "/my-profile" && data.membership_type === "member") {
         return NextResponse.redirect(new URL("/my-profile", request.url));
     }
 }
@@ -47,7 +44,7 @@ async function validateToken(access_token: string | undefined) {
 
         return data;
     } catch (e) {
-        return { status: "failed" };
+        return { status: "failed" }; // Indicates the failed fetch request.
     }
 }
 

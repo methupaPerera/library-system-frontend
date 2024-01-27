@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { useForm } from "react-hook-form";
 import { handleLogout } from "@/services";
+import { getAccessTokenCookie } from "@/lib/utils";
 
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { UpdatePasswordForm } from "./forms";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,16 +19,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet";
-import { toast } from "sonner";
 
 import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa6";
@@ -39,11 +29,9 @@ export default function Navigation() {
     const [isLogggedIn, setLoggedIn] = useState<boolean>(false);
 
     useEffect(() => {
-        const cookies = document.cookie
-            .split(";")
-            .find((cookie) => cookie.startsWith("access_token"));
+        const tokenCookie = getAccessTokenCookie();
 
-        if (cookies) {
+        if (tokenCookie) {
             setLoggedIn(true);
         } else {
             setLoggedIn(false);
@@ -70,7 +58,7 @@ export default function Navigation() {
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="mr-3 sm:mr-4 md:mr-6 lg:mr-10 w-44 flex flex-col items-center gap-2">
-                            <ChangePasswordForm />
+                            <UpdatePasswordForm />
 
                             <Button
                                 className="!w-full px-4"
@@ -95,81 +83,6 @@ export default function Navigation() {
     );
 }
 
-// --------------------- CHANGE PASSWORD FORM -----------------------------------
-
-function ChangePasswordForm() {
-    const { register, handleSubmit } = useForm();
-
-    async function handlePassword(formData: any) {
-        const tId = toast.loading("Please wait...");
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/password`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization:
-                    "Bearer " +
-                    document.cookie
-                        .split(";")
-                        .find((cookie) => cookie.startsWith("access_token"))
-                        ?.split("=")[1],
-            },
-            body: JSON.stringify(formData),
-        });
-
-        const data = await res.json();
-
-        toast.dismiss(tId);
-
-        if (data.status === "success") {
-            toast(data.message + ". Please log in again.");
-            document.cookie =
-                "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-        } else {
-            toast(data.message);
-        }
-    }
-
-    return (
-        <Sheet>
-            <SheetTrigger asChild>
-                <Button className="!w-full px-4" size="sm" variant="outline">
-                    Update Password
-                </Button>
-            </SheetTrigger>
-
-            <SheetContent>
-                <SheetHeader>
-                    <SheetTitle>Update Your Password.</SheetTitle>
-                </SheetHeader>
-
-                <form
-                    method="POST"
-                    onSubmit={handleSubmit((data) => handlePassword(data))}
-                    className="mt-8 flex flex-col gap-4"
-                >
-                    <Input
-                        type="text"
-                        placeholder="Old Password"
-                        required
-                        {...register("old_password", { required: true })}
-                    />
-                    <Input
-                        type="text"
-                        placeholder="New Password"
-                        required
-                        {...register("new_password", { required: true })}
-                    />
-
-                    <Button type="submit">Submit</Button>
-                </form>
-            </SheetContent>
-        </Sheet>
-    );
-}
 // --------------------- THEME SWITCHING BUTTON ---------------------------------
 
 function ModeToggle() {
