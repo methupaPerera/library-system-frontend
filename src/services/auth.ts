@@ -44,7 +44,17 @@ class Auth extends Utils implements AuthProperties {
                 return;
             }
 
-            document.cookie = `access_token=${data.access_token}`;
+            // Setting the expiration time to 8 hours from the current time.
+            const expirationTime = new Date();
+            expirationTime.setTime(
+                expirationTime.getTime() + 8 * 60 * 60 * 1000
+            );
+
+            // Creating the cookie string with the expiration time.
+            document.cookie = `access_token=${
+                data.access_token
+            }; expires=${expirationTime.toUTCString()};`;
+
             location.reload();
         } catch (e) {
             toast.dismiss(tId);
