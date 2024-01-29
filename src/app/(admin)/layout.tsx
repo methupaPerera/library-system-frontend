@@ -1,4 +1,4 @@
-import type { Children } from "@/typings";
+import type { Children } from "@/typings/prop-types";
 
 import { Sidebar } from "@/components";
 

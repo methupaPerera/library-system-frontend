@@ -1,13 +1,17 @@
-import type { BookDataProps } from "@/typings";
+// Importing types.
+import type { BookDataProps } from "@/typings/prop-types";
 
+// Importing components.
 import { StaticsCard } from "@/components";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+// Importing icons.
 import { FaCoins } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { TbCalendarDue } from "react-icons/tb";
 
+// Dashboard. -----------------------------------------------------------------
 export default function Dashboard() {
     return (
         <div className="pt-3 px-4">
@@ -65,6 +69,7 @@ export default function Dashboard() {
     );
 }
 
+// Generates the rows of most-read-books table. -------------------------------
 function BookData({ name, author, availability }: BookDataProps) {
     return (
         <div className="pb-2 mb-2 border-b border-muted">

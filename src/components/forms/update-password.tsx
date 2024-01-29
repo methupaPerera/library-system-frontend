@@ -1,11 +1,14 @@
 "use client";
 
-import type { UpdatePasswordInputs } from "@/typings";
+// Importing types.
+import { UpdatePasswordInputs } from "@/typings/auth-types";
 
+// Importing utilities.
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { submitUpdatePassword } from "@/services";
+import auth from "@/services/auth";
 
+// Importing components.
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,7 +26,7 @@ export default function UpdatePasswordForm() {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
 
-            handleSubmit((data) => submitUpdatePassword(data));
+            handleSubmit((data) => auth.submitUpdatePassword(data));
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -45,9 +48,9 @@ export default function UpdatePasswordForm() {
 
                 <form
                     method="POST"
-                    onSubmit={handleSubmit((data) =>
-                        submitUpdatePassword(data)
-                    )}
+                    onSubmit={handleSubmit((data) => {
+                        auth.submitUpdatePassword(data);
+                    })}
                     className="mt-8 flex flex-col gap-3"
                 >
                     <Input

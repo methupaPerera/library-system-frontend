@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import type { Children } from "@/typings";
+
+import type { Children } from "@/typings/prop-types";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Inter } from "next/font/google";

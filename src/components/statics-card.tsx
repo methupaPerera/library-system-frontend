@@ -1,4 +1,4 @@
-import type { StaticsCardProps } from "@/typings";
+import { StaticsCardProps } from "@/typings/prop-types";
 
 export default function StaticsCard({
     caption,

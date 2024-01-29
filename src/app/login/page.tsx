@@ -1,11 +1,14 @@
 "use client";
 
-import type { LoginInputs } from "@/typings";
+// Importing types.
+import type { LoginInputs } from "@/typings/auth-types";
 
+// Importing utilities.
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { submitLogin } from "@/services";
+import auth from "@/services/auth";
 
+// Importing components.
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -19,7 +22,7 @@ export default function Login() {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
 
-            handleSubmit((data) => submitLogin(data));
+            handleSubmit((data) => auth.submitLogin(data));
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -29,7 +32,7 @@ export default function Login() {
     return (
         <form
             method="POST"
-            onSubmit={handleSubmit((data) => submitLogin(data))}
+            onSubmit={handleSubmit((data) => auth.submitLogin(data))}
             className="mx-auto mt-32 sm:mt-24 w-11/12 sm:w-96 px-8 py-6 flex flex-col gap-6 shadow-[5px_0_1rem] shadow-gray-300 dark:bg-secondary dark:shadow-none dark:border dark:border-muted rounded-xl"
         >
             <h1 className="text-4xl text-secondary-foreground font-extrabold">

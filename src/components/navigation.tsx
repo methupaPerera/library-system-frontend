@@ -1,10 +1,12 @@
 "use client";
 
+// Importing utilities.
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { handleLogout } from "@/services";
-import { getAccessTokenCookie } from "@/lib/utils";
+import utils from "@/services/utils";
+import auth from "@/services/auth";
 
+// Importing components.
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UpdatePasswordForm } from "./forms";
@@ -20,16 +22,17 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 
+// Importing icons.
 import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa6";
 
-// --------------------- NAVIGATION BAR -----------------------------------------
-
+// Navigation bar. ------------------------------------------------------------
 export default function Navigation() {
     const [isLogggedIn, setLoggedIn] = useState<boolean>(false);
 
+    // Switching the navigation bar content according to presence of the access token.
     useEffect(() => {
-        const tokenCookie = getAccessTokenCookie();
+        const tokenCookie = utils.getAccessTokenCookie();
 
         if (tokenCookie) {
             setLoggedIn(true);
@@ -64,7 +67,7 @@ export default function Navigation() {
                                 className="!w-full px-4"
                                 variant="secondary"
                                 size="sm"
-                                onClick={() => handleLogout()}
+                                onClick={() => auth.handleLogout()}
                             >
                                 Log out{" "}
                                 <LogOut className="pl-2 text-[0.5rem]" />
@@ -83,8 +86,7 @@ export default function Navigation() {
     );
 }
 
-// --------------------- THEME SWITCHING BUTTON ---------------------------------
-
+// Theme switching button. ----------------------------------------------------
 function ModeToggle() {
     const { setTheme } = useTheme();
 

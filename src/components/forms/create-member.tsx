@@ -1,9 +1,16 @@
 "use client";
 
+// Importing types.
+import type { CreateMemberInputs, NewMemberState } from "@/typings/admin-types";
+
+// Importing utilities.
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import admin from "@/services/admin";
 
+// Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "../ui/input";
 import {
     Sheet,
     SheetClose,
@@ -31,34 +38,45 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+// Importing icons.
 import { FaPlus } from "react-icons/fa6";
-import { Input } from "../ui/input";
-import { submitCreateMember } from "@/services";
-import { CreateMemberInputs } from "@/typings";
 
 export default function CreateMemberForm() {
+    // Container for the membership type input.
     const [membership, setMembership] = useState<"admin" | "member">("member");
-    const [isCreated, setCreated] = useState<{
-        state: boolean;
-        info: { member_id: string; password: string };
-    }>({ state: false, info: { member_id: " ", password: " " } });
+
+    // Triggers the modal dialog with new member's id and password.
+    const [isCreated, setCreated] = useState<NewMemberState>({
+        state: false,
+        info: { member_id: "", password: "" },
+    });
 
     const { register, handleSubmit } = useForm<CreateMemberInputs>();
+
+    // Function for handling data submission and handling returned data.
+    async function handleReqRes(data: CreateMemberInputs) {
+        const info = await admin.submitCreateMember({
+            ...data,
+            membership_type: membership,
+        });
+
+        if (info?.status === "success") {
+            setCreated({
+                state: true,
+                // Using a type assertion, because data key exists if status is "success".
+                info: info.data as {
+                    member_id: string;
+                    password: string;
+                },
+            });
+        }
+    }
 
     useEffect(() => {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
 
-            handleSubmit(async (data) => {
-                const info = await submitCreateMember({
-                    ...data,
-                    membership_type: membership,
-                });
-
-                if (info?.status === "success") {
-                    setCreated({ state: true, info: info.data });
-                }
-            });
+            handleSubmit(handleReqRes);
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -76,6 +94,7 @@ export default function CreateMemberForm() {
                         Add member <FaPlus />
                     </Button>
                 </SheetTrigger>
+
                 <SheetContent>
                     <SheetHeader>
                         <SheetTitle>Add New Member.</SheetTitle>
@@ -83,16 +102,7 @@ export default function CreateMemberForm() {
 
                     <form
                         method="POST"
-                        onSubmit={handleSubmit(async (data) => {
-                            const info = await submitCreateMember({
-                                ...data,
-                                membership_type: membership,
-                            });
-
-                            if (info?.status === "success") {
-                                setCreated({ state: true, info: info.data });
-                            }
-                        })}
+                        onSubmit={handleSubmit(handleReqRes)}
                         className="mt-8 flex flex-col gap-3"
                     >
                         <Input
@@ -157,6 +167,8 @@ export default function CreateMemberForm() {
                 </SheetContent>
             </Sheet>
 
+            {/* Modal dialog for displaying the member's id and password. */}
+
             <AlertDialog
                 open={isCreated.state}
                 onOpenChange={() =>
@@ -166,7 +178,8 @@ export default function CreateMemberForm() {
                 <AlertDialogContent className="w-96">
                     <AlertDialogHeader>
                         <AlertDialogTitle>
-                            Here&apos;s the new member&apos;s member id and the password!
+                            Here&apos;s the new member&apos;s member id and the
+                            password!
                         </AlertDialogTitle>
                         <AlertDialogDescription className="pt-3 pb-1 flex flex-col justify-center mx-auto text-2xl">
                             <span>
