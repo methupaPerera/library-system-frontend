@@ -3,8 +3,7 @@ type BaseReturns = {
     message: string;
 };
 
-// Types for the member creation functions. -------------------------
-
+// Types related to member creation functions.
 export type MembershipTypes = "admin" | "member";
 
 export type CreateMemberInputs = {
@@ -27,8 +26,7 @@ export type NewMemberState = {
     info: { member_id: string; password: string };
 };
 
-// Types for the book creation functions. -------------------------
-
+// Types related to book creation functions.
 export type Genres = "sci-fi" | "novel" | "mystery" | "action" | "adventure";
 
 export type CreateBookInputs = {
@@ -43,8 +41,7 @@ export type CreateBookReturns = BaseReturns & {
     data: {};
 };
 
-// Interface for the admin class. -----------------------------------
-
+// Interface for the Admin class specifying its properties.
 export interface AdminProperties {
     submitCreateMember(formData: CreateMemberInputs): Promise<
         | {
@@ -57,4 +54,4 @@ export interface AdminProperties {
         | undefined
     >;
     submitCreateBook(formData: CreateBookInputs): Promise<void>;
-}
+};

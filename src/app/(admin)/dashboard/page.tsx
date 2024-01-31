@@ -20,8 +20,9 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { TbCalendarDue } from "react-icons/tb";
 import { InfoIcon } from "lucide-react";
 
-// Dashboard. -----------------------------------------------------------------
+// Dashboard component.
 export default async function Dashboard() {
+    // Fetching dashboard information from the server.
     const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/dashboard-info`,
         {
@@ -46,6 +47,7 @@ export default async function Dashboard() {
             </h3>
 
             <div className="pt-4 flex flex-col md:flex-row gap-4">
+                {/* Statistics cards section. */}
                 <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
                     <StaticsCard
                         caption="Books"
@@ -69,11 +71,13 @@ export default async function Dashboard() {
                     />
                 </div>
 
+                {/* Top Books section. */}
                 <div className="bg-background p-4 w-full md:w-1/2 rounded-lg shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted">
                     <span className="py-1 px-3 font-semibold bg-secondary rounded-full">
                         Top Books
                     </span>
 
+                    {/* Scrollable area for top books. */}
                     <ScrollArea
                         type="always"
                         className="h-[14.5rem] mt-3 px-2 pr-4"
@@ -88,7 +92,7 @@ export default async function Dashboard() {
     );
 }
 
-// Generates the rows of most-read-books table. -------------------------------
+// Generates the rows of the most-read-books table.
 function BookData({ title, author, stock, borrowed_count }: BookDataProps) {
     return (
         <div className="pb-2 mb-2 border-b border-muted">
@@ -99,6 +103,7 @@ function BookData({ title, author, stock, borrowed_count }: BookDataProps) {
                     {author}
                 </p>
 
+                {/* Displaying book availability status. */}
                 {stock > borrowed_count ? (
                     <span className="bg-green-400 text-[12px] mt-0.5 py-0.5 px-2 rounded-full text-white">
                         Available

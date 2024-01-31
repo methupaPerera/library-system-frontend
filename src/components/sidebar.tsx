@@ -1,9 +1,9 @@
 "use client";
 
-// Imporing types.
+// Importing types.
 import type { SidebarLinkProps } from "@/typings/prop-types";
 
-// Imporing components.
+// Importing components.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { buttonVariants } from "./ui/button";
@@ -19,7 +19,7 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
 
-// Sidebar. -------------------------------------------------------------------
+// Sidebar component.
 export default function Sidebar() {
     return (
         <div className="w-16 h-[calc(100vh-3.5rem)] pt-14 px-1.5 flex flex-col gap-1 bg-background border-r border-muted fixed">
@@ -30,7 +30,7 @@ export default function Sidebar() {
     );
 }
 
-// Link styler for sidebar links. ---------------------------------------------
+// Link styler for sidebar links.
 function SidebarLink({ route, Icon }: SidebarLinkProps) {
     const path = usePathname();
 
@@ -38,6 +38,7 @@ function SidebarLink({ route, Icon }: SidebarLinkProps) {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger>
+                    {/* Styling the link based on the path and variant. */}
                     <Link
                         href={route}
                         className={
@@ -52,6 +53,9 @@ function SidebarLink({ route, Icon }: SidebarLinkProps) {
                         {Icon}
                     </Link>
                 </TooltipTrigger>
+
+                {/* Displaying a tooltip with the route name. */}
+                
                 <TooltipContent side="right">
                     <p className="capitalize">{route}</p>
                 </TooltipContent>

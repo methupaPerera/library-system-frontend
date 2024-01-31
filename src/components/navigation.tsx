@@ -26,11 +26,11 @@ import {
 import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa6";
 
-// Navigation bar. ------------------------------------------------------------
+// Navigation bar component.
 export default function Navigation() {
-    const [isLogggedIn, setLoggedIn] = useState<boolean>(false);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
-    // Switching the navigation bar content according to presence of the access token.
+    // Switching the navigation bar content according to the presence of the access token.
     useEffect(() => {
         const tokenCookie = utils.getAccessTokenCookie();
 
@@ -49,7 +49,7 @@ export default function Navigation() {
 
             <div className="flex items-center gap-3 text-secondary-foreground">
                 <ModeToggle />
-                {isLogggedIn ? (
+                {isLoggedIn ? (
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button
@@ -86,7 +86,7 @@ export default function Navigation() {
     );
 }
 
-// Theme switching button. ----------------------------------------------------
+// Theme switching button component.
 function ModeToggle() {
     const { setTheme } = useTheme();
 

@@ -17,7 +17,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "../ui/input";
 import {
     Sheet,
-    SheetClose,
     SheetContent,
     SheetHeader,
     SheetTitle,
@@ -28,7 +27,6 @@ import {
     SelectContent,
     SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
@@ -49,7 +47,7 @@ export default function CreateMemberForm() {
     // Container for the membership type input.
     const [membership, setMembership] = useState<MembershipTypes>("member");
 
-    // Triggers the modal dialog with new member's id and password.
+    // Triggers the modal dialog with the new member's ID and password.
     const [isCreated, setCreated] = useState<NewMemberState>({
         state: false,
         info: { member_id: "", password: "" },
@@ -57,7 +55,7 @@ export default function CreateMemberForm() {
 
     const { register, handleSubmit } = useForm<CreateMemberInputs>();
 
-    // Function for handling data submission and handling returned data.
+    // Function for handling data submission and managing returned data.
     async function handleReqRes(data: CreateMemberInputs) {
         const info = await admin.submitCreateMember({
             ...data,
@@ -67,7 +65,7 @@ export default function CreateMemberForm() {
         if (info?.status === "success") {
             setCreated({
                 state: true,
-                // Using a type assertion, because data key exists if status is "success".
+                // Using a type assertion because the 'data' key exists when the status is "success".
                 info: info.data as {
                     member_id: string;
                     password: string;
@@ -170,7 +168,7 @@ export default function CreateMemberForm() {
                 </SheetContent>
             </Sheet>
 
-            {/* Modal dialog for displaying the member's id and password. */}
+            {/* Modal dialog for displaying the member's ID and password. */}
 
             <AlertDialog
                 open={isCreated.state}

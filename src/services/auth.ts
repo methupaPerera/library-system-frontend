@@ -10,19 +10,18 @@ import { Utils } from "./utils";
 import { toast } from "sonner";
 
 class Auth extends Utils implements AuthProperties {
-    // Links of the api endpoints.
+    // API endpoint URLs.
     private loginUrl: string;
     private updatePasswordUrl: string;
 
     constructor(apiUrl: string | undefined) {
         super();
 
-        // Defining routes with the base api url.
         this.loginUrl = `${apiUrl}/login`;
         this.updatePasswordUrl = `${apiUrl}/password`;
     }
 
-    // Submits the login data and logs in the user. -----------------
+    // Method to submit login data and log in the user.
     async submitLogin(formData: LoginInputs) {
         const tId = toast.loading("Please wait...");
 
@@ -44,13 +43,13 @@ class Auth extends Utils implements AuthProperties {
                 return;
             }
 
-            // Setting the expiration time to 8 hours from the current time.
+            // Setting the expiration time for the access token cookie.
             const expirationTime = new Date();
             expirationTime.setTime(
                 expirationTime.getTime() + 8 * 60 * 60 * 1000
             );
 
-            // Creating the cookie string with the expiration time.
+            // Creating the access token cookie with expiration time.
             document.cookie = `access_token=${
                 data.access_token
             }; expires=${expirationTime.toUTCString()};`;
@@ -62,7 +61,7 @@ class Auth extends Utils implements AuthProperties {
         }
     }
 
-    // Submits the password data and updates it. --------------------
+    // Method to submit password data and update it.
     async submitUpdatePassword(formData: UpdatePasswordInputs) {
         const tId = toast.loading("Please wait...");
 
@@ -87,6 +86,7 @@ class Auth extends Utils implements AuthProperties {
 
             toast(`${message} Please log in again.`);
 
+            // Clearing the access token cookie.
             document.cookie =
                 "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
@@ -99,10 +99,11 @@ class Auth extends Utils implements AuthProperties {
         }
     }
 
-    // Logs the user out by removing the access token. --------------
+    // Method to log out the user by removing the access token.
     handleLogout() {
         toast("Successfully logged out.");
 
+        // Clearing the access token cookie.
         document.cookie =
             "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 

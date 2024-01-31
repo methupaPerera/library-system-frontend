@@ -1,5 +1,3 @@
-import { Genres } from "./admin-types";
-
 export type Children = Readonly<{ children: React.ReactNode }>;
 
 type BaseReturns = {
@@ -7,15 +5,13 @@ type BaseReturns = {
     message: string;
 };
 
-// Types for the sidebar. -------------------------------------------
-
+// Types for Sidebar component props.
 export type SidebarLinkProps = {
     route: string;
     Icon: React.ReactElement;
 };
 
-// Types for the dashboard components. ------------------------------
-
+// Types for Dashboard component props.
 export type StaticsCardProps = {
     caption: string;
     value: string | number;

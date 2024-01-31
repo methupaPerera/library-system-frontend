@@ -10,19 +10,18 @@ import { Utils } from "./utils";
 import { toast } from "sonner";
 
 class Admin extends Utils implements AdminProperties {
-    // Links of the api endpoints.
+    // API endpoint URLs.
     private createMemberUrl: string;
     private createBookUrl: string;
 
     constructor(apiUrl: string | undefined) {
         super();
 
-        // Defining routes with the base api url.
         this.createMemberUrl = `${apiUrl}/member`;
         this.createBookUrl = `${apiUrl}/book`;
     }
 
-    // Creates a new member and returns id and password. ------------
+    // Method to submit new member data and get the ID & password.
     async submitCreateMember(formData: CreateMemberInputs) {
         const tId = toast.loading("Please wait...");
 
@@ -43,6 +42,7 @@ class Admin extends Utils implements AdminProperties {
 
             toast(message);
 
+            // If the creation is successful, return the status and data.
             if (status === "success") {
                 return { status, data };
             }
@@ -52,7 +52,7 @@ class Admin extends Utils implements AdminProperties {
         }
     }
 
-    // Creates a new book. ------------------------------------------
+    // Method to submit new book data.
     async submitCreateBook(formData: CreateBookInputs) {
         const tId = toast.loading("Please wait...");
 

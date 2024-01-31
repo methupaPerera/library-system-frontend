@@ -5,15 +5,15 @@ export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const access_token = request.cookies.get("access_token")?.value;
 
-    // Validating the access token.
+    // Validating the access token by sending a request to the server.
     const { status, data } = await validateToken(access_token);
 
-    // Users can't continue with a mutated access token.
+    // Users can't continue with a failed or mutated access token.
     if (path !== "/login" && status === "failed") {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Users can't relogin without logging out.
+    // Admins can't log in without logging out first.
     if (
         (path === "/login" || path === "/") &&
         data.membership_type === "admin"
@@ -21,13 +21,13 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
-    // Members can't access the pages other than "my-profile".
+    // Members can't access pages other than "/my-profile".
     if (path !== "/my-profile" && data.membership_type === "member") {
         return NextResponse.redirect(new URL("/my-profile", request.url));
     }
 }
 
-// Validates the token by sending a GET request to the server.
+// Function to validate the access token by sending a GET request to the server.
 async function validateToken(access_token: string | undefined) {
     try {
         const res = await fetch(
@@ -44,7 +44,7 @@ async function validateToken(access_token: string | undefined) {
 
         return data;
     } catch (e) {
-        return { status: "failed" }; // Indicates the failed fetch request.
+        return { status: "failed" }; // Indicates a failed request.
     }
 }
 
