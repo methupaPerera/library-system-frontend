@@ -1,7 +1,11 @@
 "use client";
 
 // Importing types.
-import type { CreateMemberInputs, NewMemberState } from "@/typings/admin-types";
+import type {
+    CreateMemberInputs,
+    MembershipTypes,
+    NewMemberState,
+} from "@/typings/admin-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
@@ -43,7 +47,7 @@ import { FaPlus } from "react-icons/fa6";
 
 export default function CreateMemberForm() {
     // Container for the membership type input.
-    const [membership, setMembership] = useState<"admin" | "member">("member");
+    const [membership, setMembership] = useState<MembershipTypes>("member");
 
     // Triggers the modal dialog with new member's id and password.
     const [isCreated, setCreated] = useState<NewMemberState>({
@@ -136,7 +140,7 @@ export default function CreateMemberForm() {
                         </div>
 
                         <Select
-                            onValueChange={(value: "admin" | "member") =>
+                            onValueChange={(value: MembershipTypes) =>
                                 setMembership(value)
                             }
                         >
@@ -148,7 +152,6 @@ export default function CreateMemberForm() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Membership Types</SelectLabel>
                                     <SelectItem value="member">
                                         Member
                                     </SelectItem>
@@ -157,12 +160,12 @@ export default function CreateMemberForm() {
                             </SelectContent>
                         </Select>
 
-                        <SheetClose
+                        <Button
                             type="submit"
                             className={buttonVariants() + " mt-6"}
                         >
                             Submit
-                        </SheetClose>
+                        </Button>
                     </form>
                 </SheetContent>
             </Sheet>
