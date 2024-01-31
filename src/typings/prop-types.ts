@@ -25,8 +25,6 @@ export type StaticsCardProps = {
 export type BookDataProps = {
     title: string;
     author: string;
-    genre: Genres;
-    total_borrowings: number;
     stock: number;
     borrowed_count: number;
 };

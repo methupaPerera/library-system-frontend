@@ -36,7 +36,7 @@ export default async function Dashboard() {
     const {
         status,
         message,
-        data: { books_count, members_count, top_books, total_fines },
+        data: { members_count, books_count, total_fines, top_books },
     }: DashboardItems = await res.json();
 
     return (
@@ -89,50 +89,25 @@ export default async function Dashboard() {
 }
 
 // Generates the rows of most-read-books table. -------------------------------
-function BookData({
-    title,
-    author,
-    genre,
-    total_borrowings,
-    stock,
-    borrowed_count,
-}: BookDataProps) {
+function BookData({ title, author, stock, borrowed_count }: BookDataProps) {
     return (
         <div className="pb-2 mb-2 border-b border-muted">
-            <div className="border-r border-muted flex justify-between pr-2">
-                <div>
-                    <h6 className="font-semibold">{title}</h6>
+            <div className="border-r border-muted">
+                <h6 className="font-semibold">{title}</h6>
 
-                    <p className="text-[14px] text-gray-400 font-semibold">
-                        {author}
-                    </p>
+                <p className="text-[14px] text-gray-400 font-semibold">
+                    {author}
+                </p>
 
-                    {stock > borrowed_count ? (
-                        <span className="bg-green-400 text-[12px] mt-0.5 py-0.5 px-2 rounded-full text-white">
-                            Available
-                        </span>
-                    ) : (
-                        <span className="bg-red-400 text-[12px] py-0.5 px-2 rounded-full text-white">
-                            Not available
-                        </span>
-                    )}
-                </div>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <InfoIcon className="cursor-pointer text-gray-400" />
-                    </PopoverTrigger>
-                    <PopoverContent side="left" className="w-40">
-                        <p className="text-[12px] font-semibold text-foreground">
-                            Genre - {genre}
-                        </p>
-                        <p className="text-[12px] font-semibold text-foreground">
-                            Total Checkouts - {total_borrowings}
-                        </p>
-                        <p className="text-[12px] font-semibold text-foreground">
-                            Remaining - {stock - borrowed_count}
-                        </p>
-                    </PopoverContent>
-                </Popover>
+                {stock > borrowed_count ? (
+                    <span className="bg-green-400 text-[12px] mt-0.5 py-0.5 px-2 rounded-full text-white">
+                        Available
+                    </span>
+                ) : (
+                    <span className="bg-red-400 text-[12px] py-0.5 px-2 rounded-full text-white">
+                        Not available
+                    </span>
+                )}
             </div>
         </div>
     );
