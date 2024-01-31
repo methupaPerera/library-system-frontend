@@ -6,7 +6,7 @@ export default function StaticsCard({
     Icon,
 }: StaticsCardProps) {
     return (
-        <div className="flex justify-start items-center gap-2 py-4 px-6 bg-background shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted rounded-lg">
+        <div className="flex flex-col py-4 px-6 bg-background shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted rounded-lg">
             <div>
                 <Icon className="text-[4rem]" />
             </div>

@@ -7,12 +7,18 @@ import { cookies } from "next/headers";
 // Importing components.
 import { StaticsCard } from "@/components";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 
 // Importing icons.
 import { FaCoins } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { TbCalendarDue } from "react-icons/tb";
+import { InfoIcon } from "lucide-react";
 
 // Dashboard. -----------------------------------------------------------------
 export default async function Dashboard() {
@@ -92,35 +98,41 @@ function BookData({
     borrowed_count,
 }: BookDataProps) {
     return (
-        <div className="pb-2 mb-2 border-b border-muted flex">
-            <div className="w-1/2 border-r border-muted">
-                <h6 className="font-semibold">{title}</h6>
+        <div className="pb-2 mb-2 border-b border-muted">
+            <div className="border-r border-muted flex justify-between pr-2">
+                <div>
+                    <h6 className="font-semibold">{title}</h6>
 
-                <p className="text-[14px] text-gray-400 font-semibold">
-                    {author}
-                </p>
+                    <p className="text-[14px] text-gray-400 font-semibold">
+                        {author}
+                    </p>
 
-                {stock > borrowed_count ? (
-                    <span className="bg-green-400 text-[12px] mt-0.5 py-0.5 px-2 rounded-full text-white">
-                        Available
-                    </span>
-                ) : (
-                    <span className="bg-red-400 text-[12px] py-0.5 px-2 rounded-full text-white">
-                        Not available
-                    </span>
-                )}
-            </div>
-
-            <div className="w-1/2 p-2 border-r border-muted">
-                <p className="text-[12px] font-semibold text-gray-500">
-                    Genre - {genre}
-                </p>
-                <p className="text-[12px] font-semibold text-gray-500">
-                    Total Checkouts - {total_borrowings}
-                </p>
-                <p className="text-[12px] font-semibold text-gray-500">
-                    Remaining - {stock - borrowed_count}
-                </p>
+                    {stock > borrowed_count ? (
+                        <span className="bg-green-400 text-[12px] mt-0.5 py-0.5 px-2 rounded-full text-white">
+                            Available
+                        </span>
+                    ) : (
+                        <span className="bg-red-400 text-[12px] py-0.5 px-2 rounded-full text-white">
+                            Not available
+                        </span>
+                    )}
+                </div>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <InfoIcon className="cursor-pointer text-gray-400" />
+                    </PopoverTrigger>
+                    <PopoverContent side="left" className="w-40">
+                        <p className="text-[12px] font-semibold text-foreground">
+                            Genre - {genre}
+                        </p>
+                        <p className="text-[12px] font-semibold text-foreground">
+                            Total Checkouts - {total_borrowings}
+                        </p>
+                        <p className="text-[12px] font-semibold text-foreground">
+                            Remaining - {stock - borrowed_count}
+                        </p>
+                    </PopoverContent>
+                </Popover>
             </div>
         </div>
     );
