@@ -73,7 +73,7 @@ export default async function Dashboard() {
                         className="h-[14.5rem] mt-3 px-2 pr-4"
                     >
                         {top_books.map((book: BookDataProps) => {
-                            return <BookData {...book} />;
+                            return <BookData key={book.title} {...book} />;
                         })}
                     </ScrollArea>
                 </div>
