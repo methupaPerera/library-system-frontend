@@ -1,3 +1,8 @@
+type BaseReturns = {
+    status: "success" | "failed";
+    message: string;
+};
+
 export type LoginInputs = {
     member_id: string;
     password: string;
@@ -6,11 +11,6 @@ export type LoginInputs = {
 export type UpdatePasswordInputs = {
     old_password: string;
     new_password: string;
-};
-
-type BaseReturns = {
-    status: "success" | "failed";
-    message: string;
 };
 
 export type LoginReturns = BaseReturns & {

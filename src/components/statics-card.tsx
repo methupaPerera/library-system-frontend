@@ -6,12 +6,14 @@ export default function StaticsCard({
     Icon,
 }: StaticsCardProps) {
     return (
-        <div className="py-4 px-6 bg-background shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted rounded-lg">
+        <div className="flex justify-start items-center gap-2 py-4 px-6 bg-background shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted rounded-lg">
             <div>
-                <h5 className="text-gray-400 font-semibold">{caption}</h5>
+                <Icon className="text-[4rem]" />
+            </div>
+            <div>
+                <h5 className="text-gray-400 font-semibold -mb-1">{caption}</h5>
                 <p className="font-bold text-3xl">{value}</p>
             </div>
-            <Icon className="text-5xl float-right" />
         </div>
     );
 }
