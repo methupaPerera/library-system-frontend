@@ -6,7 +6,7 @@ export default function AdminLayout({ children }: Children) {
     return (
         <div className="flex">
             <Sidebar />
-            <div className="pl-16 w-full bg-secondary p-1">{children}</div>
+            <div className="pl-16 w-full bg-secondary pb-8">{children}</div>
         </div>
     );
 }

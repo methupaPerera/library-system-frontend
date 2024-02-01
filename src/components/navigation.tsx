@@ -42,7 +42,7 @@ export default function Navigation() {
     }, []);
 
     return (
-        <nav className="w-full h-14 px-3 sm:px-4 md:px-6 lg:px-10 flex justify-between items-center bg-background border-b border-muted fixed">
+        <nav className="w-full h-14 px-3 sm:px-4 md:px-6 lg:px-10 flex justify-between items-center bg-background border-b border-muted fixed z-50">
             <h1 className="text-3xl text-secondary-foreground font-extrabold uppercase">
                 Libsys
             </h1>
