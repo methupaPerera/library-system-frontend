@@ -5,6 +5,7 @@ import type {
     CreateMemberInputs,
     CreateMemberReturns,
 } from "@/typings/admin-types";
+import type { Book } from "@/typings/prop-types";
 
 import { Utils } from "./utils";
 import { toast } from "sonner";
@@ -12,12 +13,14 @@ import { toast } from "sonner";
 class Admin extends Utils implements AdminProperties {
     // API endpoint URLs.
     private createMemberUrl: string;
+    private getBooksUrl: string;
     private createBookUrl: string;
 
     constructor(apiUrl: string | undefined) {
         super();
 
         this.createMemberUrl = `${apiUrl}/member`;
+        this.getBooksUrl = `${apiUrl}/book`;
         this.createBookUrl = `${apiUrl}/book`;
     }
 
@@ -74,6 +77,31 @@ class Admin extends Utils implements AdminProperties {
         } catch (e) {
             toast.dismiss(tId);
             toast("Failed to submit new book data.");
+        }
+    }
+
+    // Method to fetch book data.
+    async getBooks(page: number): Promise<[Book[], number] | null> {
+        try {
+            const res = await fetch(`${this.getBooksUrl}?page=${page}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const {
+                data: { books, books_count },
+            }: { data: { books: Book[]; books_count: number } } =
+                await res.json();
+
+            const pages = Math.ceil(books_count / 10);
+
+            return [books, pages];
+        } catch (e) {
+            toast("Failed to fetch book data.");
+            return null;
         }
     }
 }

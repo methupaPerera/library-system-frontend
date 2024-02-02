@@ -1,3 +1,5 @@
+import type { Genres } from "./admin-types";
+
 export type Children = Readonly<{ children: React.ReactNode }>;
 
 type BaseReturns = {
@@ -41,4 +43,14 @@ export type DashboardItems = BaseReturns & {
         top_books: BookDataProps[];
         recent_checkouts: RecentCheckoutProps[];
     };
+};
+
+// Types for Book table component props.
+export type Book = {
+    book_id: string;
+    title: string;
+    author: string;
+    genre: Genres;
+    stock: number;
+    borrowed_count: number;
 };
