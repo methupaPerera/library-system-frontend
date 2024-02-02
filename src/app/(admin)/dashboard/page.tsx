@@ -23,10 +23,10 @@ import {
 } from "@/components/ui/table";
 
 // Importing icons.
-import { FaCoins } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { TbCalendarDue } from "react-icons/tb";
+import { LuCoins } from "react-icons/lu";
 
 // Dashboard component.
 export default async function Dashboard() {
@@ -75,7 +75,7 @@ export default async function Dashboard() {
                     <StaticsCard
                         caption="Fines"
                         value={`$${total_fines}`}
-                        Icon={FaCoins}
+                        Icon={LuCoins}
                     />
                     <StaticsCard
                         caption="Overdues"

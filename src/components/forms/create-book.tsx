@@ -1,10 +1,7 @@
 "use client";
 
 // Importing types.
-import type {
-    CreateBookInputs,
-    Genres,
-} from "@/typings/admin-types";
+import type { CreateBookInputs, Genres } from "@/typings/admin-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
@@ -35,22 +32,33 @@ import { FaPlus } from "react-icons/fa6";
 import { toast } from "sonner";
 
 export default function CreateBookForm() {
-    const [genre, setGenre] = useState<null | Genres>(null);
+    const [genre, setGenre] = useState<undefined | Genres>(undefined); // Container for the genre input.
 
-    const { register, handleSubmit } = useForm<CreateBookInputs>();
+    const genres: Genres[] = [
+        "Sci-fi",
+        "Novel",
+        "Mystery",
+        "Action",
+        "Adventure",
+    ];
 
+    const { register, handleSubmit, reset } = useForm<CreateBookInputs>();
+
+    // Handles the enter key press.
     useEffect(() => {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
 
+            // Making sure that the user have selected a genre.
             if (!genre) {
                 toast("Please select a genre.");
                 return;
             }
 
-            handleSubmit((data: CreateBookInputs) =>
-                admin.submitCreateBook({ ...data, genre })
-            );
+            handleSubmit((data) => admin.submitCreateBook({ ...data, genre }));
+
+            reset();
+            setGenre(undefined);
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -75,13 +83,17 @@ export default function CreateBookForm() {
 
                 <form
                     method="POST"
-                    onSubmit={handleSubmit((data: CreateBookInputs) => {
+                    onSubmit={handleSubmit((data) => {
+                        // Making sure that the user have selected a genre.
                         if (!genre) {
                             toast("Please select a genre.");
                             return;
                         }
 
                         admin.submitCreateBook({ ...data, genre });
+
+                        reset();
+                        setGenre(undefined);
                     })}
                     className="mt-8 flex flex-col gap-3"
                 >
@@ -98,16 +110,41 @@ export default function CreateBookForm() {
                         required
                         {...register("author", { required: true })}
                     />
+                    <Input
+                        type="text"
+                        placeholder="ISBN"
+                        required
+                        {...register("isbn", { required: true })}
+                    />
+
                     <div className="flex items-center gap-3">
+                        <Select
+                            value={genre}
+                            onValueChange={(value: Genres) => setGenre(value)}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Genre" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectGroup>
+                                    {genres.map((genre) => {
+                                        return (
+                                            <SelectItem
+                                                key={genre}
+                                                value={genre}
+                                            >
+                                                {genre}
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+
                         <Input
                             type="text"
-                            placeholder="ISBN"
-                            required
-                            {...register("isbn", { required: true })}
-                        />
-                        <Input
-                            type="text"
-                            placeholder="Stock count"
+                            placeholder="Stock Count"
                             required
                             {...register("stock", {
                                 required: true,
@@ -115,28 +152,9 @@ export default function CreateBookForm() {
                         />
                     </div>
 
-                    <Select onValueChange={(value: Genres) => setGenre(value)}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Genre" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem value="science-fiction">
-                                    Sci-Fi
-                                </SelectItem>
-                                <SelectItem value="novel">Novel</SelectItem>
-                                <SelectItem value="mystery">Mystery</SelectItem>
-                                <SelectItem value="action">Action</SelectItem>
-                                <SelectItem value="adventure">
-                                    Adventure
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-
                     <Button
                         type="submit"
-                        className={buttonVariants() + " mt-6"}
+                        className={`mt-6 ${buttonVariants()}`}
                     >
                         Submit
                     </Button>

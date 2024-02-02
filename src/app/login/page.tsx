@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 export default function Login() {
     const { register, handleSubmit } = useForm<LoginInputs>();
 
+    // Clears the access token from cookies and handles the enter key press.
     useEffect(() => {
         document.cookie =
             "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
@@ -35,7 +36,7 @@ export default function Login() {
             onSubmit={handleSubmit((data) => auth.submitLogin(data))}
             className="mx-auto mt-32 sm:mt-24 w-11/12 sm:w-96 px-8 py-6 flex flex-col gap-6 shadow-[5px_0_1rem] shadow-gray-300 dark:bg-secondary dark:shadow-none dark:border dark:border-muted rounded-xl"
         >
-            <h1 className="text-4xl text-secondary-foreground font-extrabold">
+            <h1 className="text-4xl font-extrabold text-secondary-foreground">
                 Log in
             </h1>
 

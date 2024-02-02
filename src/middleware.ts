@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Admins can't log in without logging out first.
+    // All users can't log in without logging out first.
     if (
         (path === "/login" || path === "/") &&
         data.membership_type === "admin"
@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
-    // Members can't access pages other than "/my-profile".
+    // Members can't access pages other than '/my-profile'.
     if (path !== "/my-profile" && data.membership_type === "member") {
         return NextResponse.redirect(new URL("/my-profile", request.url));
     }

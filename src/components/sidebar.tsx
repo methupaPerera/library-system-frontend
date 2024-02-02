@@ -18,14 +18,39 @@ import {
 import { BiSolidDashboard } from "react-icons/bi";
 import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
+import { IoNewspaperSharp } from "react-icons/io5";
+import { LuCoins } from "react-icons/lu";
 
 // Sidebar component.
 export default function Sidebar() {
+    const sidebarLinks: SidebarLinkProps[] = [
+        {
+            route: "dashboard",
+            Icon: BiSolidDashboard,
+        },
+        {
+            route: "members",
+            Icon: BsFillPeopleFill,
+        },
+        {
+            route: "books",
+            Icon: ImBooks,
+        },
+        {
+            route: "checkout",
+            Icon: IoNewspaperSharp,
+        },
+        {
+            route: "fines",
+            Icon: LuCoins,
+        },
+    ];
+
     return (
-        <div className="w-16 h-[calc(100vh-3.5rem)] pt-14 px-1.5 flex flex-col gap-1 bg-background border-r border-muted fixed">
-            <SidebarLink route="dashboard" Icon={<BiSolidDashboard />} />
-            <SidebarLink route="members" Icon={<BsFillPeopleFill />} />
-            <SidebarLink route="books" Icon={<ImBooks />} />
+        <div className="pt-16 px-1.5 w-16 h-[calc(100vh-3.5rem)] flex flex-col gap-3 bg-background border-r border-muted fixed">
+            {sidebarLinks.map((link) => (
+                <SidebarLink key={link.route} {...link} />
+            ))}
         </div>
     );
 }
@@ -41,21 +66,18 @@ function SidebarLink({ route, Icon }: SidebarLinkProps) {
                     {/* Styling the link based on the path and variant. */}
                     <Link
                         href={route}
-                        className={
-                            buttonVariants({
-                                size: "lg",
-                                variant: !(path === "/" + route)
-                                    ? "outline"
-                                    : "default",
-                            }) + " !text-2xl !px-3"
-                        }
+                        className={`!text-2xl !px-3 ${buttonVariants({
+                            size: "lg",
+                            variant: !(path === `/${route}`)
+                                ? "outline"
+                                : "default",
+                        })}`}
                     >
-                        {Icon}
+                        {<Icon />}
                     </Link>
                 </TooltipTrigger>
 
                 {/* Displaying a tooltip with the route name. */}
-                
                 <TooltipContent side="right">
                     <p className="capitalize">{route}</p>
                 </TooltipContent>

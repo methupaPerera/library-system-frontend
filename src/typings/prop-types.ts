@@ -8,7 +8,7 @@ type BaseReturns = {
 // Types for Sidebar component props.
 export type SidebarLinkProps = {
     route: string;
-    Icon: React.ReactElement;
+    Icon: React.ElementType;
 };
 
 // Types for Dashboard component props.

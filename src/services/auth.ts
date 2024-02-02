@@ -109,7 +109,7 @@ class Auth extends Utils implements AuthProperties {
 
         setTimeout(() => {
             location.reload();
-        }, 500);
+        }, 300);
     }
 }
 

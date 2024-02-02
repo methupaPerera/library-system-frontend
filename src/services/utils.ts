@@ -17,7 +17,7 @@ export class Utils {
         const res = new Date(date);
 
         const year = res.getFullYear();
-        const month = (res.getMonth() + 1).toString().padStart(2, "0"); // Adding 1 because months are zero-indexed
+        const month = (res.getMonth() + 1).toString().padStart(2, "0"); // Adding 1 because months are zero-indexed.
         const day = res.getDate().toString().padStart(2, "0");
 
         const formattedDate = `${year}/${month}/${day}`;

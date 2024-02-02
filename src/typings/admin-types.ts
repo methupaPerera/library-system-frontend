@@ -27,7 +27,7 @@ export type NewMemberState = {
 };
 
 // Types related to book creation functions.
-export type Genres = "sci-fi" | "novel" | "mystery" | "action" | "adventure";
+export type Genres = "Sci-fi" | "Novel" | "Mystery" | "Action" | "Adventure";
 
 export type CreateBookInputs = {
     title: string;

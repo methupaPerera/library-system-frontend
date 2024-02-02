@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-
 import type { Children } from "@/typings/prop-types";
 
-import { ThemeProvider } from "@/components/theme-provider";
 import { Inter } from "next/font/google";
+import "./globals.css";
+
 import { Navigation } from "@/components";
 import { Toaster } from "@/components/ui/sonner";
-import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Library System Frontend",
-    description: "Frontend for library systems",
+    title: "Library System Frontend.",
+    description: "Frontend for Library Systems.",
 };
 
 export default function RootLayout({ children }: Children) {
