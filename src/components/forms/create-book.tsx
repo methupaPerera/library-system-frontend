@@ -31,7 +31,7 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import { toast } from "sonner";
 
-export default function CreateBookForm() {
+export default function CreateBookForm({ isFormOpen, setFormOpen }: any) {
     const [genre, setGenre] = useState<undefined | Genres>(undefined); // Container for the genre input.
 
     const genres: Genres[] = [
@@ -66,16 +66,7 @@ export default function CreateBookForm() {
     });
 
     return (
-        <Sheet>
-            <SheetTrigger asChild>
-                <Button
-                    size="sm"
-                    className="flex gap-1.5 fixed bottom-6 right-6"
-                >
-                    Add book <FaPlus />
-                </Button>
-            </SheetTrigger>
-
+        <Sheet open={isFormOpen} onOpenChange={() => setFormOpen(false)}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>Add New Book.</SheetTitle>
