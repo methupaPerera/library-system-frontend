@@ -47,7 +47,7 @@ export default function Sidebar() {
     ];
 
     return (
-        <div className="pt-16 px-1.5 w-16 h-[calc(100vh-3.5rem)] flex flex-col gap-3 bg-background border-r border-muted fixed">
+        <div className="pt-16 px-1.5 w-16 h-[calc(100vh-3.5rem)] flex flex-col gap-3 bg-background border-r border-muted fixed z-50">
             {sidebarLinks.map((link) => (
                 <SidebarLink key={link.route} {...link} />
             ))}

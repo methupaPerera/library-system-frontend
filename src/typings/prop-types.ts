@@ -69,13 +69,21 @@ export type Member = {
 
 // Types for Book props.
 export type Book = {
-    [index: string]: string | number;
+    [index: string]: string | number | {};
+    isbn: string;
     book_id: string;
     title: string;
     author: string;
     genre: Genres;
     stock: number;
     borrowed_count: number;
+    total_borrowings: number;
+    stock_history: {
+        state: "created" | "updated";
+        date: string;
+        added_stock: number;
+        removed_stock: number;
+    }[];
 };
 
 // Types for Checkout props.

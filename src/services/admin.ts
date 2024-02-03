@@ -79,6 +79,31 @@ class Admin extends Utils implements AdminProperties {
         }
     }
 
+    // Method to delete a book.
+    async deleteBook(book_id: string): Promise<void> {
+        const tId = toast.loading("Please wait...");
+
+        try {
+            const res = await fetch(this.bookUrl, {
+                method: "DELETE",
+                body: JSON.stringify({ book_id: book_id }),
+                headers: {
+                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const { message }: CreateBookReturns = await res.json();
+
+            toast.dismiss(tId);
+
+            toast(message);
+        } catch (e) {
+            toast.dismiss(tId);
+            toast("Failed to delete the book.");
+        }
+    }
+
     // Method to fetch different data.
     async getData<T>(
         toFetch: "book" | "member" | "checkout",
@@ -107,7 +132,7 @@ class Admin extends Utils implements AdminProperties {
             return [fetchedData, pages];
         } catch (e) {
             toast("Failed to fetch book data.");
-            
+
             return null;
         }
     }

@@ -1,25 +1,16 @@
 "use client";
 
 // Importing types.
-import type { Book, Headings, Pagination } from "@/typings/prop-types";
+import type { Book, Pagination } from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
 import admin from "@/services/admin";
+import { headingData } from "@/data";
 
 // Importing components.
 import { CreateBookForm } from "@/components/forms";
 import { BookTable } from "@/components/tables";
-
-// Heading data for the book table.
-const headingData: Headings[] = [
-    { heading: "Book ID", width: "w-[10%]" },
-    { heading: "Title", width: "w-[30%]" },
-    { heading: "Author", width: "w-[20%]" },
-    { heading: "Genre", width: "w-[20%]" },
-    { heading: "Remaining", width: "w-[10%]" },
-    { heading: "", width: "w-[10%]" },
-];
 
 export default function Books() {
     // Manages the book creation form state.
@@ -64,17 +55,15 @@ export default function Books() {
 
             <CreateBookForm isFormOpen={isFormOpen} setFormOpen={setFormOpen} />
 
-            <div className="mt-1">
-                <BookTable
-                    data={data}
-                    headingData={headingData}
-                    isLoading={isLoading}
-                    pagination={pagination}
-                    setPagination={setPagination}
-                    fetchItems={fetchItems}
-                    setFormOpen={setFormOpen}
-                />
-            </div>
+            <BookTable
+                data={data}
+                headingData={headingData}
+                isLoading={isLoading}
+                pagination={pagination}
+                setPagination={setPagination}
+                fetchItems={fetchItems}
+                setFormOpen={setFormOpen}
+            />
         </div>
     );
 }
