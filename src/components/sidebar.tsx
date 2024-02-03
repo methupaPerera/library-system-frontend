@@ -78,7 +78,7 @@ function SidebarLink({ route, Icon }: SidebarLinkProps) {
                 </TooltipTrigger>
 
                 {/* Displaying a tooltip with the route name. */}
-                <TooltipContent side="right">
+                <TooltipContent side="top">
                     <p className="capitalize">{route}</p>
                 </TooltipContent>
             </Tooltip>
