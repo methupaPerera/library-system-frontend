@@ -38,12 +38,14 @@ export default function DataTable<T>({
     useEffect(() => {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
+            
+            console.log(searchValue)
             fetchItems(1, searchValue);
         }
 
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
-    }, []);
+    }, [searchValue]);
 
     return (
         <div className="my-4">
