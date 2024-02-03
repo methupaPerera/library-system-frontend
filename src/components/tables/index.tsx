@@ -1,1 +1,1 @@
-export { default as BooksTable } from "./books";
+export { default as BookTable } from "./book-table";

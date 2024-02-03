@@ -4,7 +4,7 @@
 import type {
     CreateMemberInputs,
     MembershipTypes,
-    NewMemberState,
+    NewMemberModalState,
 } from "@/typings/admin-types";
 
 // Importing utilities.
@@ -48,7 +48,7 @@ export default function CreateMemberForm() {
     const [membership, setMembership] = useState<MembershipTypes>("member");
 
     // Triggers the modal dialog with the new member's ID and password.
-    const [isCreated, setCreated] = useState<NewMemberState>({
+    const [isCreated, setCreated] = useState<NewMemberModalState>({
         state: false,
         info: { member_id: "", password: "" },
     });
