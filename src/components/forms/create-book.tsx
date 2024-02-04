@@ -1,7 +1,8 @@
 "use client";
 
 // Importing types.
-import type { CreateBookInputs, Genres } from "@/typings/admin-types";
+import type { CreateBookInputs } from "@/typings/admin-types";
+import type { Genres } from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
@@ -28,7 +29,6 @@ import {
 } from "@/components/ui/select";
 
 // Importing icons.
-import { FaPlus } from "react-icons/fa6";
 import { toast } from "sonner";
 
 export default function CreateBookForm({ isFormOpen, setFormOpen }: any) {
