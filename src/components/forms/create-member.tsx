@@ -3,9 +3,9 @@
 // Importing types.
 import type {
     CreateMemberInputs,
-    MembershipTypes,
     NewMemberModalState,
 } from "@/typings/admin-types";
+import type { MembershipTypes } from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";

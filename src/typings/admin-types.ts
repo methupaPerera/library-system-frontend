@@ -1,11 +1,11 @@
+import { Genres, MembershipTypes } from "./prop-types";
+
 type BaseReturns = {
     status: "success" | "failed";
     message: string;
 };
 
 // Types related to member creation functions. ----------------------
-export type MembershipTypes = "admin" | "member";
-
 export type CreateMemberInputs = {
     full_name: string;
     address: string;
@@ -27,8 +27,6 @@ export type NewMemberModalState = {
 };
 
 // Types related to book creation functions. ------------------------
-export type Genres = "Sci-fi" | "Novel" | "Mystery" | "Action" | "Adventure";
-
 export type CreateBookInputs = {
     title: string;
     isbn: string;

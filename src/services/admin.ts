@@ -23,85 +23,71 @@ class Admin extends Utils implements AdminProperties {
         this.bookUrl = `${apiUrl}/book`;
     }
 
-    // Method to submit new member data and get the ID & password.
+    // Common function for fetching data. ---------------------------
+    async fetchResponse(url: string, method: string, body?: any) {
+        const tId = toast.loading("Please wait...");
+
+        try {
+            const res = await fetch(url, {
+                method: method,
+                body: body && JSON.stringify(body),
+                headers: {
+                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await res.json();
+
+            toast.dismiss(tId);
+
+            return data;
+        } catch (err) {
+            toast.dismiss(tId);
+            toast("An error occurred.");
+
+            return null;
+        }
+    }
+
+    // Method to submit new member data and get the ID & password. --
     async submitCreateMember(formData: CreateMemberInputs) {
-        const tId = toast.loading("Please wait...");
+        const fetchedData: CreateMemberReturns = await this.fetchResponse(
+            this.memberUrl,
+            "POST",
+            formData
+        );
 
-        try {
-            const res = await fetch(this.memberUrl, {
-                method: "POST",
-                body: JSON.stringify(formData),
-                headers: {
-                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
-                    "Content-Type": "application/json",
-                },
-            });
+        const { status, message, data } = fetchedData;
 
-            const { status, message, data }: CreateMemberReturns =
-                await res.json();
+        toast(message);
 
-            toast.dismiss(tId);
-
-            toast(message);
-
-            // If the creation is successful, return the status and data.
-            if (status === "success") {
-                return { status, data };
-            }
-        } catch (e) {
-            toast.dismiss(tId);
-            toast("Failed to submit new member data.");
+        // The status and data are returned if the operation is successful.
+        if (status === "success") {
+            return { status, data };
         }
     }
 
-    // Method to submit new book data.
+    // Method to submit new book data. ------------------------------
     async submitCreateBook(formData: CreateBookInputs) {
-        const tId = toast.loading("Please wait...");
+        const { message }: CreateBookReturns = await this.fetchResponse(
+            this.bookUrl,
+            "POST",
+            formData
+        );
 
-        try {
-            const res = await fetch(this.bookUrl, {
-                method: "POST",
-                body: JSON.stringify(formData),
-                headers: {
-                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const { message }: CreateBookReturns = await res.json();
-
-            toast.dismiss(tId);
-
-            toast(message);
-        } catch (e) {
-            toast.dismiss(tId);
-            toast("Failed to submit new book data.");
-        }
+        toast(message);
     }
 
-    // Method to delete a book.
+    // Method to delete a book. -------------------------------------
     async deleteBook(book_id: string): Promise<void> {
-        const tId = toast.loading("Please wait...");
+        const { message }: CreateBookReturns = await this.fetchResponse(
+            this.bookUrl,
+            "DELETE",
+            { book_id: book_id }
+        );
 
-        try {
-            const res = await fetch(this.bookUrl, {
-                method: "DELETE",
-                body: JSON.stringify({ book_id: book_id }),
-                headers: {
-                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const { message }: CreateBookReturns = await res.json();
-
-            toast.dismiss(tId);
-
-            toast(message);
-        } catch (e) {
-            toast.dismiss(tId);
-            toast("Failed to delete the book.");
-        }
+        toast(message);
     }
 
     // Method to fetch different data.

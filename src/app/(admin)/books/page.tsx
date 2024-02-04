@@ -26,6 +26,9 @@ export default function Books() {
 
     // Function to fetch data for the current page.
     async function fetchItems(page: number, query: string) {
+        // TODO: Move this function into a context and make it reusable.
+        // HINT: Use generic types. Change bookData to just data. Don't be specific.
+        
         setLoading(true);
 
         const bookData = await admin.getData<Book>("book", query, page);

@@ -5,6 +5,8 @@ import type { Book, BookTableProps } from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
+import admin from "@/services/admin";
+import { toast } from "sonner";
 
 // Importing components.
 import { Skeleton } from "../ui/skeleton";
@@ -37,22 +39,27 @@ import {
 
 // Importing icons.
 import { FaPlus } from "react-icons/fa6";
+import { TbRefresh } from "react-icons/tb";
 import { BsThreeDots } from "react-icons/bs";
-import admin from "@/services/admin";
-import { toast } from "sonner";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import Controller from "./controller";
 
-export default function DataTable<T>({
+export default function DataTable({
     data,
     headingData,
     isLoading,
     pagination,
     setPagination,
-    fetchItems,
     setFormOpen,
+    fetchItems,
 }: BookTableProps) {
     const [searchValue, setSearchValue] = useState<string>("");
 
     const { currentPage, allPages } = pagination;
+
+    function refresh() {
+        fetchItems(currentPage, "");
+    }
 
     // Handles the enter key press.
     useEffect(() => {
@@ -68,38 +75,20 @@ export default function DataTable<T>({
 
     return (
         <div className="my-4">
-            <div className="pb-2 flex flex-col sm:flex-row justify-between items-center gap-2">
-                {/* Search and Form open area. */}
-                <div className="flex items-center gap-2">
-                    <Input
-                        type="text"
-                        placeholder="Search..."
-                        className="!h-10 w-full sm:w-[18rem]"
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <Button
-                        size="sm"
-                        className="!px-6 !h-10 sm:w-32 font-semibold"
-                        onClick={() => fetchItems(1, searchValue)}
-                    >
-                        Search
-                    </Button>
-                </div>
-
-                <Button
-                    size="sm"
-                    className="!h-10 w-full sm:w-32"
-                    onClick={() => setFormOpen(true)}
-                >
-                    New Book
-                    <FaPlus />
-                </Button>
-            </div>
+            <Controller
+                fetchItems={fetchItems}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                setFormOpen={setFormOpen}
+                currentPage={currentPage}
+            />
 
             {/* Table area. */}
             <div className="py-3 px-4 bg-background rounded-lg shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted">
-                <ScrollArea type="always" className="h-[20rem] rounded-lg">
+                <ScrollArea
+                    type="always"
+                    className="h-[25rem] sm:h-[20rem] rounded-lg"
+                >
                     <ScrollBar orientation="horizontal" />
 
                     <Table>
@@ -138,7 +127,7 @@ export default function DataTable<T>({
                                                 <TableCell>
                                                     <TableAction
                                                         rowData={rowData}
-                                                        fetchItems={fetchItems}
+                                                        refresh={refresh}
                                                     />
                                                 </TableCell>
                                             </TableRow>
@@ -173,7 +162,7 @@ export default function DataTable<T>({
                 </ScrollArea>
 
                 {/* Pagination area. */}
-                <div className="pt-3 px-4 flex flex-col md:flex-row justify-between items-center gap-2">
+                <div className="pt-3 px-4 flex justify-between items-center gap-2">
                     <div className="text-gray-400 text-[15px] font-semibold">
                         Page {currentPage} of {allPages}
                     </div>
@@ -182,7 +171,7 @@ export default function DataTable<T>({
                         <Button
                             size="sm"
                             variant="default"
-                            className="!px-8 font-semibold"
+                            className="font-semibold"
                             onClick={() => {
                                 setPagination((prevState) => {
                                     const newState = {
@@ -203,12 +192,12 @@ export default function DataTable<T>({
                                 });
                             }}
                         >
-                            Prev
+                            <FaChevronLeft />
                         </Button>
                         <Button
                             size="sm"
                             variant="default"
-                            className="!px-8 font-semibold"
+                            className="font-semibold"
                             onClick={() => {
                                 setPagination((prevState) => {
                                     const newState = {
@@ -229,7 +218,7 @@ export default function DataTable<T>({
                                 });
                             }}
                         >
-                            Next
+                            <FaChevronRight />
                         </Button>
                     </div>
                 </div>
@@ -240,10 +229,10 @@ export default function DataTable<T>({
 
 function TableAction({
     rowData,
-    fetchItems,
+    refresh,
 }: {
     rowData: Book;
-    fetchItems: (page: number, query: string) => Promise<void>;
+    refresh: () => void;
 }) {
     return (
         <Popover>
@@ -271,9 +260,9 @@ function TableAction({
                     size="sm"
                     variant="destructive"
                     className="w-full font-semibold"
-                    onClick={() => {
-                        admin.deleteBook(rowData.book_id);
-                        fetchItems(1, "");
+                    onClick={async () => {
+                        await admin.deleteBook(rowData.book_id);
+                        refresh();
                     }}
                 >
                     Delete

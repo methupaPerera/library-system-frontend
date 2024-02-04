@@ -1,6 +1,6 @@
-import { Headings } from "@/typings/prop-types";
+import { Headings } from "@/typings/data-types";
 
-// Heading data for the book table.
+// Heading data for the book table. ---------------------------------
 export const headingData: Headings[] = [
     { heading: "Book ID", width: "w-[10%]" },
     { heading: "Title", width: "w-[30%]" },

@@ -1,7 +1,7 @@
 // Importing types.
 import type {
-    BookDataProps,
     DashboardItems,
+    TopBookDataProps,
     RecentCheckoutProps,
 } from "@/typings/prop-types";
 
@@ -94,7 +94,7 @@ export default async function Dashboard() {
                         type="always"
                         className="h-[16rem] mt-3 px-2 pr-4"
                     >
-                        {top_books.map((book: BookDataProps) => {
+                        {top_books.map((book: TopBookDataProps) => {
                             return <BookData key={book.title} {...book} />;
                         })}
                     </ScrollArea>
@@ -166,7 +166,7 @@ export default async function Dashboard() {
 }
 
 // Generates the rows of the most-read-books table.
-function BookData({ title, author, stock, borrowed_count }: BookDataProps) {
+function BookData({ title, author, stock, borrowed_count }: TopBookDataProps) {
     return (
         <div className="pb-2 mb-2 border-b border-muted">
             <div>
