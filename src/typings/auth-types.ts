@@ -4,30 +4,30 @@ type BaseReturns = {
 };
 
 // Types for login functions. ---------------------------------------
-export type LoginInputs = {
+export type LoginFormInputs = {
     member_id: string;
     password: string;
 };
 
-export type LoginReturns = BaseReturns & {
+export type LoginFormReturns = BaseReturns & {
     data: {
         access_token?: string;
     };
 };
 
 // Types for password reset functions. ------------------------------
-export type UpdatePasswordInputs = {
+export type PasswordFormInputs = {
     old_password: string;
     new_password: string;
 };
 
-export type UpdatePasswordReturns = BaseReturns & {
+export type PasswordFormReturns = BaseReturns & {
     data: {};
 };
 
 // Interface for the Auth class specifying its properties. ----------
 export interface AuthProperties {
-    submitLogin(formData: LoginInputs): Promise<void>;
-    submitUpdatePassword(formData: UpdatePasswordInputs): Promise<void>;
+    submitLogin(formData: LoginFormInputs): Promise<void>;
+    submitPassword(formData: PasswordFormInputs): Promise<void>;
     handleLogout(): void;
 }

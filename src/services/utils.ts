@@ -1,5 +1,34 @@
+import { toast } from "sonner";
+
 export class Utils {
     constructor() {}
+
+    // Common function for fetching data. ---------------------------
+    async fetchResponse(url: string, method: string, body?: any) {
+        const tId = toast.loading("Please wait...");
+
+        try {
+            const res = await fetch(url, {
+                method: method,
+                body: body && JSON.stringify(body),
+                headers: {
+                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await res.json();
+
+            toast.dismiss(tId);
+
+            return data;
+        } catch (err) {
+            toast.dismiss(tId);
+            toast("An error occurred.");
+
+            return null;
+        }
+    }
 
     // Method to extract and return the access token from the cookies.
     // Returns undefined if the access token is not found.

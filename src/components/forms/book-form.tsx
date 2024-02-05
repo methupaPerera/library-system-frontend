@@ -1,13 +1,15 @@
 "use client";
 
 // Importing types.
-import type { CreateBookInputs } from "@/typings/admin-types";
-import type { Genres } from "@/typings/prop-types";
+import type { BookFormInputs } from "@/typings/admin-types";
+import type { FormProps, Genres } from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import admin from "@/services/admin";
+import { toast } from "sonner";
+import { genres } from "@/data";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -17,7 +19,6 @@ import {
     SheetContent,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
 } from "@/components/ui/sheet";
 import {
     Select,
@@ -28,37 +29,30 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-// Importing icons.
-import { toast } from "sonner";
+export default function BookForm({ isFormOpen, setFormOpen }: FormProps) {
+    const { register, handleSubmit, reset } = useForm<BookFormInputs>();
 
-export default function CreateBookForm({ isFormOpen, setFormOpen }: any) {
-    const [genre, setGenre] = useState<undefined | Genres>(undefined); // Container for the genre input.
+    // Container for the genre input.
+    const [genre, setGenre] = useState<undefined | Genres>(undefined);
 
-    const genres: Genres[] = [
-        "Sci-fi",
-        "Novel",
-        "Mystery",
-        "Action",
-        "Adventure",
-    ];
+    // Action for the enter key press.
+    function action(data: BookFormInputs) {
+        if (!genre) {
+            // Making sure that the user have selected a genre.
+            toast("Please select a genre.");
+            return;
+        }
 
-    const { register, handleSubmit, reset } = useForm<CreateBookInputs>();
+        admin.submitCreateBook({ ...data, genre });
+
+        reset();
+    }
 
     // Handles the enter key press.
     useEffect(() => {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
-
-            // Making sure that the user have selected a genre.
-            if (!genre) {
-                toast("Please select a genre.");
-                return;
-            }
-
-            handleSubmit((data) => admin.submitCreateBook({ ...data, genre }));
-
-            reset();
-            setGenre(undefined);
+            handleSubmit((data) => action(data));
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -74,18 +68,7 @@ export default function CreateBookForm({ isFormOpen, setFormOpen }: any) {
 
                 <form
                     method="POST"
-                    onSubmit={handleSubmit((data) => {
-                        // Making sure that the user have selected a genre.
-                        if (!genre) {
-                            toast("Please select a genre.");
-                            return;
-                        }
-
-                        admin.submitCreateBook({ ...data, genre });
-
-                        reset();
-                        setGenre(undefined);
-                    })}
+                    onSubmit={handleSubmit((data) => action(data))}
                     className="mt-8 flex flex-col gap-3"
                 >
                     <Input

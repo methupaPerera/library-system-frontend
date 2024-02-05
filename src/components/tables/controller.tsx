@@ -1,18 +1,19 @@
-import { FaPlus } from "react-icons/fa6";
-import { Button } from "../ui/button";
+// Importing components.
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+
+// Importing icons.
+import { FaPlus } from "react-icons/fa6";
 import { TbRefresh } from "react-icons/tb";
+import { ControllerProps } from "@/typings/prop-types";
 
 export default function Controller({
-    fetchItems,
     searchValue,
     setSearchValue,
     setFormOpen,
-    currentPage,
-}: any) {
-    function refresh() {
-        fetchItems(currentPage, "");
-    }
+    fetchItems,
+    refresh
+}: ControllerProps) {
     return (
         <div className="pb-2 flex flex-col sm:flex-row justify-between items-center gap-2">
             {/* Search and Form open area. */}

@@ -45,7 +45,43 @@ export type DashboardItems = BaseReturns & {
     };
 };
 
-// Types for all the data tables. -----------------------------------
+// Types for all the data tables and forms. -----------------------------------
+
+export type FormProps = {
+    isFormOpen: boolean;
+    setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type TableBaseProps<T> = {
+    data: T[] | null;
+    headingData: Headings[];
+    isLoading: boolean;
+    pagination: Pagination;
+    setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
+    setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    fetchItems: (page: number, query: string) => Promise<void>;
+};
+
+export type TableActionProps<T> = {
+    rowData: T;
+    refresh: () => void;
+};
+
+export type ControllerProps = {
+    searchValue: string;
+    setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+    setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    fetchItems: (page: number, query: string) => void;
+    refresh: () => void;
+};
+
+export type PaginationProps = {
+    searchValue: string;
+    currentPage: number;
+    allPages: number;
+    setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
+    fetchItems: (page: number, query: string) => void;
+};
 
 // Types for Member props.
 export type MembershipTypes = "admin" | "member";
@@ -67,7 +103,7 @@ export type Member = {
 export type Genres = "Sci-fi" | "Novel" | "Mystery" | "Action" | "Adventure";
 
 export type Book = {
-    [index: string]: string | number | {};
+    [index: string]: string | number;
     isbn: string;
     book_id: string;
     title: string;
@@ -76,13 +112,9 @@ export type Book = {
     stock: number;
     borrowed_count: number;
     total_borrowings: number;
-    stock_history: {
-        state: "created" | "updated";
-        date: string;
-        added_stock: number;
-        removed_stock: number;
-    }[];
 };
+
+export type BookTableProps = TableBaseProps<Book>;
 
 // Types for Checkout props.
 export type Checkout = {
@@ -98,14 +130,4 @@ export type Checkout = {
 export type Pagination = {
     currentPage: number;
     allPages: number;
-};
-
-export type BookTableProps = {
-    data: Book[] | null;
-    headingData: Headings[];
-    isLoading: boolean;
-    pagination: Pagination;
-    setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
-    fetchItems: (page: number, query: string) => Promise<void>;
-    setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

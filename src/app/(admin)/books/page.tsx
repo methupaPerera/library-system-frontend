@@ -9,7 +9,7 @@ import admin from "@/services/admin";
 import { headingData } from "@/data";
 
 // Importing components.
-import { CreateBookForm } from "@/components/forms";
+import { BookForm } from "@/components/forms";
 import { BookTable } from "@/components/tables";
 
 export default function Books() {
@@ -26,9 +26,6 @@ export default function Books() {
 
     // Function to fetch data for the current page.
     async function fetchItems(page: number, query: string) {
-        // TODO: Move this function into a context and make it reusable.
-        // HINT: Use generic types. Change bookData to just data. Don't be specific.
-        
         setLoading(true);
 
         const bookData = await admin.getData<Book>("book", query, page);
@@ -56,7 +53,7 @@ export default function Books() {
                 Books
             </h3>
 
-            <CreateBookForm isFormOpen={isFormOpen} setFormOpen={setFormOpen} />
+            <BookForm isFormOpen={isFormOpen} setFormOpen={setFormOpen} />
 
             <BookTable
                 data={data}
@@ -64,8 +61,8 @@ export default function Books() {
                 isLoading={isLoading}
                 pagination={pagination}
                 setPagination={setPagination}
-                fetchItems={fetchItems}
                 setFormOpen={setFormOpen}
+                fetchItems={fetchItems}
             />
         </div>
     );

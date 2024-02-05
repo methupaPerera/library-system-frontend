@@ -1,7 +1,7 @@
 "use client";
 
 // Importing types.
-import { UpdatePasswordInputs } from "@/typings/auth-types";
+import { PasswordFormInputs } from "@/typings/auth-types";
 
 // Importing utilities.
 import { useEffect } from "react";
@@ -20,13 +20,21 @@ import {
 } from "@/components/ui/sheet";
 
 export default function UpdatePasswordForm() {
-    const { register, handleSubmit } = useForm<UpdatePasswordInputs>();
+    const { register, handleSubmit, reset } = useForm<PasswordFormInputs>();
 
+    // Action for the enter key press.
+    function action(data: PasswordFormInputs) {
+        auth.submitPassword(data);
+
+        reset();
+    }
+
+    // Handles the enter key press.
     useEffect(() => {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
 
-            handleSubmit((data) => auth.submitUpdatePassword(data));
+            handleSubmit((data) => action(data));
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -48,9 +56,7 @@ export default function UpdatePasswordForm() {
 
                 <form
                     method="POST"
-                    onSubmit={handleSubmit((data) => {
-                        auth.submitUpdatePassword(data);
-                    })}
+                    onSubmit={handleSubmit((data) => action(data))}
                     className="mt-8 flex flex-col gap-3"
                 >
                     <Input

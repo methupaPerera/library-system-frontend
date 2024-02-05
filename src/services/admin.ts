@@ -1,9 +1,10 @@
 import type {
     AdminProperties,
-    CreateBookInputs,
-    CreateBookReturns,
+    BookFormInputs,
+    BookFormReturns,
     CreateMemberInputs,
     CreateMemberReturns,
+    UpdateBookFormInputs,
 } from "@/typings/admin-types";
 
 import { Utils } from "./utils";
@@ -21,33 +22,6 @@ class Admin extends Utils implements AdminProperties {
         this.baseUrl = apiUrl;
         this.memberUrl = `${apiUrl}/member`;
         this.bookUrl = `${apiUrl}/book`;
-    }
-
-    // Common function for fetching data. ---------------------------
-    async fetchResponse(url: string, method: string, body?: any) {
-        const tId = toast.loading("Please wait...");
-
-        try {
-            const res = await fetch(url, {
-                method: method,
-                body: body && JSON.stringify(body),
-                headers: {
-                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const data = await res.json();
-
-            toast.dismiss(tId);
-
-            return data;
-        } catch (err) {
-            toast.dismiss(tId);
-            toast("An error occurred.");
-
-            return null;
-        }
     }
 
     // Method to submit new member data and get the ID & password. --
@@ -69,8 +43,8 @@ class Admin extends Utils implements AdminProperties {
     }
 
     // Method to submit new book data. ------------------------------
-    async submitCreateBook(formData: CreateBookInputs) {
-        const { message }: CreateBookReturns = await this.fetchResponse(
+    async submitCreateBook(formData: BookFormInputs) {
+        const { message }: BookFormReturns = await this.fetchResponse(
             this.bookUrl,
             "POST",
             formData
@@ -79,9 +53,20 @@ class Admin extends Utils implements AdminProperties {
         toast(message);
     }
 
+    // Method to update a book. -------------------------------------
+    async submitUpdateBook(formData: UpdateBookFormInputs) {
+        const { message }: BookFormReturns = await this.fetchResponse(
+            this.bookUrl,
+            "PUT",
+            formData
+        );
+
+        toast(message);
+    }
+
     // Method to delete a book. -------------------------------------
-    async deleteBook(book_id: string): Promise<void> {
-        const { message }: CreateBookReturns = await this.fetchResponse(
+    async deleteBook(book_id: string) {
+        const { message }: BookFormReturns = await this.fetchResponse(
             this.bookUrl,
             "DELETE",
             { book_id: book_id }

@@ -9,7 +9,7 @@ import auth from "@/services/auth";
 // Importing components.
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UpdatePasswordForm } from "./forms";
+import { PasswordForm } from "./forms";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -62,7 +62,7 @@ export default function Navigation() {
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="mr-3 sm:mr-4 md:mr-6 lg:mr-10 w-44 flex flex-col items-center gap-2">
-                            <UpdatePasswordForm />
+                            <PasswordForm />
 
                             <Button
                                 className="!w-full px-4"

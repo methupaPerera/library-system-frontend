@@ -1,7 +1,12 @@
 "use client";
 
 // Importing types.
-import type { Book, BookTableProps } from "@/typings/prop-types";
+import type {
+    Book,
+    BookTableProps,
+    Children,
+    TableActionProps,
+} from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
@@ -9,9 +14,10 @@ import admin from "@/services/admin";
 import { toast } from "sonner";
 
 // Importing components.
+import Controller from "./controller";
+import Pagination from "./pagination";
 import { Skeleton } from "../ui/skeleton";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button, buttonVariants } from "../ui/button";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import {
     Table,
@@ -26,25 +32,13 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 // Importing icons.
-import { FaPlus } from "react-icons/fa6";
-import { TbRefresh } from "react-icons/tb";
 import { BsThreeDots } from "react-icons/bs";
-import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
-import Controller from "./controller";
+import { BookEditForm } from "../forms";
 
-export default function DataTable({
+export default function BookTable({
     data,
     headingData,
     isLoading,
@@ -57,16 +51,22 @@ export default function DataTable({
 
     const { currentPage, allPages } = pagination;
 
+    // Function for refreshing the current page.
     function refresh() {
         fetchItems(currentPage, "");
+        setSearchValue("");
+    }
+
+    // Action for the enter key press.
+    function action() {
+        fetchItems(1, searchValue);
     }
 
     // Handles the enter key press.
     useEffect(() => {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
-
-            fetchItems(1, searchValue);
+            action();
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -80,10 +80,11 @@ export default function DataTable({
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
                 setFormOpen={setFormOpen}
-                currentPage={currentPage}
+                refresh={refresh}
             />
 
-            {/* Table area. */}
+            {/* ------------------ Table area. ------------------ */}
+
             <div className="py-3 px-4 bg-background rounded-lg shadow-lg shadow-gray-300 dark:shadow-none dark:border dark:border-muted">
                 <ScrollArea
                     type="always"
@@ -161,241 +162,94 @@ export default function DataTable({
                     </Table>
                 </ScrollArea>
 
-                {/* Pagination area. */}
-                <div className="pt-3 px-4 flex justify-between items-center gap-2">
-                    <div className="text-gray-400 text-[15px] font-semibold">
-                        Page {currentPage} of {allPages}
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <Button
-                            size="sm"
-                            variant="default"
-                            className="font-semibold"
-                            onClick={() => {
-                                setPagination((prevState) => {
-                                    const newState = {
-                                        ...prevState,
-                                        currentPage:
-                                            currentPage === 1
-                                                ? allPages
-                                                : currentPage - 1,
-                                        allPages: allPages,
-                                    };
-
-                                    fetchItems(
-                                        newState.currentPage,
-                                        searchValue
-                                    );
-
-                                    return newState;
-                                });
-                            }}
-                        >
-                            <FaChevronLeft />
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant="default"
-                            className="font-semibold"
-                            onClick={() => {
-                                setPagination((prevState) => {
-                                    const newState = {
-                                        ...prevState,
-                                        currentPage:
-                                            currentPage === allPages
-                                                ? 1
-                                                : currentPage + 1,
-                                        allPages: allPages,
-                                    };
-
-                                    fetchItems(
-                                        newState.currentPage,
-                                        searchValue
-                                    );
-
-                                    return newState;
-                                });
-                            }}
-                        >
-                            <FaChevronRight />
-                        </Button>
-                    </div>
-                </div>
+                <Pagination
+                    searchValue={searchValue}
+                    currentPage={currentPage}
+                    allPages={allPages}
+                    setPagination={setPagination}
+                    fetchItems={fetchItems}
+                />
             </div>
         </div>
     );
 }
 
-function TableAction({
-    rowData,
-    refresh,
-}: {
-    rowData: Book;
-    refresh: () => void;
-}) {
+function TableAction({ rowData, refresh }: TableActionProps<Book>) {
+    const [isFormOpen, setFormOpen] = useState<boolean>(false);
+
     return (
-        <Popover>
-            <PopoverTrigger asChild>
-                <Button variant="outline">
-                    <BsThreeDots />
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="mr-6 !p-2 w-36 flex flex-col gap-2">
-                <Button
-                    size="sm"
-                    variant="secondary"
-                    className="w-full font-semibold"
-                    onClick={() => {
-                        navigator.clipboard.writeText(rowData.book_id);
-                        toast("Copied.");
-                    }}
-                >
-                    Copy ID
-                </Button>
+        <>
+            <BookEditForm
+                bookData={rowData}
+                isFormOpen={isFormOpen}
+                setFormOpen={setFormOpen}
+                refresh={refresh}
+            />
 
-                <DataMonitor bookData={rowData} />
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button variant="outline">
+                        <BsThreeDots />
+                    </Button>
+                </PopoverTrigger>
 
-                <Button
-                    size="sm"
-                    variant="destructive"
-                    className="w-full font-semibold"
-                    onClick={async () => {
-                        await admin.deleteBook(rowData.book_id);
-                        refresh();
-                    }}
-                >
-                    Delete
-                </Button>
-            </PopoverContent>
-        </Popover>
+                <PopoverContent className="mr-6 !p-2 w-36 flex flex-col gap-2">
+                    <Button
+                        size="sm"
+                        variant="secondary"
+                        className="w-full font-semibold"
+                        onClick={() => setFormOpen(true)}
+                    >
+                        Edit
+                    </Button>
+                    <Details fullData={rowData} />
+                    <Button
+                        size="sm"
+                        variant="destructive"
+                        className="w-full font-semibold"
+                        onClick={async () => {
+                            await admin.deleteBook(rowData.book_id);
+                            refresh();
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </PopoverContent>
+            </Popover>
+        </>
     );
 }
 
-function DataMonitor({ bookData }: { bookData: Book }) {
-    const {
-        book_id,
-        title,
-        author,
-        genre,
-        stock,
-        borrowed_count,
-        isbn,
-        total_borrowings,
-        stock_history,
-    } = bookData;
+function Details({ fullData }: { fullData: Book }) {
+    const rows = [];
 
-    const [activeSection, setActiveSection] = useState<number>(0);
+    for (const key in fullData) {
+        rows.push(
+            <TableRow key={key}>
+                <TableCell className="capitalize !py-2 px-6 text-gray-500 border border-muted">
+                    {key.replace("_", " ")}
+                </TableCell>
+                <TableCell className="!py-2 px-6 border border-muted">
+                    {fullData[key]}
+                </TableCell>
+            </TableRow>
+        );
+    }
 
     return (
         <Drawer>
-            <DrawerTrigger asChild>
-                <Button
-                    size="sm"
-                    variant="secondary"
-                    className="w-full font-semibold"
-                >
-                    View Book
-                </Button>
+            <DrawerTrigger
+                className={buttonVariants({ variant: "secondary", size: "sm" })}
+            >
+                Details
             </DrawerTrigger>
-            <DrawerContent>
-                <ScrollArea className="h-[100vh]">
-                    <div className="mx-auto py-8 w-11/12 sm:w-5/6">
-                        <h4 className="text-5xl font-bold">{title}</h4>
 
-                        <div className="pt-4 flex justify-end items-center gap-2">
-                            <Button
-                                variant="secondary"
-                                className="font-semibold"
-                                onClick={() => setActiveSection(0)}
-                            >
-                                Info
-                            </Button>
-                            <Button
-                                variant="secondary"
-                                className="font-semibold"
-                                onClick={() => setActiveSection(1)}
-                            >
-                                Edit
-                            </Button>
-                        </div>
+            <DrawerContent className="m-4 p-4 sm:px-8">
+                <p className="mt-2 font-bold text-xl">Details of the book.</p>
 
-                        <div className="pt-4 font-semibold">
-                            {activeSection === 0 && (
-                                <Table className="rounded-lg overflow-hidden">
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                ID
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {book_id}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                ISBN
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {isbn}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                Title
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {title}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                Author
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {author}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                Genre
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {genre}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                Stock
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {stock}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                Borrowed Count
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {borrowed_count}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell className="border border-muted text-gray-400">
-                                                Total Borrowings
-                                            </TableCell>
-                                            <TableCell className="border border-muted">
-                                                {total_borrowings}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            )}
-
-                            {activeSection === 1 && "hi"}
-                        </div>
-                    </div>
-                </ScrollArea>
+                <Table className="mt-2 font-semibold">
+                    <TableBody>{rows}</TableBody>
+                </Table>
             </DrawerContent>
         </Drawer>
     );

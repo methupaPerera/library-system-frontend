@@ -27,7 +27,7 @@ export type NewMemberModalState = {
 };
 
 // Types related to book creation functions. ------------------------
-export type CreateBookInputs = {
+export type BookFormInputs = {
     title: string;
     isbn: string;
     author: string;
@@ -35,7 +35,22 @@ export type CreateBookInputs = {
     stock: number;
 };
 
-export type CreateBookReturns = BaseReturns & {
+export type BookFormReturns = BaseReturns & {
+    data: {};
+};
+
+// Types related to book updating functions. ------------------------
+export type UpdateBookFormInputs = {
+    book_id: string;
+    isbn: string;
+    title: string;
+    author: string;
+    genre: string;
+    to_add_stock: number;
+    to_remove_stock: number;
+};
+
+export type UpdateBookFormReturns = BaseReturns & {
     data: {};
 };
 
@@ -51,7 +66,7 @@ export interface AdminProperties {
           }
         | undefined
     >;
-    submitCreateBook(formData: CreateBookInputs): Promise<void>;
+    submitCreateBook(formData: BookFormInputs): Promise<void>;
     getData<T>(
         toFetch: "book" | "member" | "checkout",
         query: string,

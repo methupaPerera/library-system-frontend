@@ -1,12 +1,15 @@
+// Importing types.
 import type { Metadata } from "next";
 import type { Children } from "@/typings/prop-types";
 
+// Importing utilities.
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import { Navigation } from "@/components";
+// Importing component.
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Navigation } from "@/components";
 
 const inter = Inter({ subsets: ["latin"] });
 
