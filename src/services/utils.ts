@@ -41,6 +41,17 @@ export class Utils {
         return tokenCookie;
     }
 
+    // Method to extract and return the refresh token from the cookies.
+    // Returns undefined if the refresh token is not found.
+    getRefreshTokenCookie(): string | undefined {
+        const tokenCookie = document.cookie
+            .split(";")
+            .find((cookie) => cookie.startsWith("refresh_token"))
+            ?.split("=")[1];
+
+        return tokenCookie;
+    }
+
     // Method to format the dates coming from db, in 'yyyy/mm/dd' format.
     formatDate(date: string): string {
         const res = new Date(date);

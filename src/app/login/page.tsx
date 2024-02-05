@@ -24,6 +24,8 @@ export default function Login() {
     useEffect(() => {
         document.cookie =
             "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie =
+            "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;

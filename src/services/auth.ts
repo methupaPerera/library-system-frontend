@@ -11,12 +11,14 @@ import { toast } from "sonner";
 
 class Auth extends Utils implements AuthProperties {
     // API endpoint URLs.
+    private baseUrl: string | undefined;
     private loginUrl: string;
     private passwordUrl: string;
 
     constructor(apiUrl: string | undefined) {
         super();
 
+        this.baseUrl = apiUrl;
         this.loginUrl = `${apiUrl}/login`;
         this.passwordUrl = `${apiUrl}/password`;
     }
@@ -32,14 +34,9 @@ class Auth extends Utils implements AuthProperties {
             return;
         }
 
-        // Setting the expiration time for the access token cookie.
-        const expirationTime = new Date();
-        expirationTime.setTime(expirationTime.getTime() + 8 * 60 * 60 * 1000);
-
         // Creating the access token cookie with expiration time.
-        document.cookie = `access_token=${
-            data.access_token
-        }; expires=${expirationTime.toUTCString()};`;
+        document.cookie = `access_token=${data.access_token};`;
+        document.cookie = `refresh_token=${data.refresh_token};`;
 
         location.reload();
     }
@@ -59,6 +56,8 @@ class Auth extends Utils implements AuthProperties {
         // Clearing the access token cookie.
         document.cookie =
             "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie =
+            "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
         setTimeout(() => {
             location.reload();
@@ -69,13 +68,38 @@ class Auth extends Utils implements AuthProperties {
     handleLogout() {
         toast("Successfully logged out.");
 
-        // Clearing the access token cookie.
+        // Clearing the access tokens.
         document.cookie =
             "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie =
+            "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
         setTimeout(() => {
             location.reload();
         }, 300);
+    }
+
+    async checkTokens() {
+        try {
+            const res = await fetch(`${this.baseUrl}/check-token`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
+                    "Refresh-Token": `Bearer ${this.getRefreshTokenCookie()}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await res.json();
+
+            if (data.status !== "success") {
+                toast("An error occurred.");
+                this.handleLogout();
+            }
+        } catch (err) {
+            toast("An error occurred.");
+            return null;
+        }
     }
 }
 
