@@ -45,6 +45,10 @@ export default function BookForm({ isFormOpen, setFormOpen }: FormProps) {
 
         admin.submitCreateBook({ ...data, genre });
 
+        setTimeout(() => {
+            setFormOpen(false);
+        }, 300);
+
         reset();
     }
 

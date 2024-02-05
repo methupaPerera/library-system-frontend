@@ -105,7 +105,8 @@ export default function BookEditForm({
                     />
 
                     <Select
-                        value={bookData?.genre}
+                        defaultValue={bookData?.genre}
+                        value={genre}
                         onValueChange={(value: Genres) => setGenre(value)}
                     >
                         <SelectTrigger>
