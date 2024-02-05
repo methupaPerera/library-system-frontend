@@ -35,7 +35,7 @@ export class Utils {
     getAccessTokenCookie(): string | undefined {
         const tokenCookie = document.cookie
             .split(";")
-            .find((cookie) => cookie.startsWith("access_token"))
+            .find((cookie) => cookie.trim().startsWith("access_token"))
             ?.split("=")[1];
 
         return tokenCookie;
