@@ -21,8 +21,8 @@ export default function Books() {
     const [data, setData] = useState<Book[] | null>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
     const [pagination, setPagination] = useState<Pagination>({
-        currentPage: 0,
-        allPages: 0,
+        currentPage: 1,
+        allPages: 1,
     });
 
     // Function to fetch data for the current page.
