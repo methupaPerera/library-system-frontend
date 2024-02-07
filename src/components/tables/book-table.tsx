@@ -36,8 +36,6 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { BsThreeDots } from "react-icons/bs";
 import { BookEditForm } from "../forms";
 
-const { admin } = useAppContext();
-
 export default function BookTable({
     data,
     headingData,
@@ -47,7 +45,6 @@ export default function BookTable({
     setFormOpen,
     fetchItems,
 }: BookTableProps) {
-
     const [searchValue, setSearchValue] = useState<string>("");
 
     const { currentPage, allPages } = pagination;
@@ -176,6 +173,7 @@ export default function BookTable({
 }
 
 function TableAction({ rowData, refresh }: TableActionProps<Book>) {
+    const { admin } = useAppContext();
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 
     return (
