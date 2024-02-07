@@ -8,6 +8,7 @@ import type {
 
 import { Utils } from "./utils";
 import { toast } from "sonner";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 class Auth extends Utils implements AuthProperties {
     // API endpoint URLs.
@@ -15,8 +16,8 @@ class Auth extends Utils implements AuthProperties {
     private loginUrl: string;
     private passwordUrl: string;
 
-    constructor(apiUrl: string | undefined) {
-        super();
+    constructor(apiUrl: string | undefined, router: AppRouterInstance) {
+        super(router);
 
         this.baseUrl = apiUrl;
         this.loginUrl = `${apiUrl}/login`;
@@ -38,7 +39,7 @@ class Auth extends Utils implements AuthProperties {
         document.cookie = `access_token=${data.access_token};`;
         document.cookie = `refresh_token=${data.refresh_token};`;
 
-        location.reload();
+        this.router.push("/dashboard");
     }
 
     // Method to submit password data and update it.
@@ -66,6 +67,7 @@ class Auth extends Utils implements AuthProperties {
 
     // Method to log out the user by removing the access token.
     handleLogout() {
+        // TODO: Create a logout route in backend and remove the refresh token and everything.
         toast("Successfully logged out.");
 
         // Clearing the access tokens.
@@ -78,31 +80,6 @@ class Auth extends Utils implements AuthProperties {
             location.reload();
         }, 300);
     }
-
-    async checkTokens() {
-        try {
-            const res = await fetch(`${this.baseUrl}/check-token`, {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${this.getAccessTokenCookie()}`,
-                    "Refresh-Token": `Bearer ${this.getRefreshTokenCookie()}`,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const data = await res.json();
-
-            if (data.status !== "success") {
-                toast("An error occurred.");
-                this.handleLogout();
-            }
-        } catch (err) {
-            toast("An error occurred.");
-            return null;
-        }
-    }
 }
 
-const auth = Object.freeze(new Auth(process.env.NEXT_PUBLIC_API_URL));
-
-export default auth;
+export default Auth;

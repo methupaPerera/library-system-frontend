@@ -6,6 +6,7 @@ import type {
     CreateMemberReturns,
     UpdateBookFormInputs,
 } from "@/typings/admin-types";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 import { Utils } from "./utils";
 import { toast } from "sonner";
@@ -16,8 +17,8 @@ class Admin extends Utils implements AdminProperties {
     private memberUrl: string;
     private bookUrl: string;
 
-    constructor(apiUrl: string | undefined) {
-        super();
+    constructor(apiUrl: string | undefined, router: AppRouterInstance) {
+        super(router);
 
         this.baseUrl = apiUrl;
         this.memberUrl = `${apiUrl}/member`;
@@ -93,6 +94,20 @@ class Admin extends Utils implements AdminProperties {
                 }
             );
 
+            if (res.status === 403) {
+                console.log("odugqwieudcghuegh");
+                const result = await this.refreshToken();
+                if (!result) {
+                    return null;
+                }
+                const [fetchedData, pages]: any = await this.getData(
+                    toFetch,
+                    query,
+                    page
+                );
+                return [fetchedData, pages];
+            }
+
             const { data } = await res.json();
 
             const fetchedData = data[`${toFetch}s`];
@@ -109,6 +124,4 @@ class Admin extends Utils implements AdminProperties {
     }
 }
 
-const admin = Object.freeze(new Admin(process.env.NEXT_PUBLIC_API_URL));
-
-export default admin;
+export default Admin;

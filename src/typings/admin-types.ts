@@ -1,3 +1,4 @@
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { Genres, MembershipTypes } from "./prop-types";
 
 type BaseReturns = {
@@ -67,9 +68,22 @@ export interface AdminProperties {
         | undefined
     >;
     submitCreateBook(formData: BookFormInputs): Promise<void>;
+    submitUpdateBook(formData: UpdateBookFormInputs): Promise<void>;
     getData<T>(
         toFetch: "book" | "member" | "checkout",
         query: string,
         page: number
     ): Promise<[T[], number] | null>;
+    deleteBook(book_id: string): Promise<void>;
+}
+
+// Interface for the Utils class specifying its properties. ---------
+export interface UtilsProperties {
+    router?: AppRouterInstance;
+    fetchResponse: (url: string, method: string, body?: any) => any;
+    refreshToken: () => null | any;
+    getAccessTokenCookie: () => string | undefined;
+    getRefreshTokenCookie: () => string | undefined;
+    clearCookies: () => void;
+    formatDate: (date: string) => string;
 }

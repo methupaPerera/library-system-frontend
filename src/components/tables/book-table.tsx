@@ -4,14 +4,12 @@
 import type {
     Book,
     BookTableProps,
-    Children,
     TableActionProps,
 } from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
-import admin from "@/services/admin";
-import { toast } from "sonner";
+import { useAppContext } from "@/contexts/context";
 
 // Importing components.
 import Controller from "./controller";
@@ -38,6 +36,8 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { BsThreeDots } from "react-icons/bs";
 import { BookEditForm } from "../forms";
 
+const { admin } = useAppContext();
+
 export default function BookTable({
     data,
     headingData,
@@ -47,6 +47,7 @@ export default function BookTable({
     setFormOpen,
     fetchItems,
 }: BookTableProps) {
+
     const [searchValue, setSearchValue] = useState<string>("");
 
     const { currentPage, allPages } = pagination;

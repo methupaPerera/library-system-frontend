@@ -5,14 +5,15 @@ import type { Book, Pagination } from "@/typings/prop-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
-import admin from "@/services/admin";
 import { headingData } from "@/data";
 
 // Importing components.
 import { BookForm } from "@/components/forms";
 import { BookTable } from "@/components/tables";
+import { useAppContext } from "@/contexts/context";
 
 export default function Books() {
+    const { admin } = useAppContext();
     // Manages the book creation form state.
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { Children } from "@/typings/prop-types";
 
 // Importing utilities.
+import AppContext from "@/contexts/context";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -27,9 +28,11 @@ export default function RootLayout({ children }: Children) {
                     defaultTheme="light"
                     disableTransitionOnChange
                 >
-                    <Navigation />
-                    <main className="pt-14">{children}</main>
-                    <Toaster position="top-right" />
+                    <AppContext>
+                        <Navigation />
+                        <main className="pt-14">{children}</main>
+                        <Toaster position="top-right" />
+                    </AppContext>
                 </ThemeProvider>
             </body>
         </html>

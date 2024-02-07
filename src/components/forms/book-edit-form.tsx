@@ -7,7 +7,6 @@ import type { Book, FormProps, Genres } from "@/typings/prop-types";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import admin from "@/services/admin";
 import { toast } from "sonner";
 import { genres } from "@/data";
 
@@ -28,6 +27,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useAppContext } from "@/contexts/context";
 
 export default function BookEditForm({
     bookData,
@@ -35,6 +35,7 @@ export default function BookEditForm({
     setFormOpen,
     refresh,
 }: FormProps & { bookData: Book; refresh: () => void }) {
+    const { admin } = useAppContext();
     const { register, handleSubmit, reset } = useForm<UpdateBookFormInputs>();
 
     // Container for the genre input.

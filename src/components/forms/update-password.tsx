@@ -6,7 +6,6 @@ import { PasswordFormInputs } from "@/typings/auth-types";
 // Importing utilities.
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import auth from "@/services/auth";
 
 // Importing components.
 import { Button } from "@/components/ui/button";
@@ -18,8 +17,10 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import { useAppContext } from "@/contexts/context";
 
 export default function UpdatePasswordForm() {
+    const { auth } = useAppContext();
     const { register, handleSubmit, reset } = useForm<PasswordFormInputs>();
 
     // Action for the enter key press.

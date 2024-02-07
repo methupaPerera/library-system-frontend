@@ -10,7 +10,6 @@ import type { MembershipTypes } from "@/typings/prop-types";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import admin from "@/services/admin";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -42,8 +41,10 @@ import {
 
 // Importing icons.
 import { FaPlus } from "react-icons/fa6";
+import { useAppContext } from "@/contexts/context";
 
 export default function CreateMemberForm() {
+    const { admin } = useAppContext();
     // Container for the membership type input.
     const [membership, setMembership] = useState<MembershipTypes>("member");
 

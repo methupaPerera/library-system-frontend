@@ -3,8 +3,7 @@
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import utils from "@/services/utils";
-import auth from "@/services/auth";
+import { useAppContext } from "@/contexts/context";
 
 // Importing components.
 import Link from "next/link";
@@ -26,9 +25,12 @@ import {
 import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa6";
 
+
 // Navigation bar component.
 export default function Navigation() {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+
+    const { utils, auth } = useAppContext();
 
     // Switching the navigation bar content according to the presence of the access token.
     useEffect(() => {

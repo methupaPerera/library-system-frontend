@@ -31,28 +31,29 @@ import { LuCoins } from "react-icons/lu";
 // Dashboard component.
 export default async function Dashboard() {
     // Fetching dashboard information from the server.
-    const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/dashboard-info`,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${cookies().get("access_token")?.value}`,
-            },
-        }
-    );
+    // const res = await fetch(
+    //     `${process.env.NEXT_PUBLIC_API_URL}/dashboard-info`,
+    //     {
+    //         method: "GET",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Bearer ${cookies().get("access_token")?.value}`,
+    //             'Refresh-Token': `Bearer ${cookies().get("refresh_token")?.value}`,
+    //         },
+    //     }
+    // );
 
-    const {
-        status,
-        message,
-        data: {
-            members_count,
-            books_count,
-            total_fines,
-            top_books,
-            recent_checkouts,
-        },
-    }: DashboardItems = await res.json();
+    // const {
+    //     status,
+    //     message,
+    //     data: {
+    //         members_count,
+    //         books_count,
+    //         total_fines,
+    //         top_books,
+    //         recent_checkouts,
+    //     },
+    // }: DashboardItems = await res.json();
 
     return (
         <div className="pt-3 px-4">
@@ -64,22 +65,22 @@ export default async function Dashboard() {
                 <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
                     <StaticsCard
                         caption="Books"
-                        value={books_count}
+                        value={37}
                         Icon={ImBooks}
                     />
                     <StaticsCard
                         caption="Members"
-                        value={members_count}
+                        value={37}
                         Icon={BsFillPeopleFill}
                     />
                     <StaticsCard
                         caption="Fines"
-                        value={`$${total_fines}`}
+                        value={37}
                         Icon={LuCoins}
                     />
                     <StaticsCard
                         caption="Overdues"
-                        value={123}
+                        value={37}
                         Icon={TbCalendarDue}
                     />
                 </div>
@@ -94,9 +95,9 @@ export default async function Dashboard() {
                         type="always"
                         className="h-[16rem] mt-3 px-2 pr-4"
                     >
-                        {top_books.map((book: TopBookDataProps) => {
+                        {/* {top_books.map((book: TopBookDataProps) => {
                             return <BookData key={book.title} {...book} />;
-                        })}
+                        })} */}
                     </ScrollArea>
                 </div>
             </div>
@@ -122,7 +123,7 @@ export default async function Dashboard() {
                             </TableHeader>
 
                             <TableBody>
-                                {recent_checkouts.map(
+                                {/* {recent_checkouts.map(
                                     (checkout: RecentCheckoutProps) => (
                                         <TableRow key={checkout.serial}>
                                             <TableCell className="font-medium">
@@ -155,7 +156,7 @@ export default async function Dashboard() {
                                             </TableCell>
                                         </TableRow>
                                     )
-                                )}
+                                )} */}
                             </TableBody>
                         </Table>
                     </ScrollArea>
