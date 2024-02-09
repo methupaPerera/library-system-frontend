@@ -24,24 +24,6 @@ class Auth extends Utils implements AuthProperties {
         this.passwordUrl = `${apiUrl}/password`;
     }
 
-    // Method to submit login data and log in the user. -------------
-    async submitLogin(formData: LoginFormInputs) {
-        const { status, message, data }: LoginFormReturns =
-            await this.fetchResponse(this.loginUrl, "POST", formData);
-
-        toast(message);
-
-        if (status !== "success") {
-            return;
-        }
-
-        // Creating the access token cookie with expiration time.
-        document.cookie = `access_token=${data.access_token};`;
-        document.cookie = `refresh_token=${data.refresh_token};`;
-
-        this.router.push("/dashboard");
-    }
-
     // Method to submit password data and update it.
     async submitPassword(formData: PasswordFormInputs) {
         const { status, message }: PasswordFormReturns =

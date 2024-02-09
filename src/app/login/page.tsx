@@ -1,33 +1,38 @@
 "use client";
 
-// Importing types.
-import type { LoginFormInputs } from "@/typings/auth-types";
-
 // Importing utilities.
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import auth from "@/services/auth";
+import { loginUser } from "@/actions/login";
 
 // Importing components.
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { useEffect } from "react";
 import { useAppContext } from "@/contexts/context";
+
+// Type for the log in form inputs.
+export type LoginFormInputs = {
+    member_id: string;
+    password: string;
+};
 
 export default function Login() {
     const { register, handleSubmit } = useForm<LoginFormInputs>();
-    const { auth } = useAppContext();
+    const { setLoggedIn } = useAppContext();
 
-    // Action for the enter key press.
-    function action(data: LoginFormInputs) {
-        auth.submitLogin(data);
+    // Action for the form submission.
+    async function action(data: LoginFormInputs) {
+        const id = toast.loading("Please wait...");
+
+        const message = await loginUser(data);
+
+        toast.dismiss(id);
+        message && toast.error(message);
     }
 
-    // Clears the access token from cookies and handles the enter key press.
     useEffect(() => {
-        document.cookie =
-            "access_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        document.cookie =
-            "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        setLoggedIn(false);
     }, []);
 
     return (

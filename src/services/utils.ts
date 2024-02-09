@@ -75,9 +75,11 @@ export class Utils implements UtilsProperties {
     // Method to extract and return the access token from the cookies.
     getAccessTokenCookie(): string | undefined {
         const tokenCookie = document.cookie
-            .split(";")
-            .find((cookie) => cookie.trim().startsWith("access_token"))
-            ?.split("=")[1];
+            // .split(";")
+            // .find((cookie) => cookie.trim().startsWith("access_token"))
+            // ?.split("=")[1];
+
+        console.log(tokenCookie);
 
         return tokenCookie;
     }

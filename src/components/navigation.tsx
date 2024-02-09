@@ -1,7 +1,6 @@
 "use client";
 
 // Importing utilities.
-import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useAppContext } from "@/contexts/context";
 
@@ -24,24 +23,11 @@ import {
 // Importing icons.
 import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa6";
-
+import { logoutUser } from "@/actions/logout";
 
 // Navigation bar component.
 export default function Navigation() {
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-
-    const { utils, auth } = useAppContext();
-
-    // Switching the navigation bar content according to the presence of the access token.
-    useEffect(() => {
-        const tokenCookie = utils.getAccessTokenCookie();
-
-        if (tokenCookie) {
-            setLoggedIn(true);
-        } else {
-            setLoggedIn(false);
-        }
-    }, []);
+    const { isLoggedIn } = useAppContext();
 
     return (
         <nav className="w-full h-14 px-3 sm:px-4 md:px-6 lg:px-10 flex justify-between items-center bg-background border-b border-muted fixed z-50">
@@ -70,7 +56,7 @@ export default function Navigation() {
                                 className="!w-full px-4"
                                 variant="secondary"
                                 size="sm"
-                                onClick={() => auth.handleLogout()}
+                                onClick={() => logoutUser()}
                             >
                                 Log out{" "}
                                 <LogOut className="pl-2 text-[0.5rem]" />
