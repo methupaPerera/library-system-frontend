@@ -4,7 +4,6 @@
 import { PasswordFormInputs } from "@/typings/auth-types";
 
 // Importing utilities.
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 // Importing components.
@@ -17,30 +16,41 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { useAppContext } from "@/contexts/context";
+import { toast } from "sonner";
 
 export default function UpdatePasswordForm() {
-    const { auth } = useAppContext();
     const { register, handleSubmit, reset } = useForm<PasswordFormInputs>();
 
     // Action for the enter key press.
-    function action(data: PasswordFormInputs) {
-        auth.submitPassword(data);
+    async function action(data: PasswordFormInputs) {
+        const id = toast.loading("Please wait...");
 
-        reset();
-    }
+        const res = await fetch("api/password", {
+            method: "PATCH",
+            body: JSON.stringify(data),
+        });
 
-    // Handles the enter key press.
-    useEffect(() => {
-        function handleKeyPress(event: KeyboardEvent) {
-            if (event.key !== "Enter") return;
+        if (res.status === 401) {
+            const res = await fetch("api/token", { method: "POST" });
 
-            handleSubmit((data) => action(data));
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                action(data);
+            }
+
+            return;
         }
+        
+        toast.dismiss(id);
+        const { message } = await res.json();
+        toast(message);
+        reset();
 
-        window.addEventListener("keydown", handleKeyPress);
-        return window.removeEventListener("keydown", handleKeyPress);
-    });
+        if (res.status === 200) {
+            location.reload();
+        }
+    }
 
     return (
         <Sheet>

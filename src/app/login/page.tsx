@@ -1,15 +1,15 @@
 "use client";
 
 // Importing utilities.
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { loginUser } from "@/actions/login";
+import { useRouter } from "next/navigation";
+import { useAppContext } from "@/contexts/context";
+import { toast } from "sonner";
 
 // Importing components.
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useEffect } from "react";
-import { useAppContext } from "@/contexts/context";
 
 // Type for the log in form inputs.
 export type LoginFormInputs = {
@@ -18,6 +18,8 @@ export type LoginFormInputs = {
 };
 
 export default function Login() {
+    const router = useRouter();
+
     const { register, handleSubmit } = useForm<LoginFormInputs>();
     const { setLoggedIn } = useAppContext();
 
@@ -25,10 +27,28 @@ export default function Login() {
     async function action(data: LoginFormInputs) {
         const id = toast.loading("Please wait...");
 
-        const message = await loginUser(data);
+        const res = await fetch("/api/login", {
+            method: "POST",
+            body: JSON.stringify(data),
+        });
+
+        const { message, isAdmin } = await res.json();
 
         toast.dismiss(id);
-        message && toast.error(message);
+
+        // Users can't login if anything went wrong.
+        if (res.status !== 200) {
+            toast.error(message);
+            return;
+        }
+
+        toast.success(message);
+
+        if (isAdmin) {
+            router.push("dashboard");
+        } else {
+            router.push("/profile");
+        }
     }
 
     useEffect(() => {

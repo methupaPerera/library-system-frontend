@@ -3,6 +3,7 @@
 // Importing utilities.
 import { useTheme } from "next-themes";
 import { useAppContext } from "@/contexts/context";
+import { toast } from "sonner";
 
 // Importing components.
 import Link from "next/link";
@@ -23,8 +24,6 @@ import {
 // Importing icons.
 import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa6";
-import { logOutUser } from "@/actions/logout";
-import { toast } from "sonner";
 
 // Navigation bar component.
 export default function Navigation() {
@@ -33,8 +32,11 @@ export default function Navigation() {
     // Action for user log out.
     async function action() {
         const id = toast.loading("Logging out...");
-        await logOutUser();
+
+        await fetch("api/logout", { method: "POST" });
+
         toast.dismiss(id);
+        location.reload();
     }
 
     return (
@@ -57,6 +59,7 @@ export default function Navigation() {
                                 <FaAngleDown />
                             </Button>
                         </PopoverTrigger>
+
                         <PopoverContent className="mr-3 sm:mr-4 md:mr-6 lg:mr-10 w-44 flex flex-col items-center gap-2">
                             <PasswordForm />
 
