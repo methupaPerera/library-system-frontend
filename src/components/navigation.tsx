@@ -23,11 +23,19 @@ import {
 // Importing icons.
 import { LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa6";
-import { logoutUser } from "@/actions/logout";
+import { logOutUser } from "@/actions/logout";
+import { toast } from "sonner";
 
 // Navigation bar component.
 export default function Navigation() {
     const { isLoggedIn } = useAppContext();
+
+    // Action for user log out.
+    async function action() {
+        const id = toast.loading("Logging out...");
+        await logOutUser();
+        toast.dismiss(id);
+    }
 
     return (
         <nav className="w-full h-14 px-3 sm:px-4 md:px-6 lg:px-10 flex justify-between items-center bg-background border-b border-muted fixed z-50">
@@ -56,7 +64,7 @@ export default function Navigation() {
                                 className="!w-full px-4"
                                 variant="secondary"
                                 size="sm"
-                                onClick={() => logoutUser()}
+                                onClick={action}
                             >
                                 Log out{" "}
                                 <LogOut className="pl-2 text-[0.5rem]" />

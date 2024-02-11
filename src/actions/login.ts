@@ -36,7 +36,6 @@ export async function loginUser(body: LoginFormInputs) {
         });
 
         const { message, data }: LoginFormReturns = await res.json();
-        console.log(data)
 
         if (res.status === 200) {
             // All the data exist, if the status is 200.

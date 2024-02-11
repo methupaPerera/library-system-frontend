@@ -2,72 +2,64 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-    // const path = request.nextUrl.pathname;
-    // const access_token = request.cookies.get("access_token")?.value;
-    // const refresh_token = request.cookies.get("refresh_token")?.value;
+    const path = request.nextUrl.pathname;
+    const refresh_token = request.cookies.get("refresh_token")?.value;
 
-    // // Validating the access token by sending a request to the server.
-    // const { status, data } = await validateToken(access_token, refresh_token);
+    if (path !== "/login" && !refresh_token) {
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
 
-    // console.log(status, data);
+    // Redirecting users according to the token verification status.
+    const [response, isAdmin] = await verifyToken(refresh_token);
 
-    // if (status === "updated") {
-    //     const newAccessToken = data.access_token;
-    //     const response = NextResponse.redirect(new URL(path, request.url));
+    if (path !== "/login" && response !== 200) {
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
 
-    //     response.cookies.set({
-    //         name: "access_token",
-    //         value: newAccessToken,
-    //     });
+    if ((path === "/login" || path === "/") && response === 200 && isAdmin) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
 
-    //     return response;
-    // }
+    if (path === "/profile" && isAdmin) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
 
-    // // Users can't continue with a failed or mutated access token.
-    // if (path !== "/login" && status === "failed") {
-    //     return NextResponse.redirect(new URL("/login", request.url));
-    // }
-
-    // // All users can't log in without logging out first.
-    // if (
-    //     (path === "/login" || path === "/") &&
-    //     data.membership_type === "admin" &&
-    //     (status === "success" || status === "updated")
-    // ) {
-    //     return NextResponse.redirect(new URL("/dashboard", request.url));
-    // }
-
-    // // Members can't access pages other than '/my-profile'.
-    // if (path !== "/my-profile" && data.membership_type === "member") {
-    //     return NextResponse.redirect(new URL("/my-profile", request.url));
-    // }
+    if (path !== "/profile" && isAdmin === false) {
+        return NextResponse.redirect(new URL("/profile", request.url));
+    }
 }
 
-// Function to validate the access token by sending a GET request to the server.
-async function validateToken(
-    access_token: string | undefined,
-    refresh_token: string | undefined
-) {
+// Function to verify the refresh token. ----------------------------
+
+type Response = {
+    data: {
+        membership_type: "admin" | "member";
+    };
+};
+
+async function verifyToken(refresh_token: string | undefined) {
     try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/check-token`,
-            {
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                    "Refresh-Token": `Bearer ${refresh_token}`,
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
+            method: "GET",
+            headers: {
+                "Refresh-Token": `Bearer ${refresh_token}`,
+                "Content-Type": "application/json",
+            },
+        });
 
-        const data = await res.json();
+        if (res.status === 200) {
+            const { data }: Response = await res.json();
+            const isAdmin = data.membership_type === "admin";
 
-        return data;
+            return [res.status, isAdmin];
+        }
+
+        return [res.status, null];
     } catch (e) {
-        return { status: "failed" }; // Indicates a failed request.
+        return [500, null]; // Indicates a failed request.
     }
 }
 
 export const config = {
-    matcher: ["/", "/my-profile", "/login", "/dashboard", "/members", "/books"],
+    matcher: ["/", "/login", "/profile", "/dashboard", "/members", "/books"],
 };

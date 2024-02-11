@@ -8,7 +8,6 @@ import type {
 // Importing utilities.
 import { cookies } from "next/headers";
 import { cn } from "@/lib/utils";
-import utils from "@/services/utils";
 
 // Importing components.
 import { StaticsCard } from "@/components";
