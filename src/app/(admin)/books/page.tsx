@@ -7,14 +7,13 @@ import { Pagination } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { headingData } from "@/data";
+import { toast } from "sonner";
 
 // Importing components.
 import { BookForm } from "@/components/forms";
 import { BookTable } from "@/components/tables";
-import { useAppContext } from "@/contexts/context";
 
 export default function Books() {
-    const { admin } = useAppContext();
     // Manages the book creation form state.
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 
@@ -27,21 +26,39 @@ export default function Books() {
     });
 
     // Function to fetch data for the current page.
-    async function fetchItems(page: number, query: string) {
+    async function fetchItems(page: number, query: string = " ") {
         setLoading(true);
 
-        //const bookData = await admin.getData<Book>("book", query, page);
+        const res = await fetch(`/api/book?page=${page}&title=${query}`);
 
-        // if (bookData) {
-        //     setData(bookData[0]);
-        //     setPagination({
-        //         ...pagination,
-        //         currentPage: page,
-        //         allPages: bookData[1],
-        //     });
-        // }
+        if (res.status === 401) {
+            const res = await fetch("/api/token", { method: "POST" });
 
-        // setLoading(false);
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                fetchItems(page, query);
+            }
+
+            return;
+        }
+
+        const { message, data } = await res.json();
+
+        if (res.status === 500) {
+            toast.error(message);
+            setLoading(false);
+            return;
+        }
+
+        setData(data.books);
+        setPagination({
+            ...pagination,
+            currentPage: page,
+            allPages: Math.ceil(data.books_count / 10),
+        });
+
+        setLoading(false);
     }
 
     // Fetches the intial data.

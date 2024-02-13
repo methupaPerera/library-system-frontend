@@ -1,13 +1,13 @@
 "use client";
 
 // Importing types.
-import { LoginFormInputs } from "@/typings/login-types";
+import { LoginFormInputs } from "@/typings/auth-types";
 
 // Importing utilities.
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useAppContext } from "@/contexts/context";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 // Importing components.

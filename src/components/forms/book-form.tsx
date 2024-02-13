@@ -53,7 +53,6 @@ export default function BookForm({ isFormOpen, setFormOpen }: BookFormProps) {
         });
 
         if (res.status === 401) {
-            console.log("amooo");
             const res = await fetch("/api/token", { method: "POST" });
 
             if (res.status !== 200) {

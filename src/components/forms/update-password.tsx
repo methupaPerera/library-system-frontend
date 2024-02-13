@@ -1,7 +1,7 @@
 "use client";
 
 // Importing types.
-import type { PasswordFormInputs } from "@/typings/login-types";
+import type { PasswordFormInputs } from "@/typings/auth-types";
 
 // Importing utilities.
 import { useForm } from "react-hook-form";

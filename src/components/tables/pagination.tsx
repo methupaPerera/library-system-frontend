@@ -23,6 +23,7 @@ export default function Pagination({
             </div>
 
             <div className="flex items-center gap-2">
+                {/* Prev button. */}
                 <Button
                     size="sm"
                     variant="default"
@@ -35,7 +36,6 @@ export default function Pagination({
                                     currentPage === 1
                                         ? allPages
                                         : currentPage - 1,
-                                allPages: allPages,
                             };
 
                             fetchItems(newState.currentPage, searchValue);
@@ -46,6 +46,8 @@ export default function Pagination({
                 >
                     <FaChevronLeft />
                 </Button>
+
+                {/* Next button. */}
                 <Button
                     size="sm"
                     variant="default"
@@ -58,7 +60,6 @@ export default function Pagination({
                                     currentPage === allPages
                                         ? 1
                                         : currentPage + 1,
-                                allPages: allPages,
                             };
 
                             fetchItems(newState.currentPage, searchValue);

@@ -1,11 +1,14 @@
 "use client";
 
 // Importing types.
-import type { UpdateBookFormInputs } from "@/typings/book-types";
-import type { Book, BookFormProps, Genres } from "@/typings/book-types";
+import type {
+    EditBookFormProps,
+    UpdateBookFormInputs,
+} from "@/typings/book-types";
+import type { Genres } from "@/typings/book-types";
 
 // Importing utilities.
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { genres } from "@/data";
@@ -27,48 +30,55 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useAppContext } from "@/contexts/context";
 
 export default function BookEditForm({
     bookData,
     isFormOpen,
     setFormOpen,
     refresh,
-}: BookFormProps & { bookData: Book; refresh: () => void }) {
-    const { admin } = useAppContext();
+}: EditBookFormProps) {
     const { register, handleSubmit, reset } = useForm<UpdateBookFormInputs>();
 
     // Container for the genre input.
     const [genre, setGenre] = useState<undefined | Genres>(bookData.genre);
 
-    // Action for the enter key press.
-    function action(data: UpdateBookFormInputs) {
-        if (!genre) {
-            // Making sure that the user have selected a genre.
-            toast("Please select a genre.");
+    // Action for the data submission.
+    async function action(data: UpdateBookFormInputs) {
+        const id = toast.loading("Please wait...");
+
+        const res = await fetch("/api/book", {
+            method: "PUT",
+            body: JSON.stringify({ ...data, book_id: bookData.book_id, genre }),
+        });
+
+        if (res.status === 401) {
+            const res = await fetch("/api/token", { method: "POST" });
+
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                action(data);
+            }
+
             return;
         }
 
-        admin.submitUpdateBook({ ...data, genre, book_id: bookData.book_id });
+        const { message } = await res.json();
 
-        reset();
-        setFormOpen(false);
+        toast.dismiss(id);
 
-        setTimeout(() => {
-            refresh();
-        }, 300);
-    }
+        if (res.status === 200) {
+            toast.success(message);
+            reset();
+            setFormOpen(false);
 
-    // Handles the enter key press.
-    useEffect(() => {
-        function handleKeyPress(event: KeyboardEvent) {
-            if (event.key !== "Enter") return;
-            handleSubmit((data) => action(data));
+            setTimeout(() => {
+                refresh();
+            }, 500);
+        } else {
+            toast.error(message);
         }
-
-        window.addEventListener("keydown", handleKeyPress);
-        return window.removeEventListener("keydown", handleKeyPress);
-    });
+    }
 
     return (
         <Sheet open={isFormOpen} onOpenChange={() => setFormOpen(false)}>

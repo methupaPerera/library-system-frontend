@@ -19,6 +19,11 @@ export type BookFormProps = {
     setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type EditBookFormProps = BookFormProps & {
+    bookData: Book;
+    refresh: () => void;
+};
+
 export type BookFormInputs = {
     title: string;
     isbn: string;

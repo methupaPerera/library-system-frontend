@@ -6,7 +6,6 @@ import type { TableActionProps } from "@/typings/table-props";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
-import { useAppContext } from "@/contexts/context";
 
 // Importing components.
 import Controller from "./controller";
@@ -32,6 +31,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 // Importing icons.
 import { BsThreeDots } from "react-icons/bs";
 import { BookEditForm } from "../forms";
+import { toast } from "sonner";
 
 export default function BookTable({
     data,
@@ -48,20 +48,21 @@ export default function BookTable({
 
     // Function for refreshing the current page.
     function refresh() {
-        fetchItems(currentPage, "");
-        setSearchValue("");
-    }
+        let page = currentPage;
 
-    // Action for the enter key press.
-    function action() {
-        fetchItems(1, searchValue);
+        if (data && data.length - 1 === 0) {
+            page = currentPage - 1;
+        }
+
+        fetchItems(page, "");
+        setSearchValue("");
     }
 
     // Handles the enter key press.
     useEffect(() => {
         function handleKeyPress(event: KeyboardEvent) {
             if (event.key !== "Enter") return;
-            action();
+            fetchItems(1, searchValue);
         }
 
         window.addEventListener("keydown", handleKeyPress);
@@ -170,8 +171,43 @@ export default function BookTable({
 }
 
 function TableAction({ rowData, refresh }: TableActionProps<Book>) {
-    const { admin } = useAppContext();
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
+
+    async function deleteAction() {
+        const id = toast.loading("Please wait...");
+
+        const res = await fetch("/api/book", {
+            method: "DELETE",
+            body: JSON.stringify({
+                book_id: rowData.book_id,
+            }),
+        });
+
+        const { message } = await res.json();
+
+        if (res.status === 401) {
+            const res = await fetch("/api/token", {
+                method: "POST",
+            });
+
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                deleteAction();
+            }
+
+            return;
+        }
+
+        toast.dismiss(id);
+
+        if (res.status === 200) {
+            toast.success(message);
+            refresh();
+        } else {
+            toast.error(message);
+        }
+    }
 
     return (
         <>
@@ -203,10 +239,7 @@ function TableAction({ rowData, refresh }: TableActionProps<Book>) {
                         size="sm"
                         variant="destructive"
                         className="w-full font-semibold"
-                        onClick={async () => {
-                            await admin.deleteBook(rowData.book_id);
-                            refresh();
-                        }}
+                        onClick={deleteAction}
                     >
                         Delete
                     </Button>
