@@ -1,13 +1,5 @@
 // Importing types.
-import type {
-    DashboardItems,
-    TopBookDataProps,
-    RecentCheckoutProps,
-} from "@/typings/prop-types";
-
-// Importing utilities.
-import { cookies } from "next/headers";
-import { cn } from "@/lib/utils";
+import type { TopBookDataProps } from "@/typings/comp-props";
 
 // Importing components.
 import { StaticsCard } from "@/components";
@@ -15,7 +7,6 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
@@ -29,31 +20,6 @@ import { LuCoins } from "react-icons/lu";
 
 // Dashboard component.
 export default async function Dashboard() {
-    // Fetching dashboard information from the server.
-    // const res = await fetch(
-    //     `${process.env.NEXT_PUBLIC_API_URL}/dashboard-info`,
-    //     {
-    //         method: "GET",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             Authorization: `Bearer ${cookies().get("access_token")?.value}`,
-    //             'Refresh-Token': `Bearer ${cookies().get("refresh_token")?.value}`,
-    //         },
-    //     }
-    // );
-
-    // const {
-    //     status,
-    //     message,
-    //     data: {
-    //         members_count,
-    //         books_count,
-    //         total_fines,
-    //         top_books,
-    //         recent_checkouts,
-    //     },
-    // }: DashboardItems = await res.json();
-
     return (
         <div className="pt-3 px-4">
             <h3 className="font-semibold text-2xl text-muted-foreground">
@@ -62,21 +28,13 @@ export default async function Dashboard() {
             <div className="flex flex-col md:flex-row gap-4 mt-4">
                 {/* Statistics cards section. */}
                 <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-                    <StaticsCard
-                        caption="Books"
-                        value={37}
-                        Icon={ImBooks}
-                    />
+                    <StaticsCard caption="Books" value={37} Icon={ImBooks} />
                     <StaticsCard
                         caption="Members"
                         value={37}
                         Icon={BsFillPeopleFill}
                     />
-                    <StaticsCard
-                        caption="Fines"
-                        value={37}
-                        Icon={LuCoins}
-                    />
+                    <StaticsCard caption="Fines" value={37} Icon={LuCoins} />
                     <StaticsCard
                         caption="Overdues"
                         value={37}

@@ -1,7 +1,7 @@
 "use client";
 
 // Importing types.
-import type { Children } from "@/typings/prop-types";
+import type { Children } from "@/typings/main-types";
 
 // Importing utilities.
 import { createContext, useContext, useState } from "react";

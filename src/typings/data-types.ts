@@ -1,1 +1,0 @@
-export type Headings = { heading: string; width: string };

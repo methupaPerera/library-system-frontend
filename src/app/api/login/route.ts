@@ -1,6 +1,5 @@
+import type { CookieData } from "@/typings/main-types";
 import { cookies } from "next/headers";
-
-type CookieData = { name: string; value: string; exp: number };
 
 export async function POST(request: Request) {
     const body = await request.json();

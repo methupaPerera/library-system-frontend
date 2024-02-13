@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 // Importing icons.
 import { FaPlus } from "react-icons/fa6";
 import { TbRefresh } from "react-icons/tb";
-import { ControllerProps } from "@/typings/prop-types";
+import { ControllerProps } from "@/typings/table-props";
 
 export default function Controller({
     searchValue,

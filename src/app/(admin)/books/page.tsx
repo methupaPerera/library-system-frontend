@@ -1,7 +1,8 @@
 "use client";
 
 // Importing types.
-import type { Book, Pagination } from "@/typings/prop-types";
+import { Book } from "@/typings/book-types";
+import { Pagination } from "@/typings/table-props";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
@@ -29,18 +30,18 @@ export default function Books() {
     async function fetchItems(page: number, query: string) {
         setLoading(true);
 
-        const bookData = await admin.getData<Book>("book", query, page);
+        //const bookData = await admin.getData<Book>("book", query, page);
 
-        if (bookData) {
-            setData(bookData[0]);
-            setPagination({
-                ...pagination,
-                currentPage: page,
-                allPages: bookData[1],
-            });
-        }
+        // if (bookData) {
+        //     setData(bookData[0]);
+        //     setPagination({
+        //         ...pagination,
+        //         currentPage: page,
+        //         allPages: bookData[1],
+        //     });
+        // }
 
-        setLoading(false);
+        // setLoading(false);
     }
 
     // Fetches the intial data.

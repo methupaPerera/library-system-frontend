@@ -1,5 +1,7 @@
+"use client";
+
 // Importing types.
-import { PaginationProps } from "@/typings/prop-types";
+import type { PaginationProps } from "@/typings/table-props";
 
 // Importing components.
 import { Button } from "../ui/button";

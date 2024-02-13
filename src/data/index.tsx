@@ -1,7 +1,6 @@
-import type { Headings } from "@/typings/data-types";
-import type { Genres } from "@/typings/prop-types";
+import type { Genres } from "@/typings/book-types";
+import type { Headings } from "@/typings/table-props";
 
-// Book Genres for the book form. -----------------------------------
 export const genres: Genres[] = [
     "Sci-fi",
     "Novel",
@@ -10,7 +9,6 @@ export const genres: Genres[] = [
     "Adventure",
 ];
 
-// Heading data for the book table. ---------------------------------
 export const headingData: Headings[] = [
     { heading: "Book ID", width: "w-[10%]" },
     { heading: "Title", width: "w-[30%]" },

@@ -1,6 +1,6 @@
 // Importing types.
 import type { Metadata } from "next";
-import type { Children } from "@/typings/prop-types";
+import type { Children } from "@/typings/main-types";
 
 // Importing utilities.
 import AppContext from "@/contexts/context";

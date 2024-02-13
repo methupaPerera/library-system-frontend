@@ -1,11 +1,8 @@
 "use client";
 
 // Importing types.
-import type {
-    Book,
-    BookTableProps,
-    TableActionProps,
-} from "@/typings/prop-types";
+import type { Book, BookTableProps } from "@/typings/book-types";
+import type { TableActionProps } from "@/typings/table-props";
 
 // Importing utilities.
 import { useEffect, useState } from "react";

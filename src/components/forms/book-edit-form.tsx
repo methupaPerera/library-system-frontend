@@ -1,8 +1,8 @@
 "use client";
 
 // Importing types.
-import type { UpdateBookFormInputs } from "@/typings/admin-types";
-import type { Book, FormProps, Genres } from "@/typings/prop-types";
+import type { UpdateBookFormInputs } from "@/typings/book-types";
+import type { Book, BookFormProps, Genres } from "@/typings/book-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ export default function BookEditForm({
     isFormOpen,
     setFormOpen,
     refresh,
-}: FormProps & { bookData: Book; refresh: () => void }) {
+}: BookFormProps & { bookData: Book; refresh: () => void }) {
     const { admin } = useAppContext();
     const { register, handleSubmit, reset } = useForm<UpdateBookFormInputs>();
 

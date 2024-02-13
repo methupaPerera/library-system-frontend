@@ -1,5 +1,8 @@
 "use client";
 
+// Importing types.
+import { LoginFormInputs } from "@/typings/login-types";
+
 // Importing utilities.
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -10,12 +13,6 @@ import { toast } from "sonner";
 // Importing components.
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-// Type for the log in form inputs.
-export type LoginFormInputs = {
-    member_id: string;
-    password: string;
-};
 
 export default function Login() {
     const router = useRouter();

@@ -1,7 +1,7 @@
 "use client";
 
 // Importing types.
-import type { SidebarLinkProps } from "@/typings/prop-types";
+import type { SidebarLinkProps } from "@/typings/comp-props";
 
 // Importing components.
 import Link from "next/link";

@@ -1,11 +1,14 @@
 "use client";
 
 // Importing types.
-import type { BookFormInputs } from "@/typings/admin-types";
-import type { FormProps, Genres } from "@/typings/prop-types";
+import type {
+    BookFormInputs,
+    BookFormProps,
+    Genres,
+} from "@/typings/book-types";
 
 // Importing utilities.
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { genres } from "@/data";
@@ -27,42 +30,46 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useAppContext } from "@/contexts/context";
 
-export default function BookForm({ isFormOpen, setFormOpen }: FormProps) {
-    const { admin } = useAppContext();
+export default function BookForm({ isFormOpen, setFormOpen }: BookFormProps) {
     const { register, handleSubmit, reset } = useForm<BookFormInputs>();
 
     // Container for the genre input.
     const [genre, setGenre] = useState<undefined | Genres>(undefined);
 
-    // Action for the enter key press.
-    function action(data: BookFormInputs) {
+    // Action for the data submission.
+    async function action(data: BookFormInputs) {
         if (!genre) {
             // Making sure that the user have selected a genre.
             toast("Please select a genre.");
             return;
         }
 
-        admin.submitCreateBook({ ...data, genre });
+        const id = toast.loading("Please wait...");
 
-        setTimeout(() => {
-            setFormOpen(false);
-        }, 300);
+        const res = await fetch("/api/book", {
+            method: "POST",
+            body: JSON.stringify({ ...data, genre }),
+        });
 
-        reset();
-    }
+        if (res.status === 401) {
+            console.log("amooo");
+            const res = await fetch("/api/token", { method: "POST" });
 
-    // Handles the enter key press.
-    useEffect(() => {
-        function handleKeyPress(event: KeyboardEvent) {
-            if (event.key !== "Enter") return;
-            handleSubmit((data) => action(data));
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                action(data);
+            }
+
+            return;
         }
 
-        window.addEventListener("keydown", handleKeyPress);
-        return window.removeEventListener("keydown", handleKeyPress);
-    });
+        toast.dismiss(id);
+        const { message } = await res.json();
+        toast(message);
+        reset();
+    }
 
     return (
         <Sheet open={isFormOpen} onOpenChange={() => setFormOpen(false)}>

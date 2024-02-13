@@ -1,10 +1,11 @@
 "use client";
 
 // Importing types.
-import { PasswordFormInputs } from "@/typings/auth-types";
+import type { PasswordFormInputs } from "@/typings/login-types";
 
 // Importing utilities.
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 // Importing components.
 import { Button } from "@/components/ui/button";
@@ -16,22 +17,21 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { toast } from "sonner";
 
 export default function UpdatePasswordForm() {
     const { register, handleSubmit, reset } = useForm<PasswordFormInputs>();
 
-    // Action for the enter key press.
+    // Action for the data submission.
     async function action(data: PasswordFormInputs) {
         const id = toast.loading("Please wait...");
 
-        const res = await fetch("api/password", {
+        const res = await fetch("/api/password", {
             method: "PATCH",
             body: JSON.stringify(data),
         });
 
         if (res.status === 401) {
-            const res = await fetch("api/token", { method: "POST" });
+            const res = await fetch("/api/token", { method: "POST" });
 
             if (res.status !== 200) {
                 location.reload();
@@ -41,7 +41,7 @@ export default function UpdatePasswordForm() {
 
             return;
         }
-        
+
         toast.dismiss(id);
         const { message } = await res.json();
         toast(message);
