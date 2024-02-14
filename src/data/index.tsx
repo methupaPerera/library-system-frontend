@@ -9,7 +9,16 @@ export const genres: Genres[] = [
     "Adventure",
 ];
 
-export const headingData: Headings[] = [
+export const memberHeadingData: Headings[] = [
+    { heading: "Member ID", width: "w-[10%]" },
+    { heading: "Full Name", width: "w-[30%]" },
+    { heading: "Address", width: "w-[20%]" },
+    { heading: "Phone", width: "w-[20%]" },
+    { heading: "Membership Status", width: "w-[10%]" },
+    { heading: "", width: "w-[10%]" },
+];
+
+export const bookHeadingData: Headings[] = [
     { heading: "Book ID", width: "w-[10%]" },
     { heading: "Title", width: "w-[30%]" },
     { heading: "Author", width: "w-[20%]" },

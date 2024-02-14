@@ -1,12 +1,12 @@
 "use client";
 
 // Importing types.
-import { Book } from "@/typings/book-types";
-import { Pagination } from "@/typings/table-props";
+import type { Book } from "@/typings/book-types";
+import type { Pagination } from "@/typings/table-props";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
-import { headingData } from "@/data";
+import { bookHeadingData } from "@/data";
 import { toast } from "sonner";
 
 // Importing components.
@@ -54,8 +54,8 @@ export default function Books() {
         setData(data.books);
         setPagination({
             ...pagination,
-            currentPage: page,
-            allPages: Math.ceil(data.books_count / 10),
+            currentPage: data.books_count ? page : 1,
+            allPages: data.books_count ? Math.ceil(data.books_count / 10) : 1,
         });
 
         setLoading(false);
@@ -76,7 +76,7 @@ export default function Books() {
 
             <BookTable
                 data={data}
-                headingData={headingData}
+                headingData={bookHeadingData}
                 isLoading={isLoading}
                 pagination={pagination}
                 setPagination={setPagination}

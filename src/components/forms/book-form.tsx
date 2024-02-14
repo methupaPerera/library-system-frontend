@@ -71,7 +71,7 @@ export default function BookForm({ isFormOpen, setFormOpen }: BookFormProps) {
     }
 
     return (
-        <Sheet open={isFormOpen} onOpenChange={() => setFormOpen(false)}>
+        <Sheet open={isFormOpen} onOpenChange={(open) => setFormOpen(open)}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>Add New Book.</SheetTitle>

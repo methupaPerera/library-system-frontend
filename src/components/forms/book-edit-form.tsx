@@ -3,7 +3,7 @@
 // Importing types.
 import type {
     EditBookFormProps,
-    UpdateBookFormInputs,
+    EditBookFormInputs,
 } from "@/typings/book-types";
 import type { Genres } from "@/typings/book-types";
 
@@ -37,13 +37,13 @@ export default function BookEditForm({
     setFormOpen,
     refresh,
 }: EditBookFormProps) {
-    const { register, handleSubmit, reset } = useForm<UpdateBookFormInputs>();
+    const { register, handleSubmit, reset } = useForm<EditBookFormInputs>();
 
     // Container for the genre input.
     const [genre, setGenre] = useState<undefined | Genres>(bookData.genre);
 
     // Action for the data submission.
-    async function action(data: UpdateBookFormInputs) {
+    async function action(data: EditBookFormInputs) {
         const id = toast.loading("Please wait...");
 
         const res = await fetch("/api/book", {

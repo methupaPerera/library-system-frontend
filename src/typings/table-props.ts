@@ -29,6 +29,7 @@ export type TableActionProps<T> = {
 };
 
 export type ControllerProps = {
+    name: string;
     searchValue: string;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
     setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;

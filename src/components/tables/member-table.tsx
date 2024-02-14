@@ -1,7 +1,7 @@
 "use client";
 
 // Importing types.
-import type { Book, BookTableProps } from "@/typings/book-types";
+import type { Member, MemberTableProps } from "@/typings/member-types";
 import type { TableActionProps } from "@/typings/table-props";
 
 // Importing utilities.
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 // Importing components.
 import Controller from "./controller";
 import Pagination from "./pagination";
-import { BookEditForm } from "../forms";
+import { MemberEditForm } from "../forms";
 import { Skeleton } from "../ui/skeleton";
 import { Button, buttonVariants } from "../ui/button";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
@@ -33,7 +33,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 // Importing icons.
 import { BsThreeDots } from "react-icons/bs";
 
-export default function BookTable({
+export default function MemberTable({
     data,
     headingData,
     isLoading,
@@ -41,7 +41,7 @@ export default function BookTable({
     setPagination,
     setFormOpen,
     fetchItems,
-}: BookTableProps) {
+}: MemberTableProps) {
     const [searchValue, setSearchValue] = useState<string>("");
 
     const { currentPage, allPages } = pagination;
@@ -72,7 +72,7 @@ export default function BookTable({
     return (
         <div className="my-4">
             <Controller
-                name="New Book"
+                name="New Member"
                 fetchItems={fetchItems}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
@@ -104,23 +104,23 @@ export default function BookTable({
                             {!isLoading ? (
                                 data ? (
                                     data.map((rowData, index) => {
-                                        const {
-                                            book_id,
-                                            title,
-                                            author,
-                                            genre,
-                                            stock,
-                                            borrowed_count,
-                                        } = rowData;
+                                        // const {
+                                        //     book_id,
+                                        //     title,
+                                        //     author,
+                                        //     genre,
+                                        //     stock,
+                                        //     borrowed_count,
+                                        // } = rowData;
 
                                         return (
                                             <TableRow key={index}>
-                                                <TableCell>{book_id}</TableCell>
-                                                <TableCell>{title}</TableCell>
-                                                <TableCell>{author}</TableCell>
-                                                <TableCell>{genre}</TableCell>
+                                                {/*     <TableCell>{book_id}</TableCell> */}
+                                                {/* <TableCell>{title}</TableCell> */}
+                                                {/* <TableCell>{author}</TableCell> */}
+                                                {/* <TableCell>{genre}</TableCell> */}
                                                 <TableCell>
-                                                    {stock - borrowed_count}
+                                                    {/* {stock - borrowed_count} */}
                                                 </TableCell>
                                                 <TableCell>
                                                     <TableAction
@@ -171,49 +171,42 @@ export default function BookTable({
     );
 }
 
-function TableAction({ rowData, refresh }: TableActionProps<Book>) {
+function TableAction({ rowData, refresh }: TableActionProps<Member>) {
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 
     async function deleteAction() {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/book", {
-            method: "DELETE",
-            body: JSON.stringify({
-                book_id: rowData.book_id,
-            }),
-        });
-
-        const { message } = await res.json();
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", {
-                method: "POST",
-            });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                deleteAction();
-            }
-
-            return;
-        }
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
-            toast.success(message);
-            refresh();
-        } else {
-            toast.error(message);
-        }
+        // const id = toast.loading("Please wait...");
+        // const res = await fetch("/api/book", {
+        //     method: "DELETE",
+        //     body: JSON.stringify({
+        //         book_id: rowData.book_id,
+        //     }),
+        // });
+        // const { message } = await res.json();
+        // if (res.status === 401) {
+        //     const res = await fetch("/api/token", {
+        //         method: "POST",
+        //     });
+        //     if (res.status !== 200) {
+        //         location.reload();
+        //     } else {
+        //         deleteAction();
+        //     }
+        //     return;
+        // }
+        // toast.dismiss(id);
+        // if (res.status === 200) {
+        //     toast.success(message);
+        //     refresh();
+        // } else {
+        //     toast.error(message);
+        // }
     }
 
     return (
         <>
-            <BookEditForm
-                bookData={rowData}
+            <MemberEditForm
+                memberData={rowData}
                 isFormOpen={isFormOpen}
                 setFormOpen={setFormOpen}
                 refresh={refresh}
@@ -250,7 +243,7 @@ function TableAction({ rowData, refresh }: TableActionProps<Book>) {
     );
 }
 
-function Details({ fullData }: { fullData: Book }) {
+function Details({ fullData }: { fullData: Member }) {
     const rows = [];
 
     for (const key in fullData) {
@@ -275,7 +268,7 @@ function Details({ fullData }: { fullData: Book }) {
             </DrawerTrigger>
 
             <DrawerContent className="m-4 p-4 sm:px-8">
-                <p className="mt-2 font-bold text-xl">Details of the book.</p>
+                <p className="mt-2 font-bold text-xl">Details of the member.</p>
 
                 <Table className="mt-2 font-semibold">
                     <TableBody>{rows}</TableBody>

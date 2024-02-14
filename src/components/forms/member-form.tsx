@@ -2,13 +2,14 @@
 
 // Importing types.
 import type {
-    CreateMemberInputs,
+    MemberFormInputs,
+    MemberFormProps,
     NewMemberModalState,
 } from "@/typings/member-types";
 import type { MembershipTypes } from "@/typings/member-types";
 
 // Importing utilities.
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 // Importing components.
@@ -19,7 +20,6 @@ import {
     SheetContent,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
 } from "@/components/ui/sheet";
 import {
     Select,
@@ -39,12 +39,12 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-// Importing icons.
-import { FaPlus } from "react-icons/fa6";
-import { useAppContext } from "@/contexts/context";
+export default function MemberForm({
+    isFormOpen,
+    setFormOpen,
+}: MemberFormProps) {
+    const { register, handleSubmit, reset } = useForm<MemberFormInputs>();
 
-export default function CreateMemberForm() {
-    const { admin } = useAppContext();
     // Container for the membership type input.
     const [membership, setMembership] = useState<MembershipTypes>("member");
 
@@ -54,50 +54,27 @@ export default function CreateMemberForm() {
         info: { member_id: "", password: "" },
     });
 
-    const { register, handleSubmit } = useForm<CreateMemberInputs>();
-
-    // Function for handling data submission and managing returned data.
-    async function handleReqRes(data: CreateMemberInputs) {
-        const info = await admin.submitCreateMember({
-            ...data,
-            membership_type: membership,
-        });
-
-        if (info?.status === "success") {
-            setCreated({
-                state: true,
-                // Using a type assertion because the 'data' key exists when the status is "success".
-                info: info.data as {
-                    member_id: string;
-                    password: string;
-                },
-            });
-        }
+    // Action for the data submission.
+    async function action(data: MemberFormInputs) {
+        // const info = await admin.submitCreateMember({
+        //     ...data,
+        //     membership_type: membership,
+        // });
+        // if (info?.status === "success") {
+        //     setCreated({
+        //         state: true,
+        //         // Using a type assertion because the 'data' key exists when the status is "success".
+        //         info: info.data as {
+        //             member_id: string;
+        //             password: string;
+        //         },
+        //     });
+        // }
     }
-
-    useEffect(() => {
-        function handleKeyPress(event: KeyboardEvent) {
-            if (event.key !== "Enter") return;
-
-            handleSubmit(handleReqRes);
-        }
-
-        window.addEventListener("keydown", handleKeyPress);
-        return window.removeEventListener("keydown", handleKeyPress);
-    });
 
     return (
         <>
-            <Sheet>
-                <SheetTrigger asChild>
-                    <Button
-                        size="sm"
-                        className="flex gap-1.5 fixed bottom-6 right-6"
-                    >
-                        Add member <FaPlus />
-                    </Button>
-                </SheetTrigger>
-
+            <Sheet open={isFormOpen} onOpenChange={(open) => setFormOpen(open)}>
                 <SheetContent>
                     <SheetHeader>
                         <SheetTitle>Add New Member.</SheetTitle>
@@ -105,7 +82,7 @@ export default function CreateMemberForm() {
 
                     <form
                         method="POST"
-                        onSubmit={handleSubmit(handleReqRes)}
+                        onSubmit={handleSubmit((data) => action(data))}
                         className="mt-8 flex flex-col gap-3"
                     >
                         <Input
@@ -139,15 +116,13 @@ export default function CreateMemberForm() {
                         </div>
 
                         <Select
+                            value={membership}
                             onValueChange={(value: MembershipTypes) =>
                                 setMembership(value)
                             }
                         >
                             <SelectTrigger>
-                                <SelectValue
-                                    defaultValue={membership}
-                                    placeholder="Membership Type"
-                                />
+                                <SelectValue placeholder="Membership Type" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>

@@ -8,6 +8,7 @@ import { TbRefresh } from "react-icons/tb";
 import { ControllerProps } from "@/typings/table-props";
 
 export default function Controller({
+    name,
     searchValue,
     setSearchValue,
     setFormOpen,
@@ -36,12 +37,11 @@ export default function Controller({
 
             <div className="w-full flex justify-end items-center gap-2">
                 <Button
-                    size="sm"
-                    className="!h-10 w-full sm:w-32"
+                    className="!h-10 w-full font-semibold"
                     onClick={() => setFormOpen(true)}
                 >
-                    New Book
-                    <FaPlus />
+                    {name}
+                    <FaPlus className="ml-1" />
                 </Button>
                 <Button size="sm" className="!h-10" onClick={() => refresh()}>
                     <TbRefresh />

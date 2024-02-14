@@ -32,7 +32,7 @@ export type BookFormInputs = {
     stock: number;
 };
 
-export type UpdateBookFormInputs = {
+export type EditBookFormInputs = {
     title: string;
     isbn: string;
     author: string;
