@@ -50,7 +50,7 @@ export default function BookTable({
     function refresh() {
         let page = currentPage;
 
-        if (data && data.length - 1 === 0) {
+        if (data && data.length - 1 === 0 && currentPage - 1 !== 0) {
             page = currentPage - 1;
         }
 

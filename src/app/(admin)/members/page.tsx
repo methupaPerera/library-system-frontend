@@ -29,34 +29,34 @@ export default function Members() {
     async function fetchItems(page: number, query: string = " ") {
         setLoading(true);
 
-        // const res = await fetch(`/api/book?page=${page}&title=${query}`);
+        const res = await fetch(`/api/member?page=${page}&name=${query}`);
 
-        // if (res.status === 401) {
-        //     const res = await fetch("/api/token", { method: "POST" });
+        if (res.status === 401) {
+            const res = await fetch("/api/token", { method: "POST" });
 
-        //     if (res.status !== 200) {
-        //         location.reload();
-        //     } else {
-        //         fetchItems(page, query);
-        //     }
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                fetchItems(page, query);
+            }
 
-        //     return;
-        // }
+            return;
+        }
 
-        // const { message, data } = await res.json();
+        const { message, data } = await res.json();
 
-        // if (res.status === 500) {
-        //     toast.error(message);
-        //     setLoading(false);
-        //     return;
-        // }
+        if (res.status === 500) {
+            toast.error(message);
+            setLoading(false);
+            return;
+        }
 
-        // setData(data.books);
-        // setPagination({
-        //     ...pagination,
-        //     currentPage: page,
-        //     allPages: Math.ceil(data.books_count / 10),
-        // });
+        setData(data.members);
+        setPagination({
+            ...pagination,
+            currentPage: data.members_count ? page : 1,
+            allPages: data.members_count ? Math.ceil(data.members_count / 10) : 1,
+        });
 
         setLoading(false);
     }

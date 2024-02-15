@@ -32,6 +32,8 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 // Importing icons.
 import { BsThreeDots } from "react-icons/bs";
+import { cn } from "@/lib/utils";
+import { formatDate } from "@/functions";
 
 export default function MemberTable({
     data,
@@ -50,7 +52,7 @@ export default function MemberTable({
     function refresh() {
         let page = currentPage;
 
-        if (data && data.length - 1 === 0) {
+        if (data && data.length - 1 === 0 && currentPage - 1 !== 0) {
             page = currentPage - 1;
         }
 
@@ -104,23 +106,52 @@ export default function MemberTable({
                             {!isLoading ? (
                                 data ? (
                                     data.map((rowData, index) => {
-                                        // const {
-                                        //     book_id,
-                                        //     title,
-                                        //     author,
-                                        //     genre,
-                                        //     stock,
-                                        //     borrowed_count,
-                                        // } = rowData;
+                                        const {
+                                            member_id,
+                                            full_name,
+                                            address,
+                                            phone_number,
+                                            registration_date,
+                                            expiry_date,
+                                        } = rowData;
+
+                                        const isExpired =
+                                            new Date(expiry_date).getTime() -
+                                                new Date(
+                                                    registration_date
+                                                ).getTime() >
+                                            0
+                                                ? "Active"
+                                                : "Expired";
 
                                         return (
                                             <TableRow key={index}>
-                                                {/*     <TableCell>{book_id}</TableCell> */}
-                                                {/* <TableCell>{title}</TableCell> */}
-                                                {/* <TableCell>{author}</TableCell> */}
-                                                {/* <TableCell>{genre}</TableCell> */}
                                                 <TableCell>
-                                                    {/* {stock - borrowed_count} */}
+                                                    {member_id}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {full_name}
+                                                </TableCell>
+                                                <TableCell>{address}</TableCell>
+                                                <TableCell>
+                                                    {phone_number}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    <span
+                                                        className={cn(
+                                                            "text-[12px] py-1 px-3 rounded-full text-white",
+                                                            {
+                                                                "bg-red-400":
+                                                                    isExpired ===
+                                                                    "Expired",
+                                                                "bg-green-400":
+                                                                    isExpired ===
+                                                                    "Active",
+                                                            }
+                                                        )}
+                                                    >
+                                                        {isExpired}
+                                                    </span>
                                                 </TableCell>
                                                 <TableCell>
                                                     <TableAction
@@ -175,32 +206,39 @@ function TableAction({ rowData, refresh }: TableActionProps<Member>) {
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 
     async function deleteAction() {
-        // const id = toast.loading("Please wait...");
-        // const res = await fetch("/api/book", {
-        //     method: "DELETE",
-        //     body: JSON.stringify({
-        //         book_id: rowData.book_id,
-        //     }),
-        // });
-        // const { message } = await res.json();
-        // if (res.status === 401) {
-        //     const res = await fetch("/api/token", {
-        //         method: "POST",
-        //     });
-        //     if (res.status !== 200) {
-        //         location.reload();
-        //     } else {
-        //         deleteAction();
-        //     }
-        //     return;
-        // }
-        // toast.dismiss(id);
-        // if (res.status === 200) {
-        //     toast.success(message);
-        //     refresh();
-        // } else {
-        //     toast.error(message);
-        // }
+        const id = toast.loading("Please wait...");
+
+        const res = await fetch("/api/member", {
+            method: "DELETE",
+            body: JSON.stringify({
+                member_id: rowData.member_id,
+            }),
+        });
+
+        console.log(rowData.member_id)
+
+        const { message } = await res.json();
+
+        if (res.status === 401) {
+            const res = await fetch("/api/token", {
+                method: "POST",
+            });
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                deleteAction();
+            }
+            return;
+        }
+
+        toast.dismiss(id);
+
+        if (res.status === 200) {
+            toast.success(message);
+            refresh();
+        } else {
+            toast.error(message);
+        }
     }
 
     return (
@@ -253,7 +291,7 @@ function Details({ fullData }: { fullData: Member }) {
                     {key.replace("_", " ")}
                 </TableCell>
                 <TableCell className="!py-2 px-6 border border-muted">
-                    {fullData[key]}
+                    {key === "registration_date" || key === "expiry_date" ? formatDate(new Date(fullData[key])): fullData[key]}
                 </TableCell>
             </TableRow>
         );

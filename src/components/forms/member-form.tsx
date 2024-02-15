@@ -38,6 +38,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 export default function MemberForm({
     isFormOpen,
@@ -56,20 +57,42 @@ export default function MemberForm({
 
     // Action for the data submission.
     async function action(data: MemberFormInputs) {
-        // const info = await admin.submitCreateMember({
-        //     ...data,
-        //     membership_type: membership,
-        // });
-        // if (info?.status === "success") {
-        //     setCreated({
-        //         state: true,
-        //         // Using a type assertion because the 'data' key exists when the status is "success".
-        //         info: info.data as {
-        //             member_id: string;
-        //             password: string;
-        //         },
-        //     });
-        // }
+        const id = toast.loading("Please wait...");
+
+        const res = await fetch("/api/member", {
+            method: "POST",
+            body: JSON.stringify({ ...data, membership_type: membership }),
+        });
+
+        if (res.status === 401) {
+            const res = await fetch("/api/token", { method: "POST" });
+
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                action(data);
+            }
+
+            return;
+        }
+
+        toast.dismiss(id);
+
+        const { message, data: info } = await res.json();
+
+        if (res.status === 200) {
+            setCreated({
+                ...isCreated,
+                state: true,
+                info: { member_id: info.member_id, password: info.password },
+            });
+
+            reset();
+
+            return;
+        }
+
+        toast.error(message);
     }
 
     return (
