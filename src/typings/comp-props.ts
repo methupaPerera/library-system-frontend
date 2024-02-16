@@ -3,9 +3,18 @@ export type SidebarLinkProps = {
     Icon: React.ElementType;
 };
 
+export type DashboardData = {
+    members_count: number;
+    books_count: number;
+    top_books: TopBookDataProps[];
+    recent_checkouts: RecentCheckoutProps[];
+    total_fines: number;
+    overdues: number;
+};
+
 export type StaticsCardProps = {
     caption: string;
-    value: string | number;
+    value?: number;
     Icon: React.ElementType;
 };
 

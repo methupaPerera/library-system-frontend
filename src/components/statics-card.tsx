@@ -1,4 +1,5 @@
 import { StaticsCardProps } from "@/typings/comp-props";
+import { Skeleton } from "./ui/skeleton";
 
 export default function StaticsCard({
     caption,
@@ -12,7 +13,13 @@ export default function StaticsCard({
             </div>
             <div>
                 <h5 className="text-gray-400 font-semibold -mb-1">{caption}</h5>
-                <p className="font-bold text-3xl">{value}</p>
+                <div className="font-bold text-3xl">
+                    {value || value === 0 ? (
+                        value
+                    ) : (
+                        <Skeleton className="mt-2 w-1/2 h-6" />
+                    )}
+                </div>
             </div>
         </div>
     );

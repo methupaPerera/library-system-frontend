@@ -1,5 +1,14 @@
+"use client";
+
 // Importing types.
-import type { TopBookDataProps } from "@/typings/comp-props";
+import type {
+    DashboardData,
+    RecentCheckoutProps,
+    TopBookDataProps,
+} from "@/typings/comp-props";
+
+// Importing utilities.
+import { useState, useEffect } from "react";
 
 // Importing components.
 import { StaticsCard } from "@/components";
@@ -7,6 +16,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
     Table,
     TableBody,
+    TableCell,
     TableHead,
     TableHeader,
     TableRow,
@@ -17,9 +27,40 @@ import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { TbCalendarDue } from "react-icons/tb";
 import { LuCoins } from "react-icons/lu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { formatDate } from "@/functions";
 
 // Dashboard component.
-export default async function Dashboard() {
+export default function Dashboard() {
+    const [data, setData] = useState<null | DashboardData>(null);
+
+    async function fetchData() {
+        const res = await fetch("/api/dashboard", {
+            method: "GET",
+        });
+
+        if (res.status === 401) {
+            const res = await fetch("/api/token", { method: "POST" });
+
+            if (res.status !== 200) {
+                location.reload();
+            } else {
+                fetchData();
+            }
+
+            return;
+        }
+
+        const { data } = await res.json();
+
+        setData(data);
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     return (
         <div className="pt-3 px-4">
             <h3 className="font-semibold text-2xl text-muted-foreground">
@@ -28,16 +69,24 @@ export default async function Dashboard() {
             <div className="flex flex-col md:flex-row gap-4 mt-4">
                 {/* Statistics cards section. */}
                 <div className="w-full md:w-1/2 grid grid-cols-2 gap-4">
-                    <StaticsCard caption="Books" value={37} Icon={ImBooks} />
                     <StaticsCard
                         caption="Members"
-                        value={37}
+                        value={data?.members_count}
                         Icon={BsFillPeopleFill}
                     />
-                    <StaticsCard caption="Fines" value={37} Icon={LuCoins} />
+                    <StaticsCard
+                        caption="Books"
+                        value={data?.books_count}
+                        Icon={ImBooks}
+                    />
+                    <StaticsCard
+                        caption="Fines"
+                        value={data?.total_fines}
+                        Icon={LuCoins}
+                    />
                     <StaticsCard
                         caption="Overdues"
-                        value={37}
+                        value={data?.overdues}
                         Icon={TbCalendarDue}
                     />
                 </div>
@@ -52,9 +101,32 @@ export default async function Dashboard() {
                         type="always"
                         className="h-[16rem] mt-3 px-2 pr-4"
                     >
-                        {/* {top_books.map((book: TopBookDataProps) => {
-                            return <BookData key={book.title} {...book} />;
-                        })} */}
+                        {data
+                            ? data.top_books.map((book: TopBookDataProps) => {
+                                  return (
+                                      <BookData key={book.title} {...book} />
+                                  );
+                              })
+                            : [1, 2, 3, 4, 5].map((item) => (
+                                  <div
+                                      key={item}
+                                      className="flex flex-col pb-2 gap-2 mb-2 border-b border-muted"
+                                  >
+                                      <div className="flex flex-col gap-2">
+                                          <div className="font-semibold">
+                                              <Skeleton className="w-3/4 h-4" />
+                                          </div>
+
+                                          <div className="text-[14px] text-gray-400 font-semibold">
+                                              <Skeleton className="w-1/2 h-4" />
+                                          </div>
+                                      </div>
+
+                                      <div>
+                                          <Skeleton className="w-1/4 h-4" />
+                                      </div>
+                                  </div>
+                              ))}
                     </ScrollArea>
                 </div>
             </div>
@@ -80,40 +152,62 @@ export default async function Dashboard() {
                             </TableHeader>
 
                             <TableBody>
-                                {/* {recent_checkouts.map(
-                                    (checkout: RecentCheckoutProps) => (
-                                        <TableRow key={checkout.serial}>
-                                            <TableCell className="font-medium">
-                                                {checkout.serial}
-                                            </TableCell>
-                                            <TableCell>
-                                                {checkout.member_id}
-                                            </TableCell>
-                                            <TableCell>
-                                                {checkout.book_id}
-                                            </TableCell>
-                                            <TableCell>
-                                                {utils.formatDate(
-                                                    checkout.return_date
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                <span
-                                                    className={cn(
-                                                        "capitalize text-[12px] mt-0.5 py-0.5 px-2 rounded-full text-white bg-green-400",
-                                                        {
-                                                            "!bg-red-400":
-                                                                checkout.status ===
-                                                                "borrowed",
-                                                        }
-                                                    )}
-                                                >
-                                                    {checkout.status}
-                                                </span>
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                )} */}
+                                {data
+                                    ? data.recent_checkouts.map(
+                                          (checkout: RecentCheckoutProps) => (
+                                              <TableRow key={checkout.serial}>
+                                                  <TableCell className="font-medium">
+                                                      {checkout.serial}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      {checkout.member_id}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      {checkout.book_id}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      {formatDate(
+                                                          new Date(
+                                                              checkout.return_date
+                                                          )
+                                                      )}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      <span
+                                                          className={cn(
+                                                              "capitalize text-[12px] mt-0.5 py-0.5 px-2 rounded-full text-white bg-green-400",
+                                                              {
+                                                                  "!bg-red-400":
+                                                                      checkout.status ===
+                                                                      "borrowed",
+                                                              }
+                                                          )}
+                                                      >
+                                                          {checkout.status}
+                                                      </span>
+                                                  </TableCell>
+                                              </TableRow>
+                                          )
+                                      )
+                                    : [1, 2, 3, 4, 5].map((item) => (
+                                          <TableRow key={item}>
+                                              <TableCell className="font-medium">
+                                                  <Skeleton className="h-3 w-full" />
+                                              </TableCell>
+                                              <TableCell>
+                                                  <Skeleton className="h-3 w-full" />
+                                              </TableCell>
+                                              <TableCell>
+                                                  <Skeleton className="h-3 w-full" />
+                                              </TableCell>
+                                              <TableCell>
+                                                  <Skeleton className="h-3 w-full" />
+                                              </TableCell>
+                                              <TableCell>
+                                                  <Skeleton className="h-3 w-full" />
+                                              </TableCell>
+                                          </TableRow>
+                                      ))}
                             </TableBody>
                         </Table>
                     </ScrollArea>
