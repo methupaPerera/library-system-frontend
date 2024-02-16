@@ -15,17 +15,22 @@ export type Member = {
     fines: number;
 };
 
+export type MemberFormProps = {
+    isFormOpen: boolean;
+    setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type EditMemberFormProps = MemberFormProps & {
+    memberData: Member;
+    refresh: () => void;
+};
+
 export type MemberFormInputs = {
     full_name: string;
     address: string;
     phone_number: string;
     email: string;
     membership_type: MembershipTypes;
-};
-
-export type NewMemberModalState = {
-    state: boolean;
-    info: { member_id: string; password: string };
 };
 
 export type EditMemberFormInputs = {
@@ -37,14 +42,9 @@ export type EditMemberFormInputs = {
     membership_type: MembershipTypes;
 };
 
-export type MemberFormProps = {
-    isFormOpen: boolean;
-    setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export type EditMemberFormProps = MemberFormProps & {
-    memberData: Member;
-    refresh: () => void;
+export type NewMemberModalState = {
+    state: boolean;
+    info: { member_id: string; password: string };
 };
 
 export type MemberTableProps = TableBaseProps<Member>;

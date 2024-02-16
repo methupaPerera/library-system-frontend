@@ -26,3 +26,13 @@ export const bookHeadingData: Headings[] = [
     { heading: "Remaining", width: "w-[10%]" },
     { heading: "", width: "w-[10%]" },
 ];
+
+export const checkoutHeadingData: Headings[] = [
+    { heading: "Serial", width: "w-[10%]" },
+    { heading: "Member ID", width: "w-[15%]" },
+    { heading: "Book ID", width: "w-[15%]" },
+    { heading: "Borrowed Date", width: "w-[20%]" },
+    { heading: "Return Date", width: "w-[20%]" },
+    { heading: "Status", width: "w-[10%]" },
+    { heading: "", width: "w-[10%]" },
+];

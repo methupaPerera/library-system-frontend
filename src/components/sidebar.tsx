@@ -37,7 +37,7 @@ export default function Sidebar() {
             Icon: ImBooks,
         },
         {
-            route: "checkout",
+            route: "checkouts",
             Icon: IoNewspaperSharp,
         },
         {
