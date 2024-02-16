@@ -28,14 +28,13 @@ export type NewMemberModalState = {
     info: { member_id: string; password: string };
 };
 
-export type EditBookFormInputs = {
-    book_id: string;
-    isbn: string;
-    title: string;
-    author: string;
-    genre: string;
-    to_add_stock: number;
-    to_remove_stock: number;
+export type EditMemberFormInputs = {
+    member_id: string;
+    full_name: string;
+    address: string;
+    phone_number: string;
+    email: string;
+    membership_type: MembershipTypes;
 };
 
 export type MemberFormProps = {

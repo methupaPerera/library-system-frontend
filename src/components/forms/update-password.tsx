@@ -66,7 +66,6 @@ export default function UpdatePasswordForm() {
                 </SheetHeader>
 
                 <form
-                    method="POST"
                     onSubmit={handleSubmit((data) => action(data))}
                     className="mt-8 flex flex-col gap-3"
                 >

@@ -88,7 +88,6 @@ export default function BookEditForm({
                 </SheetHeader>
 
                 <form
-                    method="POST"
                     onSubmit={handleSubmit((data) => action(data))}
                     className="mt-8 flex flex-col gap-3"
                 >
