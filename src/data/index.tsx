@@ -36,3 +36,10 @@ export const checkoutHeadingData: Headings[] = [
     { heading: "Status", width: "w-[10%]" },
     { heading: "", width: "w-[10%]" },
 ];
+
+export const fineHeadingData: Headings[] = [
+    { heading: "Member ID", width: "w-[20%]" },
+    { heading: "Full Name", width: "w-[50%]" },
+    { heading: "Fines", width: "w-[20%]" },
+    { heading: "", width: "w-[10%]" },
+];

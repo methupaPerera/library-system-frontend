@@ -61,5 +61,13 @@ async function verifyToken(refresh_token: string | undefined) {
 }
 
 export const config = {
-    matcher: ["/", "/login", "/profile", "/dashboard", "/members", "/books"],
+    matcher: [
+        "/",
+        "/login",
+        "/profile",
+        "/dashboard",
+        "/members",
+        "/books",
+        "/fines",
+    ],
 };
