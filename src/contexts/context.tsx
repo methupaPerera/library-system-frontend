@@ -5,7 +5,6 @@ import type { Children } from "@/typings/main-types";
 
 // Importing utilities.
 import { createContext, useContext, useState } from "react";
-import { CookiesProvider } from "react-cookie";
 
 const Context = createContext<any | undefined>(undefined);
 
@@ -17,10 +16,8 @@ export default function AppContext({ children }: Children) {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
     return (
-        <CookiesProvider>
-            <Context.Provider value={{ isLoggedIn, setLoggedIn }}>
-                {children}
-            </Context.Provider>
-        </CookiesProvider>
+        <Context.Provider value={{ isLoggedIn, setLoggedIn }}>
+            {children}
+        </Context.Provider>
     );
 }

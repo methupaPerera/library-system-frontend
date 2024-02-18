@@ -7,7 +7,7 @@ import AppContext from "@/contexts/context";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-// Importing component.
+// Importing components.
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navigation } from "@/components";

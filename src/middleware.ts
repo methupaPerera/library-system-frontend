@@ -5,6 +5,7 @@ export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const refresh_token = request.cookies.get("refresh_token")?.value;
 
+    // New users will be redirected to the log in page.
     if (path !== "/login" && !refresh_token) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
