@@ -10,11 +10,10 @@ export const genres: Genres[] = [
 ];
 
 export const memberHeadingData: Headings[] = [
-    { heading: "Member ID", width: "w-[10%]" },
+    { heading: "Member ID", width: "w-[15%]" },
     { heading: "Full Name", width: "w-[30%]" },
     { heading: "Address", width: "w-[20%]" },
-    { heading: "Phone", width: "w-[20%]" },
-    { heading: "Membership Status", width: "w-[10%]" },
+    { heading: "Phone", width: "w-[25%]" },
     { heading: "", width: "w-[10%]" },
 ];
 

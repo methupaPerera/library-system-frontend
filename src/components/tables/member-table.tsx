@@ -111,18 +111,7 @@ export default function MemberTable({
                                             full_name,
                                             address,
                                             phone_number,
-                                            registration_date,
-                                            expiry_date,
                                         } = rowData;
-
-                                        const isExpired =
-                                            new Date(expiry_date).getTime() -
-                                                new Date(
-                                                    registration_date
-                                                ).getTime() >
-                                            0
-                                                ? "Active"
-                                                : "Expired";
 
                                         return (
                                             <TableRow key={index}>
@@ -136,23 +125,7 @@ export default function MemberTable({
                                                 <TableCell>
                                                     {phone_number}
                                                 </TableCell>
-                                                <TableCell className="text-center">
-                                                    <span
-                                                        className={cn(
-                                                            "text-[12px] py-1 px-3 rounded-full text-white",
-                                                            {
-                                                                "bg-red-400":
-                                                                    isExpired ===
-                                                                    "Expired",
-                                                                "bg-green-400":
-                                                                    isExpired ===
-                                                                    "Active",
-                                                            }
-                                                        )}
-                                                    >
-                                                        {isExpired}
-                                                    </span>
-                                                </TableCell>
+
                                                 <TableCell>
                                                     <TableAction
                                                         rowData={rowData}
@@ -215,7 +188,7 @@ function TableAction({ rowData, refresh }: TableActionProps<Member>) {
             }),
         });
 
-        console.log(rowData.member_id)
+        console.log(rowData.member_id);
 
         const { message } = await res.json();
 
@@ -291,7 +264,9 @@ function Details({ fullData }: { fullData: Member }) {
                     {key.replace("_", " ")}
                 </TableCell>
                 <TableCell className="!py-2 px-6 border border-muted">
-                    {key === "registration_date" || key === "expiry_date" ? formatDate(new Date(fullData[key])): fullData[key]}
+                    {key === "registration_date" || key === "expiry_date"
+                        ? formatDate(new Date(fullData[key]))
+                        : fullData[key]}
                 </TableCell>
             </TableRow>
         );
