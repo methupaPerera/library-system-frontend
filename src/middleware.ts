@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
 
 type Response = {
     data: {
-        membership_type: "admin" | "member";
+        membership_type: "Admin" | "Member";
     };
 };
 
@@ -50,7 +50,7 @@ async function verifyToken(refresh_token: string | undefined) {
 
         if (res.status === 200) {
             const { data }: Response = await res.json();
-            const isAdmin = data.membership_type === "admin";
+            const isAdmin = data.membership_type === "Admin";
 
             return [res.status, isAdmin];
         }

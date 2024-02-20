@@ -129,8 +129,8 @@ export default function MemberEditForm({
 
                         <SelectContent>
                             <SelectGroup>
-                                <SelectItem value="member">Member</SelectItem>
-                                <SelectItem value="admin">Admin</SelectItem>
+                                <SelectItem value="Member">Member</SelectItem>
+                                <SelectItem value="Admin">Admin</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
