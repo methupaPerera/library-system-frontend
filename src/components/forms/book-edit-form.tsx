@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { genres } from "@/data";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export default function BookEditForm({
 
     // Action for the data submission.
     async function action(data: EditBookFormInputs) {
-        const { message, status } = await UseFetch("/api/book", "PUT", {
+        const { message, status } = await makeFetch("/api/book", "PUT", {
             ...data,
             book_id: bookData.book_id,
             genre,

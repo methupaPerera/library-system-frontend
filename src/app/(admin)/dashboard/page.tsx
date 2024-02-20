@@ -9,6 +9,7 @@ import type {
 
 // Importing utilities.
 import { useState, useEffect } from "react";
+import { makeFetch } from "@/functions";
 
 // Importing components.
 import { StaticsCard } from "@/components";
@@ -36,23 +37,12 @@ export default function Dashboard() {
     const [data, setData] = useState<null | DashboardData>(null);
 
     async function fetchData() {
-        const res = await fetch("/api/dashboard", {
-            method: "GET",
-        });
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                fetchData();
-            }
-
-            return;
-        }
-
-        const { data } = await res.json();
+        const { data } = await makeFetch(
+            "/api/dashboard",
+            "GET",
+            undefined,
+            false
+        );
 
         setData(data);
     }

@@ -8,7 +8,7 @@ import type { Pagination } from "@/typings/table-props";
 import { useEffect, useState } from "react";
 import { bookHeadingData } from "@/data";
 import { toast } from "sonner";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 
 // Importing components.
 import { BookForm } from "@/components/forms";
@@ -30,7 +30,7 @@ export default function Books() {
     async function fetchItems(page: number, query: string) {
         setLoading(true);
 
-        const { message, data, status } = await UseFetch(
+        const { message, data, status } = await makeFetch(
             `/api/book?page=${page}&title=${query}`,
             "GET",
             undefined,

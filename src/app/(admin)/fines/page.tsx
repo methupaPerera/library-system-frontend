@@ -7,7 +7,7 @@ import type { Pagination } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { fineHeadingData } from "@/data";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 import { toast } from "sonner";
 
 // Importing components.
@@ -26,7 +26,7 @@ export default function Fines() {
     async function fetchItems(page: number, query: string) {
         setLoading(true);
 
-        const { message, data, status } = await UseFetch(
+        const { message, data, status } = await makeFetch(
             `/api/fines?page=${page}&member_id=${query}`,
             "GET",
             undefined,

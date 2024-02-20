@@ -11,7 +11,7 @@ import type {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 
 // Importing components.
 import { Input } from "../ui/input";
@@ -41,7 +41,7 @@ export default function MemberEditForm({
 
     // Action for the data submission.
     async function action(data: EditMemberFormInputs) {
-        const { message, status } = await UseFetch("/api/member", "PUT", {
+        const { message, status } = await makeFetch("/api/member", "PUT", {
             ...data,
             member_id: memberData.member_id,
             membership_type: membership,

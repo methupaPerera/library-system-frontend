@@ -11,7 +11,7 @@ import type {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 import { genres } from "@/data";
 
 // Importing components.
@@ -45,7 +45,7 @@ export default function BookForm({ isFormOpen, setFormOpen }: BookFormProps) {
             return;
         }
 
-        const { message, status } = await UseFetch("/api/book", "POST", {
+        const { message, status } = await makeFetch("/api/book", "POST", {
             ...data,
             genre,
         });

@@ -9,7 +9,7 @@ import type {
 // Importing utilities.
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -29,7 +29,7 @@ export default function CheckoutForm({
 
     // Action for the data submission.
     async function action(data: CheckoutFormInputs) {
-        const { message, status } = await UseFetch(
+        const { message, status } = await makeFetch(
             "/api/checkout",
             "POST",
             data

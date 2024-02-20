@@ -7,7 +7,7 @@ import type { TableActionProps } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 
 // Importing components.
 import Controller from "./controller";
@@ -199,7 +199,7 @@ export default function CheckoutTable({
 
 function TableAction({ rowData, refresh }: TableActionProps<Checkout>) {
     async function deleteAction() {
-        const { message, status } = await UseFetch("/api/checkout", "DELETE", {
+        const { message, status } = await makeFetch("/api/checkout", "DELETE", {
             serial: rowData.serial,
         });
 
@@ -212,7 +212,7 @@ function TableAction({ rowData, refresh }: TableActionProps<Checkout>) {
     }
 
     async function returnAction() {
-        const { message, status } = await UseFetch("/api/checkout", "PATCH", {
+        const { message, status } = await makeFetch("/api/checkout", "PATCH", {
             serial: rowData.serial,
         });
 

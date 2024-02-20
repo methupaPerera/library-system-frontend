@@ -11,7 +11,7 @@ import type { MembershipTypes } from "@/typings/member-types";
 // Importing utilities.
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { UseFetch } from "@/hooks";
+import { makeFetch } from "@/functions";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -62,7 +62,7 @@ export default function MemberForm({
             message,
             data: info,
             status,
-        } = await UseFetch("/api/member", "POST", {
+        } = await makeFetch("/api/member", "POST", {
             ...data,
             membership_type: membership,
         });
