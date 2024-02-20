@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { genres } from "@/data";
+import { useFetch } from "@/hooks";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -44,34 +45,17 @@ export default function BookEditForm({
 
     // Action for the data submission.
     async function action(data: EditBookFormInputs) {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/book", {
-            method: "PUT",
-            body: JSON.stringify({ ...data, book_id: bookData.book_id, genre }),
+        const { message, status } = await useFetch("/api/book", "PUT", {
+            ...data,
+            book_id: bookData.book_id,
+            genre,
         });
 
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                action(data);
-            }
-
-            return;
-        }
-
-        const { message } = await res.json();
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
+        if (status === 200) {
             toast.success(message);
             reset();
             setFormOpen(false);
-
+            
             setTimeout(() => {
                 refresh();
             }, 500);
@@ -140,13 +124,19 @@ export default function BookEditForm({
                             type="text"
                             placeholder="Add to Stock"
                             required
-                            {...register("to_add_stock", { required: true })}
+                            {...register("to_add_stock", {
+                                required: true,
+                                valueAsNumber: true,
+                            })}
                         />
                         <Input
                             type="text"
                             placeholder="Remove from Stock"
                             required
-                            {...register("to_remove_stock", { required: true })}
+                            {...register("to_remove_stock", {
+                                required: true,
+                                valueAsNumber: true,
+                            })}
                         />
                     </div>
 

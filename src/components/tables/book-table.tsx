@@ -7,6 +7,7 @@ import type { TableActionProps } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useFetch } from "@/hooks";
 
 // Importing components.
 import Controller from "./controller";
@@ -175,34 +176,11 @@ function TableAction({ rowData, refresh }: TableActionProps<Book>) {
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 
     async function deleteAction() {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/book", {
-            method: "DELETE",
-            body: JSON.stringify({
-                book_id: rowData.book_id,
-            }),
+        const { message, status } = await useFetch("/api/book", "DELETE", {
+            book_id: rowData.book_id,
         });
 
-        const { message } = await res.json();
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", {
-                method: "POST",
-            });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                deleteAction();
-            }
-
-            return;
-        }
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
+        if (status === 200) {
             toast.success(message);
             refresh();
         } else {

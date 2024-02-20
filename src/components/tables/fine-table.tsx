@@ -32,6 +32,7 @@ import {
 import { BsThreeDots } from "react-icons/bs";
 import { Input } from "../ui/input";
 import { TbRefresh } from "react-icons/tb";
+import { useFetch } from "@/hooks";
 
 export default function FineTable({
     data,
@@ -129,8 +130,12 @@ export default function FineTable({
 
                                         return (
                                             <TableRow key={index}>
-                                                <TableCell>{member_id}</TableCell>
-                                                <TableCell>{full_name}</TableCell>
+                                                <TableCell>
+                                                    {member_id}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {full_name}
+                                                </TableCell>
                                                 <TableCell>${fines}</TableCell>
                                                 <TableCell>
                                                     <TableAction
@@ -183,34 +188,11 @@ export default function FineTable({
 
 function TableAction({ rowData, refresh }: TableActionProps<Fine>) {
     async function payAction() {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/fines", {
-            method: "PATCH",
-            body: JSON.stringify({
-                member_id: rowData.member_id,
-            }),
+        const { message, status } = await useFetch("/api/fines", "PATCH", {
+            member_id: rowData.member_id,
         });
 
-        const { message } = await res.json();
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", {
-                method: "POST",
-            });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                payAction();
-            }
-
-            return;
-        }
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
+        if (status === 200) {
             toast.success(message);
             refresh();
         } else {

@@ -7,9 +7,9 @@ import type {
 } from "@/typings/checkout-types";
 
 // Importing utilities.
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useFetch } from "@/hooks";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -20,14 +20,6 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 
 export default function CheckoutForm({
     isFormOpen,
@@ -37,29 +29,18 @@ export default function CheckoutForm({
 
     // Action for the data submission.
     async function action(data: CheckoutFormInputs) {
-        const id = toast.loading("Please wait...");
+        const { message, status } = await useFetch(
+            "/api/checkout",
+            "POST",
+            data
+        );
 
-        const res = await fetch("/api/checkout", {
-            method: "POST",
-            body: JSON.stringify({ ...data }),
-        });
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                action(data);
-            }
-
-            return;
+        if (status === 200) {
+            toast.success(message);
+            reset();
+        } else {
+            toast.error(message);
         }
-
-        toast.dismiss(id);
-        const { message } = await res.json();
-        toast(message);
-        reset();
     }
 
     return (

@@ -11,6 +11,7 @@ import type {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useFetch } from "@/hooks";
 import { genres } from "@/data";
 
 // Importing components.
@@ -40,34 +41,21 @@ export default function BookForm({ isFormOpen, setFormOpen }: BookFormProps) {
     // Action for the data submission.
     async function action(data: BookFormInputs) {
         if (!genre) {
-            // Making sure that the user have selected a genre.
-            toast("Please select a genre.");
+            toast.error("Please select a genre.");
             return;
         }
 
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/book", {
-            method: "POST",
-            body: JSON.stringify({ ...data, genre }),
+        const { message, status } = await useFetch("/api/book", "POST", {
+            ...data,
+            genre,
         });
 
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                action(data);
-            }
-
-            return;
+        if (status === 200) {
+            toast.success(message);
+            reset();
+        } else {
+            toast.error(message);
         }
-
-        toast.dismiss(id);
-        const { message } = await res.json();
-        toast(message);
-        reset();
     }
 
     return (
@@ -132,6 +120,7 @@ export default function BookForm({ isFormOpen, setFormOpen }: BookFormProps) {
                             required
                             {...register("stock", {
                                 required: true,
+                                valueAsNumber: true,
                             })}
                         />
                     </div>

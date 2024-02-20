@@ -11,6 +11,7 @@ import type { MembershipTypes } from "@/typings/member-types";
 // Importing utilities.
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useFetch } from "@/hooks";
 
 // Importing components.
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -57,30 +58,16 @@ export default function MemberForm({
 
     // Action for the data submission.
     async function action(data: MemberFormInputs) {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/member", {
-            method: "POST",
-            body: JSON.stringify({ ...data, membership_type: membership }),
+        const {
+            message,
+            data: info,
+            status,
+        } = await useFetch("/api/member", "POST", {
+            ...data,
+            membership_type: membership,
         });
 
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                action(data);
-            }
-
-            return;
-        }
-
-        toast.dismiss(id);
-
-        const { message, data: info } = await res.json();
-
-        if (res.status === 200) {
+        if (status === 200) {
             setCreated({
                 ...isCreated,
                 state: true,
@@ -88,11 +75,9 @@ export default function MemberForm({
             });
 
             reset();
-
-            return;
+        } else {
+            toast.error(message);
         }
-
-        toast.error(message);
     }
 
     return (

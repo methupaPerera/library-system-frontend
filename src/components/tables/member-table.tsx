@@ -6,6 +6,7 @@ import type { TableActionProps } from "@/typings/table-props";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
+import { useFetch } from "@/hooks";
 import { toast } from "sonner";
 
 // Importing components.
@@ -32,7 +33,6 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 // Importing icons.
 import { BsThreeDots } from "react-icons/bs";
-import { cn } from "@/lib/utils";
 import { formatDate } from "@/functions";
 
 export default function MemberTable({
@@ -179,34 +179,11 @@ function TableAction({ rowData, refresh }: TableActionProps<Member>) {
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 
     async function deleteAction() {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/member", {
-            method: "DELETE",
-            body: JSON.stringify({
-                member_id: rowData.member_id,
-            }),
+        const { message, status } = await useFetch("/api/member", "DELETE", {
+            member_id: rowData.member_id,
         });
 
-        console.log(rowData.member_id);
-
-        const { message } = await res.json();
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", {
-                method: "POST",
-            });
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                deleteAction();
-            }
-            return;
-        }
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
+        if (status === 200) {
             toast.success(message);
             refresh();
         } else {

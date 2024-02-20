@@ -1,14 +1,22 @@
-import {
+"use client";
+
+// Importing types.
+import type {
     EditMemberFormInputs,
     EditMemberFormProps,
     MembershipTypes,
 } from "@/typings/member-types";
-import React, { useState } from "react";
+
+// Importing utilities.
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { useFetch } from "@/hooks";
+
+// Importing components.
 import { Input } from "../ui/input";
 import { Button, buttonVariants } from "../ui/button";
-import { toast } from "sonner";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
-import { useForm } from "react-hook-form";
 import {
     Select,
     SelectContent,
@@ -19,9 +27,9 @@ import {
 } from "../ui/select";
 
 export default function MemberEditForm({
+    memberData,
     isFormOpen,
     setFormOpen,
-    memberData,
     refresh,
 }: EditMemberFormProps) {
     const { register, handleSubmit, reset } = useForm<EditMemberFormInputs>();
@@ -33,34 +41,13 @@ export default function MemberEditForm({
 
     // Action for the data submission.
     async function action(data: EditMemberFormInputs) {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/member", {
-            method: "PUT",
-            body: JSON.stringify({
-                ...data,
-                member_id: memberData.member_id,
-                membership_type: membership,
-            }),
+        const { message, status } = await useFetch("/api/member", "PUT", {
+            ...data,
+            member_id: memberData.member_id,
+            membership_type: membership,
         });
 
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                action(data);
-            }
-
-            return;
-        }
-
-        const { message } = await res.json();
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
+        if (status === 200) {
             toast.success(message);
             reset();
             setFormOpen(false);

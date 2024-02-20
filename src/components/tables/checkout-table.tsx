@@ -7,6 +7,7 @@ import type { TableActionProps } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useFetch } from "@/hooks";
 
 // Importing components.
 import Controller from "./controller";
@@ -198,34 +199,11 @@ export default function CheckoutTable({
 
 function TableAction({ rowData, refresh }: TableActionProps<Checkout>) {
     async function deleteAction() {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/checkout", {
-            method: "DELETE",
-            body: JSON.stringify({
-                serial: rowData.serial,
-            }),
+        const { message, status } = await useFetch("/api/checkout", "DELETE", {
+            serial: rowData.serial,
         });
 
-        const { message } = await res.json();
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", {
-                method: "POST",
-            });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                deleteAction();
-            }
-
-            return;
-        }
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
+        if (status === 200) {
             toast.success(message);
             refresh();
         } else {
@@ -234,34 +212,11 @@ function TableAction({ rowData, refresh }: TableActionProps<Checkout>) {
     }
 
     async function returnAction() {
-        const id = toast.loading("Please wait...");
-
-        const res = await fetch("/api/checkout", {
-            method: "PATCH",
-            body: JSON.stringify({
-                serial: rowData.serial,
-            }),
+        const { message, status } = await useFetch("/api/checkout", "PATCH", {
+            serial: rowData.serial,
         });
 
-        const { message } = await res.json();
-
-        if (res.status === 401) {
-            const res = await fetch("/api/token", {
-                method: "POST",
-            });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                returnAction();
-            }
-
-            return;
-        }
-
-        toast.dismiss(id);
-
-        if (res.status === 200) {
+        if (status === 200) {
             toast.success(message);
             refresh();
         } else {
