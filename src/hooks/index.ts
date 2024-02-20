@@ -23,7 +23,7 @@ export async function UseFetch(
         if (res.status !== 200) {
             location.reload();
         } else {
-            return await UseFetch(url, method, body);
+            return await UseFetch(url, method, body, isNotification);
         }
     }
 
