@@ -7,6 +7,7 @@ import type { Pagination } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { fineHeadingData } from "@/data";
+import { useFetch } from "@/hooks";
 import { toast } from "sonner";
 
 // Importing components.
@@ -22,37 +23,28 @@ export default function Fines() {
     });
 
     // Function to fetch data for the current page.
-    async function fetchItems(page: number, query: string = " ") {
+    async function fetchItems(page: number, query: string) {
         setLoading(true);
 
-        const res = await fetch(`/api/fines?page=${page}&member_id=${query}`);
+        const { message, data, status } = await useFetch(
+            `/api/fines?page=${page}&member_id=${query}`,
+            "GET",
+            undefined,
+            false
+        );
 
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                fetchItems(page, query);
-            }
-
-            return;
-        }
-
-        const { message, data } = await res.json();
-
-        if (res.status === 500) {
+        if (status === 200) {
+            setData(data.members);
+            setPagination({
+                ...pagination,
+                currentPage: data.members_count ? page : 1,
+                allPages: data.members_count
+                    ? Math.ceil(data.members_count / 10)
+                    : 1,
+            });
+        } else {
             toast.error(message);
-            setLoading(false);
-            return;
         }
-
-        setData(data.members);
-        setPagination({
-            ...pagination,
-            currentPage: data.members_count ? page : 1,
-            allPages: data.members_count ? Math.ceil(data.members_count / 10) : 1,
-        });
 
         setLoading(false);
     }

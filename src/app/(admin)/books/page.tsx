@@ -8,6 +8,7 @@ import type { Pagination } from "@/typings/table-props";
 import { useEffect, useState } from "react";
 import { bookHeadingData } from "@/data";
 import { toast } from "sonner";
+import { useFetch } from "@/hooks";
 
 // Importing components.
 import { BookForm } from "@/components/forms";
@@ -26,37 +27,28 @@ export default function Books() {
     });
 
     // Function to fetch data for the current page.
-    async function fetchItems(page: number, query: string = " ") {
+    async function fetchItems(page: number, query: string) {
         setLoading(true);
 
-        const res = await fetch(`/api/book?page=${page}&title=${query}`);
+        const { message, data, status } = await useFetch(
+            `/api/book?page=${page}&title=${query}`,
+            "GET",
+            undefined,
+            false
+        );
 
-        if (res.status === 401) {
-            const res = await fetch("/api/token", { method: "POST" });
-
-            if (res.status !== 200) {
-                location.reload();
-            } else {
-                fetchItems(page, query);
-            }
-
-            return;
-        }
-
-        const { message, data } = await res.json();
-
-        if (res.status === 500) {
+        if (status === 200) {
+            setData(data.books);
+            setPagination({
+                ...pagination,
+                currentPage: data.books_count ? page : 1,
+                allPages: data.books_count
+                    ? Math.ceil(data.books_count / 10)
+                    : 1,
+            });
+        } else {
             toast.error(message);
-            setLoading(false);
-            return;
         }
-
-        setData(data.books);
-        setPagination({
-            ...pagination,
-            currentPage: data.books_count ? page : 1,
-            allPages: data.books_count ? Math.ceil(data.books_count / 10) : 1,
-        });
 
         setLoading(false);
     }

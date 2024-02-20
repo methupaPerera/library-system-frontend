@@ -1,7 +1,16 @@
 import { toast } from "sonner";
 
-export async function useFetch(url: string, method: string, body?: any) {
-    const id = toast.loading("Please wait...");
+export async function useFetch(
+    url: string,
+    method: string,
+    body?: any,
+    isNotification: boolean = true
+) {
+    let id;
+
+    if (isNotification) {
+        id = toast.loading("Please wait...");
+    }
 
     const res = await fetch(url, {
         method: method,
@@ -19,7 +28,10 @@ export async function useFetch(url: string, method: string, body?: any) {
     }
 
     const data = await res.json();
-    toast.dismiss(id);
+
+    if (isNotification) {
+        toast.dismiss(id);
+    }
 
     return { ...data, status: res.status };
 }
