@@ -32,7 +32,7 @@ import {
 import { BsThreeDots } from "react-icons/bs";
 import { Input } from "../ui/input";
 import { TbRefresh } from "react-icons/tb";
-import { useFetch } from "@/hooks";
+import { UseFetch } from "@/hooks";
 
 export default function FineTable({
     data,
@@ -188,7 +188,7 @@ export default function FineTable({
 
 function TableAction({ rowData, refresh }: TableActionProps<Fine>) {
     async function payAction() {
-        const { message, status } = await useFetch("/api/fines", "PATCH", {
+        const { message, status } = await UseFetch("/api/fines", "PATCH", {
             member_id: rowData.member_id,
         });
 

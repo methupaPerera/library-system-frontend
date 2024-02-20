@@ -7,7 +7,7 @@ import type { TableActionProps } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useFetch } from "@/hooks";
+import { UseFetch } from "@/hooks";
 
 // Importing components.
 import Controller from "./controller";
@@ -176,7 +176,7 @@ function TableAction({ rowData, refresh }: TableActionProps<Book>) {
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
 
     async function deleteAction() {
-        const { message, status } = await useFetch("/api/book", "DELETE", {
+        const { message, status } = await UseFetch("/api/book", "DELETE", {
             book_id: rowData.book_id,
         });
 

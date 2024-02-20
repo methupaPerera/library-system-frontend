@@ -7,7 +7,7 @@ import type { Pagination } from "@/typings/table-props";
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { checkoutHeadingData } from "@/data";
-import { useFetch } from "@/hooks";
+import { UseFetch } from "@/hooks";
 import { toast } from "sonner";
 
 // Importing components.
@@ -30,7 +30,7 @@ export default function Checkouts() {
     async function fetchItems(page: number, query: string) {
         setLoading(true);
 
-        const { message, data, status } = await useFetch(
+        const { message, data, status } = await UseFetch(
             `/api/checkout?page=${page}&id=${query}`,
             "GET",
             undefined,

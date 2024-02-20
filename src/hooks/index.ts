@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-export async function useFetch(
+export async function UseFetch(
     url: string,
     method: string,
     body?: any,
@@ -23,7 +23,7 @@ export async function useFetch(
         if (res.status !== 200) {
             location.reload();
         } else {
-            return await useFetch(url, method, body);
+            return await UseFetch(url, method, body);
         }
     }
 

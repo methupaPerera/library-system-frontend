@@ -5,7 +5,7 @@ import type { PasswordFormInputs } from "@/typings/auth-types";
 
 // Importing utilities.
 import { useForm } from "react-hook-form";
-import { useFetch } from "@/hooks";
+import { UseFetch } from "@/hooks";
 import { toast } from "sonner";
 
 // Importing components.
@@ -24,7 +24,7 @@ export default function UpdatePasswordForm() {
 
     // Action for the data submission.
     async function action(data: PasswordFormInputs) {
-        const { message, status } = await useFetch(
+        const { message, status } = await UseFetch(
             "/api/password",
             "PATCH",
             data
