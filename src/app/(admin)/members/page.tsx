@@ -47,7 +47,9 @@ export default function Members() {
                     : 1,
             });
         } else {
-            toast.error(message);
+            if (status !== 404) {
+                toast.error(message);
+            }
         }
 
         setLoading(false);
