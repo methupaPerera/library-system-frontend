@@ -57,3 +57,11 @@
         @apply bg-background text-foreground;
     }
 }
+
+::-webkit-scrollbar {
+    @apply flex touch-none select-none bg-secondary h-full w-2.5 border-l border-l-transparent p-[1px];
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded-full;
+}
