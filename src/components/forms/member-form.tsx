@@ -64,7 +64,7 @@ export default function MemberForm({
             status,
         } = await makeFetch("/api/member", "POST", {
             ...data,
-            membership_type: membership,
+            membership_type: membership[0].toUpperCase() + membership.slice(1),
         });
 
         if (status === 200) {

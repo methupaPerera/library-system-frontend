@@ -81,7 +81,6 @@ export async function PATCH(request: Request) {
         });
 
         const { message } = await res.json();
-        console.log(message);
 
         return Response.json({ message }, { status: res.status });
     } catch (err) {
