@@ -12,4 +12,5 @@ Tailwind
 shadcn
 next-themes
 react-icons
+react-hook-form
 ```
