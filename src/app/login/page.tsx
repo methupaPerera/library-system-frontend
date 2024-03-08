@@ -4,7 +4,7 @@
 import { LoginFormInputs } from "@/typings/auth-types";
 
 // Importing utilities.
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAppContext } from "@/contexts/context";
 import { useRouter } from "next/navigation";
@@ -19,10 +19,11 @@ export default function Login() {
 
     const { register, handleSubmit } = useForm<LoginFormInputs>();
     const { setLoggedIn } = useAppContext();
+    const [isPending, setPending] = useState(false);
 
     // Action for the form submission.
     async function action(data: LoginFormInputs) {
-        const id = toast.loading("Please wait...");
+        setPending(true);
 
         const res = await fetch("/api/login", {
             method: "POST",
@@ -31,15 +32,19 @@ export default function Login() {
 
         const { message, isAdmin } = await res.json();
 
-        toast.dismiss(id);
-
         // Users can't login if anything went wrong.
         if (res.status !== 200) {
             toast.error(message);
+            setPending(false);
+
             return;
         }
 
-        toast.success(message);
+        const id = toast.success(message);
+
+        setTimeout(() => {
+            toast.dismiss(id);
+        }, 2000);
 
         if (isAdmin) {
             router.push("dashboard");
@@ -77,7 +82,9 @@ export default function Login() {
                 />
             </div>
 
-            <Button type="submit">Log in</Button>
+            <Button type="submit" disabled={isPending}>
+                {isPending ? "Logging in..." : "Log in"}
+            </Button>
         </form>
     );
 }
