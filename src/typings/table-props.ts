@@ -11,6 +11,7 @@ export type PaginationProps = {
     allPages: number;
     setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
     fetchItems: (page: number, query: string) => void;
+    isLoading: boolean;
 };
 
 export type TableBaseProps<T> = {

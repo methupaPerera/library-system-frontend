@@ -164,6 +164,7 @@ export default function MemberTable({
                 </ScrollArea>
 
                 <Pagination
+                    isLoading={isLoading}
                     searchValue={searchValue}
                     currentPage={currentPage}
                     allPages={allPages}

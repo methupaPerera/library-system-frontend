@@ -186,6 +186,7 @@ export default function CheckoutTable({
                 </ScrollArea>
 
                 <Pagination
+                    isLoading={isLoading}
                     searchValue={searchValue}
                     currentPage={currentPage}
                     allPages={allPages}

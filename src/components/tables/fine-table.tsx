@@ -175,6 +175,7 @@ export default function FineTable({
                 </ScrollArea>
 
                 <Pagination
+                    isLoading={isLoading}
                     searchValue={searchValue}
                     currentPage={currentPage}
                     allPages={allPages}

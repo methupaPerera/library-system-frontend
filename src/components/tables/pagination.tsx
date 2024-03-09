@@ -15,10 +15,11 @@ export default function Pagination({
     allPages,
     setPagination,
     fetchItems,
+    isLoading,
 }: PaginationProps) {
     return (
         <div className="pt-3 px-4 flex justify-between items-center gap-2">
-            <div className="text-gray-400 text-[15px] font-semibold">
+            <div className="text-gray-400 text-[15px] font-semibold select-none">
                 Page {currentPage} of {allPages}
             </div>
 
@@ -28,6 +29,7 @@ export default function Pagination({
                     size="sm"
                     variant="default"
                     className="font-semibold"
+                    disabled={isLoading}
                     onClick={() => {
                         setPagination((prevState) => {
                             const newState = {
@@ -52,6 +54,7 @@ export default function Pagination({
                     size="sm"
                     variant="default"
                     className="font-semibold"
+                    disabled={isLoading}
                     onClick={() => {
                         setPagination((prevState) => {
                             const newState = {
