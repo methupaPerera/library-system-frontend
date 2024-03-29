@@ -69,6 +69,7 @@ export const config = {
         "/dashboard",
         "/members",
         "/books",
+        "/checkouts",
         "/fines",
     ],
 };
