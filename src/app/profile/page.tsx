@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAppContext } from "@/contexts/context";
 import { makeFetch } from "@/functions";
 import { Member } from "@/typings/member-types";
@@ -8,19 +9,22 @@ import { useEffect, useState } from "react";
 export default function Profile() {
     const { setLoggedIn } = useAppContext();
 
-    const [userData, setUserData] = useState<{} | null>();
+    const [userData, setUserData] = useState<Member | null>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
     useEffect(() => {
         async function getUser() {
-            const res = await makeFetch(
-                "/api/profile",
-                "GET",
-                null,
-                false
-            );
+            setIsLoading(true);
 
-            const data: Member = res.data;
+            const {
+                message,
+                data: { member_data },
+                status,
+            } = await makeFetch("/api/profile", "GET", null, false);
 
-            console.log(data);
+            setUserData(member_data);
+
+            setIsLoading(false);
         }
 
         getUser();
@@ -30,8 +34,7 @@ export default function Profile() {
 
     return (
         <div className="mx-auto h-[calc(100vh-3.5rem)] flex flex-col gap-2 items-center justify-center font-bold">
-            <h2 className="text-5xl">Under Development.</h2>
-            <p>You can still reset your password.</p>
+            {isLoading ? <Skeleton className="w-10 h-5" /> : <p>{userData?.full_name}</p>}
         </div>
     );
 }
