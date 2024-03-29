@@ -29,7 +29,8 @@ export default function Profile() {
 
     const [userData, setUserData] = useState<
         (Member & { history: CheckoutHistory[] }) | null
-    >();
+    >(null);
+
     useEffect(() => {
         async function getUser() {
             const {
