@@ -12,6 +12,8 @@ export default function Profile() {
     const [userData, setUserData] = useState<Member | null>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
+    console.log(userData);
+
     useEffect(() => {
         async function getUser() {
             setIsLoading(true);
