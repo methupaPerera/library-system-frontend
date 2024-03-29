@@ -70,6 +70,7 @@ export const config = {
         "/checkouts",
         "/members",
         "/books",
+        "/checkouts",
         "/fines",
     ],
 };
