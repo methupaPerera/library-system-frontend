@@ -1,12 +1,30 @@
 "use client";
 
 import { useAppContext } from "@/contexts/context";
-import { useEffect } from "react";
+import { makeFetch } from "@/functions";
+import { Member } from "@/typings/member-types";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
     const { setLoggedIn } = useAppContext();
 
+    const [userData, setUserData] = useState<{} | null>();
     useEffect(() => {
+        async function getUser() {
+            const res = await makeFetch(
+                "/api/profile",
+                "GET",
+                null,
+                false
+            );
+
+            const data: Member = res.data;
+
+            console.log(data);
+        }
+
+        getUser();
+
         setLoggedIn(true);
     }, []);
 
