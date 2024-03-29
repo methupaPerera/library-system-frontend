@@ -194,7 +194,7 @@ function Info({
                     <Label htmlFor="name">{heading}</Label>
                     <Input
                         className="disabled:opacity-80"
-                        id="name"
+                        id={heading}
                         value={data}
                         disabled
                     />
