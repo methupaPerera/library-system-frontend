@@ -20,10 +20,18 @@ export async function makeFetch(
         id = toast.loading("Please wait...");
     }
 
-    const res = await fetch(url, {
-        method: method,
-        body: JSON.stringify(body),
-    });
+    let res;
+
+    if (method !== "GET") {
+        res = await fetch(url, {
+            method: method,
+            body: JSON.stringify(body),
+        });
+    } else {
+        res = await fetch(url, {
+            method: method,
+        });
+    }
 
     if (res.status === 401) {
         const res = await fetch("/api/token", { method: "POST" });

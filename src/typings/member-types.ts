@@ -11,7 +11,6 @@ export type Member = {
     phone_number: string;
     membership_type: MembershipTypes;
     registration_date: string;
-    expiry_date: string;
     fines: number;
 };
 
