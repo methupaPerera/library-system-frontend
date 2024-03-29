@@ -2,6 +2,7 @@
 
 // Importing types.
 import type { Member } from "@/typings/member-types";
+import type { Checkout } from "@/typings/checkout-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
@@ -25,16 +26,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Profile() {
     const { setLoggedIn } = useAppContext();
 
-    const [userData, setUserData] = useState<Member | null>();
+    const [userData, setUserData] = useState<
+        (Member & { history: Checkout[] }) | null
+    >();
     useEffect(() => {
         async function getUser() {
             const {
                 message,
-                data: { member_data },
+                data: { member_data, history },
                 status,
             } = await makeFetch("/api/profile", "GET", null, false);
 
-            setUserData(member_data);
+            setUserData({ ...member_data, history });
         }
 
         getUser();
@@ -43,7 +46,7 @@ export default function Profile() {
     }, []);
 
     return (
-        <div className="m-4 mb-8 h-[calc(100vh-3.5rem)]">
+        <div className="m-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Profile</CardTitle>
@@ -91,36 +94,48 @@ export default function Profile() {
                     <CardTitle>Borrowing History</CardTitle>
                 </CardHeader>
 
-                <CardContent className="p-12">
-                    <Carousel
-                        opts={{
-                            align: "start",
-                        }}
-                        orientation="vertical"
-                        className="w-full max-w-xs mx-auto"
-                    >
-                        <CarouselContent className="-mt-1 h-[200px]">
-                            {Array.from({ length: 5 }).map((_, index) => (
-                                <CarouselItem
-                                    key={index}
-                                    className="pt-1 md:basis-1/2"
-                                >
-                                    <div className="p-1">
-                                        <Card>
-                                            <CardContent className="flex items-center justify-center p-6">
-                                                <span className="text-3xl font-semibold">
-                                                    {index + 1}
-                                                </span>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
+                <CardContent className="px-16">
+                    {userData?.history ? (
+                        userData.history.length > 0 ? (
+                            <Carousel
+                                opts={{
+                                    align: "start",
+                                }}
+                                className="w-full max-w-sm mx-auto"
+                            >
+                                <CarouselContent>
+                                    {userData.history.map(
+                                        ({
+                                            serial,
+                                            book_id,
+                                            borrowed_date,
+                                            return_date,
+                                            status,
+                                        }) => (
+                                            <CarouselItem
+                                                key={serial}
+                                                className=""
+                                            >
+                                                <div className="p-1">
+                                                    <Card>
+                                                        <CardContent className="aspect-square">
+                                                            <p>{serial}</p>
+                                                        </CardContent>
+                                                    </Card>
+                                                </div>
+                                            </CarouselItem>
+                                        )
+                                    )}
+                                </CarouselContent>
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </Carousel>
+                        ) : (
+                            <p className="text-center py-12">No Information.</p>
+                        )
+                    ) : (
+                        <p className="text-center py-12">Loading...</p>
+                    )}
                 </CardContent>
             </Card>
         </div>
