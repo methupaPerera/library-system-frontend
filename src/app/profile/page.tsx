@@ -2,12 +2,13 @@
 
 // Importing types.
 import type { Member } from "@/typings/member-types";
-import type { Checkout } from "@/typings/checkout-types";
+import type { CheckoutHistory } from "@/typings/checkout-types";
 
 // Importing utilities.
 import { useEffect, useState } from "react";
 import { formatDate, makeFetch } from "@/functions";
 import { useAppContext } from "@/contexts/context";
+import { cn } from "@/lib/utils";
 
 // Importing components.
 import {
@@ -27,7 +28,7 @@ export default function Profile() {
     const { setLoggedIn } = useAppContext();
 
     const [userData, setUserData] = useState<
-        (Member & { history: Checkout[] }) | null
+        (Member & { history: CheckoutHistory[] }) | null
     >();
     useEffect(() => {
         async function getUser() {
@@ -61,22 +62,19 @@ export default function Profile() {
                     </Avatar>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <UserInfo heading="Name" data={userData?.full_name} />
-                        <UserInfo heading="Email" data={userData?.email} />
-                        <UserInfo heading="Address" data={userData?.address} />
-                        <UserInfo
-                            heading="Phone"
-                            data={userData?.phone_number}
-                        />
-                        <UserInfo
+                        <Info heading="Name" data={userData?.full_name} />
+                        <Info heading="Email" data={userData?.email} />
+                        <Info heading="Address" data={userData?.address} />
+                        <Info heading="Phone" data={userData?.phone_number} />
+                        <Info
                             heading="Membership Type"
                             data={userData?.membership_type}
                         />
-                        <UserInfo
+                        <Info
                             heading="Fines"
                             data={userData?.fines.toString()}
                         />
-                        <UserInfo
+                        <Info
                             heading="Resgistration Date"
                             data={
                                 userData?.registration_date &&
@@ -107,7 +105,7 @@ export default function Profile() {
                                     {userData.history.map(
                                         ({
                                             serial,
-                                            book_id,
+                                            book_title,
                                             borrowed_date,
                                             return_date,
                                             status,
@@ -116,13 +114,52 @@ export default function Profile() {
                                                 key={serial}
                                                 className=""
                                             >
-                                                <div className="p-1">
-                                                    <Card>
-                                                        <CardContent className="aspect-square">
-                                                            <p>{serial}</p>
-                                                        </CardContent>
-                                                    </Card>
-                                                </div>
+                                                <Card>
+                                                    <CardContent className="aspect-square px-8 py-6">
+                                                        <p className="text-right mb-4">
+                                                            <span
+                                                                className={cn(
+                                                                    "py-1 px-3 rounded-full text-white text-sm capitalize",
+                                                                    "bg-green-400",
+                                                                    {
+                                                                        "!bg-red-400":
+                                                                            status ===
+                                                                            "borrowed",
+                                                                    }
+                                                                )}
+                                                            >
+                                                                {status}
+                                                            </span>
+                                                        </p>
+
+                                                        <p className="font-bold text-2xl mb-6">
+                                                            {book_title}
+                                                        </p>
+
+                                                        <div className="flex flex-col gap-4">
+                                                            <Info
+                                                                heading="Serial"
+                                                                data={serial}
+                                                            />
+                                                            <Info
+                                                                heading="Borrowed Date"
+                                                                data={formatDate(
+                                                                    new Date(
+                                                                        borrowed_date
+                                                                    )
+                                                                )}
+                                                            />
+                                                            <Info
+                                                                heading="Return Date"
+                                                                data={formatDate(
+                                                                    new Date(
+                                                                        return_date
+                                                                    )
+                                                                )}
+                                                            />
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
                                             </CarouselItem>
                                         )
                                     )}
@@ -142,7 +179,7 @@ export default function Profile() {
     );
 }
 
-function UserInfo({
+function Info({
     heading,
     data,
 }: {

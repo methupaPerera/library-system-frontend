@@ -21,3 +21,11 @@ export type CheckoutFormInputs = {
 };
 
 export type CheckoutTableProps = TableBaseProps<Checkout>;
+
+export type CheckoutHistory = {
+    serial: string;
+    borrowed_date: string;
+    return_date: string;
+    status: "borrowed" | "returned";
+    book_title: string;
+};
