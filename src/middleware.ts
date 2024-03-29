@@ -67,6 +67,7 @@ export const config = {
         "/login",
         "/profile",
         "/dashboard",
+        "/checkouts",
         "/members",
         "/books",
         "/fines",
