@@ -20,10 +20,15 @@ import { ImBooks } from "react-icons/im";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { IoNewspaperSharp } from "react-icons/io5";
 import { LuCoins } from "react-icons/lu";
+import { ImProfile } from "react-icons/im";
 
 // Sidebar component.
 export default function Sidebar() {
     const sidebarLinks: SidebarLinkProps[] = [
+        {
+            route: "admin-profile",
+            Icon: ImProfile,
+        },
         {
             route: "dashboard",
             Icon: BiSolidDashboard,
@@ -79,7 +84,7 @@ function SidebarLink({ route, Icon }: SidebarLinkProps) {
 
                 {/* Displaying a tooltip with the route name. */}
                 <TooltipContent side="top">
-                    <p className="capitalize">{route}</p>
+                    <p className="capitalize">{route.replace("-", " ")}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
